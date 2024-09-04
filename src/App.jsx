@@ -20,7 +20,8 @@ const App = () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: import.meta.env.VITE_TMDB_AUTHKEY,
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
     },
   };
 
@@ -45,8 +46,14 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home options={options} />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/movies" element={<ShowsPage options={options} type_={"movie"}/>} />
-        <Route path="/series" element={<ShowsPage options={options} type_={"tv"}/>} />
+        <Route
+          path="/movies"
+          element={<ShowsPage options={options} type_={"movie"} />}
+        />
+        <Route
+          path="/series"
+          element={<ShowsPage options={options} type_={"tv"} />}
+        />
         <Route path="/trending" element={<PopularPage options={options} />} />
         <Route path="/person/:id" element={<PersonPage options={options} />} />
         <Route path="/:type/:id" element={<ShowPage options={options} />} />
