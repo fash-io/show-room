@@ -1,0 +1,388 @@
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import Loading from "../components/Loading"; // Import the Loading component
+import GoBackButton from "../components/GoBackButton"; // Import the GoBackButton component
+import Error from "../components/Error";
+
+const ContentPage = (props) => {
+  const { id, type } = useParams();
+  const [content, setContent] = useState(null);
+  const [credits, setCredits] = useState({ cast: [], crew: [] });
+  const [error, setError] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const { options } = props;
+
+  useEffect(() => {
+    const fetchContentDetails = async () => {
+      setLoading(true); // Set loading to true before fetching data
+      try {
+        const contentResponse = await fetch(
+          `https://api.themoviedb.org/3/${
+            type === "series" ? "tv" : "movie"
+          }/${id}?language=en-US`,
+          options
+        );
+        const contentData = await contentResponse.json();
+        console.log(contentData);
+        if (contentResponse.ok) {
+          setContent(contentData);
+        } else {
+          setError(contentData.status_message);
+        }
+
+        const creditsResponse = await fetch(
+          `https://api.themoviedb.org/3/${
+            type === "series" ? "tv" : "movie"
+          }/${id}/credits`,
+          options
+        );
+        const creditsData = await creditsResponse.json();
+        if (creditsResponse.ok) {
+          setCredits(creditsData);
+        } else {
+          setError(creditsData.status_message);
+        }
+
+        const recommendationsResponse = await fetch(
+          `https://api.themoviedb.org/3/${
+            type === "series" ? "tv" : "movie"
+          }/${id}/recommendations?language=en-US&page=1`,
+          options
+        );
+        const recommendationsData = await recommendationsResponse.json();
+        if (recommendationsResponse.ok) {
+          setRecommendations(recommendationsData.results);
+        } else {
+          setError(recommendationsData.status_message);
+        }
+      } catch (err) {
+        console.error("Failed to fetch content details or credits:", err);
+        setError("Failed to load content details.");
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
+      }
+    };
+
+    fetchContentDetails();
+  }, [id, type]);
+
+  if (error) {
+    return <Error />;
+  }
+
+  if (loading || !content) {
+    return <Loading />;
+  }
+
+  const directors =
+    type === "series"
+      ? content.created_by
+      : credits.crew.filter((member) => member.job === "Director");
+
+  return (
+    <>
+      <Navbar />
+      <GoBackButton />
+      <div className="text-white min-h-screen">
+        {/* Hero Image Section */}
+        <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">
+          <img
+            src={`https://image.tmdb.org/t/p/original${
+              content.backdrop_path || content.poster_path
+            }`}
+            alt={content.title || content.name}
+            className="object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
+          <div className="absolute bottom-10 left-5 sm:left-10 p-4 sm:p-8">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-2">
+              {content.title || content.name}
+            </h1>
+            <p className="text-sm sm:text-xl italic">{content.tagline}</p>
+          </div>
+        </div>
+
+        {/* Content Details Section */}
+        <div className="p-4 sm:p-6 md:p-10 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+          {/* Content Poster */}
+          <div className="flex justify-center md:justify-start">
+            <img
+              src={`https://image.tmdb.org/t/p/original${content.poster_path}`}
+              alt={`${content.title || content.name} Poster`}
+              className="w-64 sm:w-80 rounded-lg shadow-lg"
+            />
+          </div>
+
+          {/* Content Info */}
+          <div className="col-span-2 space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-bold ">Overview</h2>
+            <p className="text-sm sm:text-lg">{content.overview}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-lg">
+              <div>
+                <p>
+                  <span className="font-semibold text-slate-500">Release Date:</span>{" "}
+                  {content.release_date || content.first_air_date}
+                </p>
+                {content.episode_run_time || content.runtime ? (
+                    <p>
+                      <span className="font-semibold text-slate-500">Runtime:</span>{" "}
+                      {type === "movie"
+                        ? `${content.runtime || "N/A"} minutes`
+                        : content.episode_run_time
+                        ? `${content.episode_run_time[0]} minutes / episode`
+                        : "N/A"}
+                    </p>
+                  ):("")}
+                <p>
+                  <span className="font-semibold text-slate-500">Genres:</span>{" "}
+                  {content.genres.map((genre) => genre.name).join(",  ")}
+                </p>
+                <p className="flex items-center">
+                  <span className="font-semibold text-slate-500">Rating:</span>{" "}
+                  <span className="flex items-center ml-2">
+                    {Array.from({ length: 5 }, (_, i) => {
+                      // Convert the rating to a scale of 0-5
+                      const starRating = (content.vote_average / 2).toFixed(1);
+                      const fullStars = Math.floor(starRating);
+                      const hasHalfStar = starRating - fullStars >= 0.5;
+
+                      if (i < fullStars) {
+                        // Full star
+                        return <FaStar key={i} className="text-yellow-400" />;
+                      } else if (i === fullStars && hasHalfStar) {
+                        // Half star
+                        return (
+                          <FaStarHalfAlt key={i} className="text-yellow-400" />
+                        );
+                      } else {
+                        // Empty star
+                        return <FaStar key={i} className="text-gray-500" />;
+                      }
+                    })}
+                    <span className="ml-2">
+                      {(content.vote_average / 2).toFixed(1)} / 5
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div>
+                {content.budget && (
+                  <p>
+                    <span className="font-semibold text-slate-500">Budget:</span> $
+                    {content.budget.toLocaleString()}
+                  </p>
+                )}
+                {content.revenue && (
+                  <p>
+                    <span className="font-semibold text-slate-500">Revenue:</span> $
+                    {content.revenue.toLocaleString()}
+                  </p>
+                )}
+                <p>
+                  <span className="font-semibold text-slate-500">Status:</span>{" "}
+                  {content.status === "Ended"
+                    ? content.status + "  " + content.last_air_date
+                    : content.status}
+                </p>
+                <p>
+                  <span className="font-semibold text-slate-500">Original Language:</span>{" "}
+                  {content.original_language}
+                </p>
+                {type === "series" && (
+                  <>
+                    <p>
+                      <span className="font-semibold text-slate-500">Number of Seasons:</span>{" "}
+                      {content.number_of_seasons}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-slate-500">Number of Episodes:</span>{" "}
+                      {content.number_of_episodes}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {content.homepage && (
+              <div className="mt-4">
+                <a
+                  href={content.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                >
+                  Official Website
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+        {type === "series" && content.next_episode_to_air && (
+          <div className="px-4 sm:px-6 md:px-10 lg:px-20">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
+              Next Episode
+            </h2>
+            <p>
+              <span className="font-semibold">Title:</span>{" "}
+              {content.next_episode_to_air.name ||
+                "Episode " + content.next_episode_to_air.episode_number}
+            </p>
+            <p>
+              <span className="font-semibold">Air Date:</span>{" "}
+              {content.next_episode_to_air.air_date}
+            </p>
+            <p>
+              <span className="font-semibold">Season:</span>{" "}
+              {content.next_episode_to_air.season_number}
+            </p>
+            <p>
+              <span className="font-semibold">Episode:</span>{" "}
+              {content.next_episode_to_air.episode_number}
+            </p>
+          </div>
+        )}
+
+        {/* Seasons Section (Only for TV Series) */}
+        {type === "series" && (
+          <div className="p-4 sm:p-6 md:p-10 lg:p-20">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+              {content.seasons.map((season) => (
+                <div
+                  key={season.id}
+                  className="bg-gray-900 rounded-lg shadow-lg p-4"
+                >
+                  <img
+                    src={
+                      season.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
+                        : "https://via.placeholder.com/150x225?text=No+Image"
+                    }
+                    alt={`Season ${season.season_number} Poster`}
+                    className="w-full object-cover rounded-lg mb-4"
+                  />
+                  <h3 className="text-xl sm:text-2xl font-semibold mb-2">
+                    {season.name}
+                  </h3>
+                  <p>
+                    <span className="font-semibold">Air Date:</span>{" "}
+                    {season.air_date || "N/A"}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Episodes:</span>{" "}
+                    {season.episode_count}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Cast and Crew Section */}
+        <div className="p-4 sm:p-6 md:p-10 lg:p-20">
+          {/* Cast */}
+          {credits.cast.length > 0 && (
+            <>
+              <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Cast</h2>
+              <div
+                className={`flex overflow-x-scroll space-x-4 pb-4 div1 ${
+                  credits.cast.length < 11 ? "div" : ""
+                }`}
+              >
+                {credits.cast.map((actor) => (
+                  <Link key={actor.cast_id} to={`/person/${actor.id}`}>
+                    <div className="flex-shrink-0 w-28 sm:w-32">
+                      <img
+                        src={
+                          actor.profile_path
+                            ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
+                            : "https://via.placeholder.com/150x225?text=No+Image"
+                        }
+                        alt={actor.name}
+                        className="w-full h-40 object-cover rounded-lg shadow-md mb-2"
+                      />
+                      <p className="text-center font-semibold text-sm sm:text-base">
+                        {actor.name}
+                      </p>
+                      <p className="text-center text-xs sm:text-sm text-gray-400">
+                        as {actor.character}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Director */}
+          {directors.length > 0 ? (
+            <>
+              <h2 className="text-2xl sm:text-3xl font-semibold mt-8 mb-4">
+                Director
+              </h2>
+              <div className="flex overflow-x-scroll space-x-4 pb-4 div">
+                {directors.map((director) => (
+                  <Link key={director.id} to={`/person/${director.id}`}>
+                    <div className="flex-shrink-0 w-28 sm:w-32">
+                      <img
+                        src={
+                          director.profile_path
+                            ? `https://image.tmdb.org/t/p/w300${director.profile_path}`
+                            : "https://via.placeholder.com/150x225?text=No+Image"
+                        }
+                        alt={director.name}
+                        className="w-full h-40 object-cover rounded-lg shadow-md mb-2"
+                      />
+                      <p className="text-center font-semibold text-sm sm:text-base">
+                        {director.name}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+
+        {recommendations.length > 0 && (
+          <div className="p-4 sm:p-6 md:p-10">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
+              Recommendations
+            </h2>
+            <div className="flex overflow-x-auto space-x-4 div">
+              {recommendations.map((rec) => (
+                <div key={rec.id} className="min-w-[230px] w-96">
+                  <Link
+                    to={`/${type === "series" ? "series" : "movie"}/${rec.id}`}
+                  >
+                    <img
+                      src={
+                        rec.poster_path || rec.backdrop_path
+                          ? `https://image.tmdb.org/t/p/w500${
+                              rec.poster_path || rec.backdrop_path
+                            }`
+                          : "https://via.placeholder.com/150x225?text=No+Image"
+                      }
+                      alt={rec.title || rec.name}
+                      className="w-full h-auto rounded-lg shadow-lg object-cover"
+                    />
+                    {/* <p className="mt-2 text-sm">{rec.title || rec.name}</p> */}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+export default ContentPage;
