@@ -133,7 +133,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      <ul className="fixed bottom-0 right-0 left-0 w-full bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 md:hidden z-50 rounded-t-lg">
+      <ul className="fixed -bottom-10 right-0 left-0 w-full bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-6 md:hidden z-50 rounded-t-lg">
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
