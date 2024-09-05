@@ -131,7 +131,7 @@ const SearchPage = (props) => {
 
         {error && <div className="text-red-500 text-center">{error}</div>}
 
-        <main className="p-10">
+        <main className="sm:p-10 p-4">
           {results.length === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
