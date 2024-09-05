@@ -1,4 +1,4 @@
-const Loading = ({ isSmall }) => (
+const Loading = ({ isSmall }) =>
   isSmall ? (
     <div className="bg-gray-900 z-10 text-white h-full w-full top-0 flex items-center justify-center">
       <div className="p-4 rounded-lg text-center">
@@ -21,7 +21,6 @@ const Loading = ({ isSmall }) => (
         </p>
       </div>
     </div>
-  )
-);
+  );
 
 export default Loading;
