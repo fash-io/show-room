@@ -130,7 +130,7 @@ const filteredMoviesDir = movies?.crew?.length
       <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
         <GoBackButton />
 
-        <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 p-10">
+        <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 p-8">
           {/* Actor Profile Image */}
           <div className="lg:w-1/3 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:sticky lg:top-32 max-sm:w-full">
             <img
@@ -236,7 +236,7 @@ const filteredMoviesDir = movies?.crew?.length
                   to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
                     credit.id
                   }`}
-                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end"
+                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg sm:transition-transform transform sm:hover:scale-105 sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end"
                 >
                   <img
                     src={

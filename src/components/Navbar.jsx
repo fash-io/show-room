@@ -118,9 +118,6 @@ const Navbar = () => {
               >
                 <i className="fa-solid fa-user"></i>
               </Link>
-              <Link to={"/login"} className="text-white" onClick={handleLogout}>
-                Logout
-              </Link>
             </>
           ) : (
             // Login link if no user is logged in
