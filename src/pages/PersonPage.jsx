@@ -127,7 +127,7 @@ const filteredMoviesDir = movies?.crew?.length
   return (
     <>
       <Navbar />
-      <div className="relative min-h-screen bg-black text-white p-1 md:p-8 lg:p-20">
+      <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
         <GoBackButton />
 
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 p-10">
@@ -236,7 +236,7 @@ const filteredMoviesDir = movies?.crew?.length
                   to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
                     credit.id
                   }`}
-                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg sm:transition-transform sm:transform sm:hover:scale-105 sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end"
+                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end"
                 >
                   <img
                     src={
