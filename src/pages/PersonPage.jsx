@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import GoBackButton from "../components/GoBackButton";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
+import { calculateAge } from "../constants";
 
 const PersonPage = (props) => {
   const { id } = useParams();
@@ -121,7 +122,8 @@ const filteredMoviesDir = movies?.crew?.length
   if (!actor || !movies) {
     return <Loading />;
   }
-
+  const today = new Date;
+  today.getFullYear;
   return (
     <>
       <Navbar />
@@ -143,7 +145,7 @@ const filteredMoviesDir = movies?.crew?.length
           </div>
 
           {/* Actor Information */}
-          <div className="lg:w-2/3 space-y-4">
+          <div className="lg:w-2/3 space-y-4 lg:p-0">
             <h1 className="text-3xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent inline-block"
             style={{
               backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
@@ -162,7 +164,7 @@ const filteredMoviesDir = movies?.crew?.length
               </p>
               <p>
                 <span className="font-semibold text-slate-500">Birthday:</span>{" "}
-                {actor.birthday}
+                {actor.birthday} <span className="text-sm">({calculateAge(actor.birthday).years} years old)</span>
               </p>
               <p>
                 <span className="font-semibold text-slate-500">Place of Birth:</span>{" "}
@@ -245,8 +247,8 @@ const filteredMoviesDir = movies?.crew?.length
                     alt={credit.title || credit.name}
                     className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10"
                   />
-                  <div className="pb-0 p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent" style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}>
-                    {credit.character ? (<h3 className="text-gray-100 text-sm">AS: {credit.character}</h3>) : (<p className="text-gray-400">{credit.job}</p>)}
+                  <div className="pb-0 sm:p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent" style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}>
+                    {credit.character ? (<h3 className="hidden sm:block text-gray-100 text-sm">AS: {credit.character}</h3>) : (<p className="text-gray-400">{credit.job}</p>)}
                     <p className="text-gray-400 text-xs">
                       {credit.release_date || credit.first_air_date}
                     </p>

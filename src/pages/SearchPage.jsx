@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -8,71 +8,80 @@ import GoBackButton from "../components/GoBackButton";
 const SearchPage = (props) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [opt, setOpt] = useState("movie");
+  const [filter, setFilter] = useState("multi");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(null); // For error handling
 
   const { options } = props;
 
-  const handleSearch = async () => {
-    if (query.trim() === "") return;
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/${opt}?query=${query}&include_adult=false&language=en-US&page=${page}`,
-        options
-      );
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-      console.log("API response:", data);
-
-      if (data.results) {
-        setResults(data.results);
-        setTotalPages(data.total_pages);
-      } else {
-        setResults([]);
-        setTotalPages(1); // Ensure totalPages is set correctly
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setResults([]);
-      setTotalPages(1); // Reset totalPages on error
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOptChange = (e) => {
-    setOpt(e.target.value);
-    setQuery("");
-    setResults([]);
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
     setPage(1);
-    setTotalPages(1);
   };
 
   const handleChange = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setPage(1);
-    handleSearch();
-  };
-
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= (totalPages || 1)) {
       setPage(newPage);
-      setLoading(true);
+      searchMovies(newPage);
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
-      handleSearch();
     }
+  };
+
+  // Function to handle the search
+  const searchMovies = async (page = 1) => {
+    if (query.trim() === "") return;
+
+    setLoading(true);
+    setError(null); // Reset error
+
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=${page}`,
+        options
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const data = await response.json();
+      console.log("API response:", data.results);
+
+      if (data.results) {
+        setResults(data.results);
+        setTotalPages(data.total_pages);
+      } else {
+        setResults([]);
+        setTotalPages(1);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Something went wrong. Please try again.");
+      setResults([]);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Trigger search when filter or page changes
+  useEffect(() => {
+    if (query.trim() !== "") {
+      searchMovies(page);
+    }
+  }, [filter, page]); // Re-run searchMovies when filter or page changes
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setResults([]); // Clear previous results
+    searchMovies(1); // Call search for page 1
   };
 
   if (loading) {
@@ -84,39 +93,45 @@ const SearchPage = (props) => {
       <Navbar />
       <GoBackButton />
 
-      <div className="min-h-screen pt-20 text-white p-20">
-        <header className="mb-6">
+      <div className="min-h-screen pt-20 text-white">
+        <header className="mb-6 px-20">
           <form onSubmit={handleSubmit} className="mt-4 sm:flex items-center">
             <input
               type="text"
               value={query}
               onChange={handleChange}
-              placeholder={`Search ${opt}...`}
+              placeholder="Search ..."
               className="w-full p-2 border border-gray-700 rounded-md bg-gray-950 placeholder-gray-400"
-              aria-label={`Search ${opt}`}
-            />
-            <div className="max-sm:flex justify-between mt-3">
-            <button
-              type="submit"
-              className="sm:ml-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 duration-200 rounded-md order-last sm:order-none"
               aria-label="Search"
-            >
-              Search
-            </button>
-            <select
-              value={opt}
-              onChange={handleOptChange}
-              className="sm:ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 duration-200 rounded-md"
-              aria-label="Select search type"
-            >
-              <option value="movie">Movies</option>
-              <option value="person">Person</option>
-              <option value="tv">Series</option>
-            </select>
+            />
+            <div className="sm:flex justify-between mt-3 sm:mt-0 ">
+              <button
+                type="submit"
+                className="sm:ml-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 duration-200 rounded-md w-full sm:w-auto sm:m-0 my-1"
+                aria-label="Search"
+              >
+                Search
+              </button>
+              {results.length > 0 && (
+                <select
+                  value={filter}
+                  onChange={handleFilterChange}
+                  className="sm:ml-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 duration-200 rounded-md w-full sm:w-auto"
+                  aria-label="Select search type"
+                >
+                  <option value="multi">Filter Search</option>
+                  <option value="movie">Movies</option>
+                  <option value="person">Person</option>
+                  <option value="tv">Series</option>
+                </select>
+              )}
             </div>
           </form>
         </header>
-        <main>
+
+        {error && <div className="text-red-500 text-center">{error}</div>}
+
+        <main className="p-10">
           {results.length === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
@@ -124,14 +139,26 @@ const SearchPage = (props) => {
               {results.map((data) => (
                 <Link
                   key={data.id}
-                  to={`/${opt === "movie" ? "movie" :opt === "person" ? "person" : "series"}/${data.id}`}
-                  className="block bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+                  to={`/${
+                    data.media_type === "movie"
+                      ? "movie"
+                      : data.media_type === "tv"
+                      ? "series"
+                      : data.media_type === "person" ?
+                      "person" 
+                      : filter === "tv" ? "series" : filter
+                  }/${data.id}`}
+                  className="block bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
                 >
                   <img
                     src={
-                      data.poster_path || data.backdrop_path || data.profile_path
+                      data.poster_path ||
+                      data.backdrop_path ||
+                      data.profile_path
                         ? `https://image.tmdb.org/t/p/w500${
-                            data.poster_path || data.backdrop_path || data.profile_path
+                            data.poster_path ||
+                            data.backdrop_path ||
+                            data.profile_path
                           }`
                         : "https://via.placeholder.com/150x225?text=No+Image"
                     }
@@ -143,15 +170,32 @@ const SearchPage = (props) => {
                       {data.name || data.title}
                     </h3>
                     <p className="text-gray-400">
-                      {opt === "person"
+                      {data.media_type === "person"
                         ? data.known_for_department
                         : data.release_date || data.first_air_date}
                     </p>
                     <p className="text-gray-200 text-sm mb-4">
-                      {data.overview &&
+                      {data.overview ?
                         (data.overview.length > 100
                           ? `${data.overview.slice(0, 100)}...`
-                          : data.overview)}
+                          : data.overview) :
+                          data.known_for ? (
+                            <div>
+                              Known for:{" "}
+                              {data.known_for
+                                .map((show) => {
+                                  return (
+                                    <Link
+                                      key={show.id}
+                                      to={`/${show.media_type === "movie" ? "movie" : "series"}/${show.id}`}
+                                    >
+                                      <li className="text-base sm:text-xs hover:underline underline-offset-2 duration-75 text-blue-300 hover:text-blue-500">{show.name || show.title}</li>
+                                    </Link>
+                                  );
+                                })}
+                            </div>
+                          ): ""
+                          }
                     </p>
                   </div>
                 </Link>
@@ -159,6 +203,7 @@ const SearchPage = (props) => {
             </div>
           )}
         </main>
+
         {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="mt-8 flex justify-center items-center space-x-4">

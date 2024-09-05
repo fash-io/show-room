@@ -23,6 +23,7 @@ const Navbar = () => {
 
     return () => unsubscribe(); // Cleanup on unmount
   }, [navigate]);
+  console.log(user);
 
   const { pathname } = useLocation();
 
@@ -103,37 +104,33 @@ const Navbar = () => {
 
         {/* Right Icons Container */}
         <div className="flex gap-10 lg:gap-15 items-center">
+          {/* Search icon */}
           <Link to={"/search"}>
             <FaSearch className="cursor-pointer" size={20} />
           </Link>
-          {user ? (
-            <Link
-              to={"/profile"}
-              className="flex items-center gap-5 relative profile cursor-pointer"
-            >
-              <i className="fa-solid fa-user"></i>
-            </Link>
+
+          {/* Profile and Logout links if user is logged in */}
+          {user && Object.keys(user).length !== 0 ? (
+            <>
+              <Link
+                to={"/profile"}
+                className="flex items-center gap-5 relative profile cursor-pointer"
+              >
+                <i className="fa-solid fa-user"></i>
+              </Link>
+              <Link to={"/login"} className="text-white" onClick={handleLogout}>
+                Logout
+              </Link>
+            </>
           ) : (
-            <Link to={"/login"}>
-              <i className="fa-solid fa-user"></i>
-            </Link>
-          )}
-          {user ? (
-            <Link
-              to={"/login"}
-              className="text-white"
-              onClick={handleLogout}
-            >
-              Logout
-            </Link>
-          ) : (
+            // Login link if no user is logged in
             <Link to={"/login"} className="text-white">
               Login
             </Link>
           )}
         </div>
       </nav>
-      <ul className="fixed -bottom-10 right-0 left-0 w-full bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-6 md:hidden z-50 rounded-t-lg">
+      <ul className="fixed bottom-0 right-0 left-0 w-full bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-[10%] md:hidden z-50 rounded-t-lg">
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
@@ -145,14 +142,14 @@ const Navbar = () => {
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-6 py-2 -skew-x-[20deg] bottom-[70%] shadow-lg gg rounded-lg"
+                    ? "absolute px-6 py-2 -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
                     : ""
                 }`}
               >
                 <i
                   className={`fa-solid ${val.icon} ${
                     pathname === val.href
-                      ? "font-bold text-sm skew-x-[20deg]"
+                      ? "font-bold text-sm skew-x-[25deg]"
                       : ""
                   }`}
                 ></i>

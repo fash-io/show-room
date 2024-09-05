@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
   Home,
   Login,
@@ -9,9 +8,7 @@ import {
   PopularPage,
   Error,
 } from "./pages";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./utils/firebase";
+import { Routes, Route} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -25,20 +22,7 @@ const App = () => {
     },
   };
 
-  const navigate = useNavigate();
-  const path = useLocation().pathname;
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate(path);
-      } else {
-        navigate("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [navigate]);
 
   return (
     <>

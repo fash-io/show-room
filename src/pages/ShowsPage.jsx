@@ -88,7 +88,7 @@ const TVShowsPage = ({ options, type_ }) => {
       <Navbar />
       <div>
         <Slider
-          height="min-h-[50vh] sm:max-h-[90vh]"
+          height="min-h-[50vh] sm:max-h-[70vh]  md:max-h-[80vh] lg:max-h-[90vh]"
           movies={filteredShows}
           setLoading={setLoading}
           loading={loading}
@@ -197,7 +197,7 @@ const TVShowsPage = ({ options, type_ }) => {
                   <Link
                     key={show.id}
                     to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
-                    className="block bg-gray-800 rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 h-auto"
+                    className="block bg-gray-800 rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto"
                   >
                     <LazyLoader
                       src={

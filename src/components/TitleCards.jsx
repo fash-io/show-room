@@ -52,17 +52,16 @@ const TitleCards = (props) => {
           <Link
             to={`/${type === "movie" ? "movie" : "series"}/${card.id}`}
             key={card.id}
-            className="relative inline-block mr-3 w-auto overflow-hidden"
+            className="relative inline-block mr-3 w-auto overflow-hidden title-cards"
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${ card.backdrop_path}`}
+              src={`https://image.tmdb.org/t/p/w500${ card.poster_path}`}
               alt={card.original_title || "Movie Poster"}
-              className="rounded cursor-pointer h-48 w-auto"
-              width={240}
+              className="rounded cursor-pointer sm:w-auto object-scale-down h-80 w-auto"
             />
-            <p className="absolute bottom-3 left-3 text-white bg-black bg-opacity-50 p-1 rounded">
+            {/* <p className="absolute bottom-3 left-3 text-white bg-black bg-opacity-50 p-1 rounded">
               {card.title || card.name}
-            </p>
+            </p> */}
           </Link>
         ))}
       </div>

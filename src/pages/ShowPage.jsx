@@ -95,7 +95,7 @@ const ContentPage = (props) => {
               content.backdrop_path || content.poster_path
             }`}
             alt={content.title || content.name}
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
           <div className="absolute bottom-10 left-5 sm:left-10 p-4 sm:p-8">
@@ -127,11 +127,11 @@ const ContentPage = (props) => {
                   <span className="font-semibold text-slate-500">Release Date:</span>{" "}
                   {content.release_date || content.first_air_date}
                 </p>
-                {content.episode_run_time || content.runtime ? (
+                {content.runtime || content.episode_run_time[0]  ? (
                     <p>
                       <span className="font-semibold text-slate-500">Runtime:</span>{" "}
                       {type === "movie"
-                        ? `${content.runtime || "N/A"} minutes`
+                        ? `${content.runtime ? `${(content.runtime/60).toFixed(0)} h ${content.runtime % 60} m` : "N/A"}`
                         : content.episode_run_time
                         ? `${content.episode_run_time[0]} minutes / episode`
                         : "N/A"}
@@ -170,18 +170,18 @@ const ContentPage = (props) => {
                 </p>
               </div>
               <div>
-                {content.budget && (
+                {content.budget ? (
                   <p>
                     <span className="font-semibold text-slate-500">Budget:</span> $
                     {content.budget.toLocaleString()}
                   </p>
-                )}
-                {content.revenue && (
+                ): ""}
+                {content.revenue ? (
                   <p>
                     <span className="font-semibold text-slate-500">Revenue:</span> $
                     {content.revenue.toLocaleString()}
                   </p>
-                )}
+                ): ""}
                 <p>
                   <span className="font-semibold text-slate-500">Status:</span>{" "}
                   {content.status === "Ended"
@@ -250,7 +250,7 @@ const ContentPage = (props) => {
         {type === "series" && (
           <div className="p-4 sm:p-6 md:p-10 lg:p-20">
             <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-8">
               {content.seasons.map((season) => (
                 <div
                   key={season.id}
@@ -263,7 +263,7 @@ const ContentPage = (props) => {
                         : "https://via.placeholder.com/150x225?text=No+Image"
                     }
                     alt={`Season ${season.season_number} Poster`}
-                    className="w-full object-cover rounded-lg mb-4"
+                    className=" rounded-lg mb-4 object-scale-down"
                   />
                   <h3 className="text-xl sm:text-2xl font-semibold mb-2">
                     {season.name}

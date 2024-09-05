@@ -24,8 +24,8 @@ const Home = (props) => {
       <Navbar />
       <Slider
         height="max-h-[95vh] max-sm:min-h-[60vh]"
-        // setLoading={setLoading}
-        // setError={setError}
+        setLoading={setLoading}
+        setError={setError}
         type={"all"}
         options={options}
       />
@@ -36,7 +36,6 @@ const Home = (props) => {
         <TitleCards title={"Popular Series"} category="popular" options={options} type={"tv"}/>
         <TitleCards title={"Top Rated Series"} category="top_rated" options={options} type={"tv"}/>
         <TitleCards title={"On The Air"} category="on_the_air" options={options} type={"tv"}/>
-        <TitleCards title={"Airing Today"} category="airing_today" options={options} type={"tv"}/>
       </div>
       <Footer />
     </div>
