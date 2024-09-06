@@ -51,7 +51,6 @@ const SearchPage = (props) => {
       if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
-      console.log("API response:", data.results);
 
       if (data.results) {
         setResults(data.results);

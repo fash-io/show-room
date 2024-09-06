@@ -6,7 +6,7 @@ const GoBackButton = () => {
 
   return (
     <button
-    title='Go Back'
+      title="Go Back"
       onClick={() => navigate(-1)}
       className="hidden sm:block z-30 fixed top-20 left-4 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700 transition-colors duration-200"
       aria-label="Go Back"

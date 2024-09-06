@@ -6,6 +6,7 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import GoBackButton from "../components/GoBackButton"; // Import the GoBackButton component
 import Error from "../components/Error";
+import ShowCard from "../components/ShowCard";
 
 const ContentPage = (props) => {
   const { id, type } = useParams();
@@ -27,7 +28,6 @@ const ContentPage = (props) => {
           options
         );
         const contentData = await contentResponse.json();
-        console.log(contentData);
         if (contentResponse.ok) {
           setContent(contentData);
         } else {
@@ -124,19 +124,31 @@ const ContentPage = (props) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-lg">
               <div>
                 <p>
-                  <span className="font-semibold text-slate-500">Release Date:</span>{" "}
+                  <span className="font-semibold text-slate-500">
+                    Release Date:
+                  </span>{" "}
                   {content.release_date || content.first_air_date}
                 </p>
-                {content.runtime || content.episode_run_time[0]  ? (
-                    <p>
-                      <span className="font-semibold text-slate-500">Runtime:</span>{" "}
-                      {type === "movie"
-                        ? `${content.runtime ? `${(content.runtime/60).toFixed(0)} h ${content.runtime % 60} m` : "N/A"}`
-                        : content.episode_run_time
-                        ? `${content.episode_run_time[0]} minutes / episode`
-                        : "N/A"}
-                    </p>
-                  ):("")}
+                {content.runtime || content.episode_run_time[0] ? (
+                  <p>
+                    <span className="font-semibold text-slate-500">
+                      Runtime:
+                    </span>{" "}
+                    {type === "movie"
+                      ? `${
+                          content.runtime
+                            ? `${(content.runtime / 60).toFixed(0)} h ${
+                                content.runtime % 60
+                              } m`
+                            : "N/A"
+                        }`
+                      : content.episode_run_time
+                      ? `${content.episode_run_time[0]} minutes / episode`
+                      : "N/A"}
+                  </p>
+                ) : (
+                  ""
+                )}
                 <p>
                   <span className="font-semibold text-slate-500">Genres:</span>{" "}
                   {content.genres.map((genre) => genre.name).join(",  ")}
@@ -172,16 +184,24 @@ const ContentPage = (props) => {
               <div>
                 {content.budget ? (
                   <p>
-                    <span className="font-semibold text-slate-500">Budget:</span> $
-                    {content.budget.toLocaleString()}
+                    <span className="font-semibold text-slate-500">
+                      Budget:
+                    </span>{" "}
+                    ${content.budget.toLocaleString()}
                   </p>
-                ): ""}
+                ) : (
+                  ""
+                )}
                 {content.revenue ? (
                   <p>
-                    <span className="font-semibold text-slate-500">Revenue:</span> $
-                    {content.revenue.toLocaleString()}
+                    <span className="font-semibold text-slate-500">
+                      Revenue:
+                    </span>{" "}
+                    ${content.revenue.toLocaleString()}
                   </p>
-                ): ""}
+                ) : (
+                  ""
+                )}
                 <p>
                   <span className="font-semibold text-slate-500">Status:</span>{" "}
                   {content.status === "Ended"
@@ -189,17 +209,23 @@ const ContentPage = (props) => {
                     : content.status}
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-500">Original Language:</span>{" "}
+                  <span className="font-semibold text-slate-500">
+                    Original Language:
+                  </span>{" "}
                   {content.original_language}
                 </p>
                 {type === "series" && (
                   <>
                     <p>
-                      <span className="font-semibold text-slate-500">Number of Seasons:</span>{" "}
+                      <span className="font-semibold text-slate-500">
+                        Number of Seasons:
+                      </span>{" "}
                       {content.number_of_seasons}
                     </p>
                     <p>
-                      <span className="font-semibold text-slate-500">Number of Episodes:</span>{" "}
+                      <span className="font-semibold text-slate-500">
+                        Number of Episodes:
+                      </span>{" "}
                       {content.number_of_episodes}
                     </p>
                   </>
@@ -355,26 +381,9 @@ const ContentPage = (props) => {
             <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
               Recommendations
             </h2>
-            <div className="flex overflow-x-auto space-x-4 div">
+            <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
               {recommendations.map((rec) => (
-                <div key={rec.id} className="min-w-[230px] w-96">
-                  <Link
-                    to={`/${type === "series" ? "series" : "movie"}/${rec.id}`}
-                  >
-                    <img
-                      src={
-                        rec.poster_path || rec.backdrop_path
-                          ? `https://image.tmdb.org/t/p/w500${
-                              rec.poster_path || rec.backdrop_path
-                            }`
-                          : "https://via.placeholder.com/150x225?text=No+Image"
-                      }
-                      alt={rec.title || rec.name}
-                      className="w-full h-auto rounded-lg shadow-lg object-cover"
-                    />
-                    {/* <p className="mt-2 text-sm">{rec.title || rec.name}</p> */}
-                  </Link>
-                </div>
+                <ShowCard key={rec.id} show={rec} type_={type} type={2} />
               ))}
             </div>
           </div>

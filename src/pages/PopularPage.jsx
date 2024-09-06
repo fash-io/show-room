@@ -24,7 +24,6 @@ const PopularPage = ({ options }) => {
       });
     }
   };
-  console.log(timeWindow);
 
   useEffect(() => {
     const fetchNewReleases = async () => {
@@ -36,7 +35,6 @@ const PopularPage = ({ options }) => {
           throw new Error("Failed to fetch new releases.");
         }
         const data = await response.json();
-        console.log("API response:", data);
         setMovies(data.results);
         setTotalPages(data.total_pages);
       } catch (err) {
@@ -132,7 +130,7 @@ const PopularPage = ({ options }) => {
               to={`/${movie.media_type === "movie" ? "movie" : "series"}/${
                 movie.id
               }`}
-              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
+              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform sm:hover:scale-105 sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
             >
               <img
                 src={

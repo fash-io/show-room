@@ -6,8 +6,8 @@ import Loading from "../components/Loading";
 import GoBackButton from "../components/GoBackButton";
 import Slider from "../components/Slider";
 import useDebounce from "../utils/useDebounce";
-import LazyLoader from "../components/LazyLoader";
 import { movieGenre, tvGenre } from "../constants";
+import ShowCard from "../components/ShowCard";
 
 const TVShowsPage = ({ options, type_ }) => {
   const [shows, setShows] = useState([]);
@@ -44,7 +44,6 @@ const TVShowsPage = ({ options, type_ }) => {
 
       const data = await response.json();
       setShows(data.results);
-      console.log("API response:", data);
       setFilteredShows(data.results);
       setTotalPages(data.total_pages);
     } catch (error) {
@@ -63,32 +62,20 @@ const TVShowsPage = ({ options, type_ }) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
       setLoading(true);
-      window.scrollTo({
-        top: 0,
-        behavior: "instant",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const handleSortChange = (event) => {
-    const newSort = event.target.value;
-    setSort(newSort);
-  };
-  const handleGenreChange = (event) => {
-    const newGenre = event.target.value;
-    setGenre(newGenre);
-  };
-
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
-  };
+  const handleSortChange = (event) => setSort(event.target.value);
+  const handleGenreChange = (event) => setGenre(event.target.value);
+  const handleYearChange = (event) => setYear(event.target.value);
 
   return (
     <>
       <Navbar />
       <div>
         <Slider
-          height="min-h-[50vh] sm:max-h-[70vh]  md:max-h-[80vh] lg:max-h-[90vh]"
+          height="min-h-[50vh] sm:max-h-[70vh] md:max-h-[80vh] lg:max-h-[90vh]"
           movies={filteredShows}
           setLoading={setLoading}
           loading={loading}
@@ -110,44 +97,40 @@ const TVShowsPage = ({ options, type_ }) => {
         ) : (
           <>
             {/* Filters Section */}
-            <div className=" p-4 sm:p-6 rounded-lg mb-8 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1">
+            <div className="p-4 sm:p-6 rounded-lg mb-8 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 ring-gray-700">
               <div className="flex flex-col sm:flex-row sm:space-x-6 w-full ml-auto justify-end">
-                <div className="flex flex-col  mb-4 sm:mb-0">
+                <div className="flex flex-col mb-4 sm:mb-0">
                   <label htmlFor="sort" className="text-white text-sm mb-2">
                     Sort By:
                   </label>
-                  <div className="relative flex">
-                    <select
-                      id="sort"
-                      value={sort}
-                      onChange={handleSortChange}
-                      className="p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto"
-                    >
-                      <option value="popularity">Popularity</option>
-                      <option value="vote_average">Rating</option>
-                      <option value="first_air_date">Release Date</option>
-                    </select>
-                  </div>
+                  <select
+                    id="sort"
+                    value={sort}
+                    onChange={handleSortChange}
+                    className="p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto"
+                  >
+                    <option value="popularity">Popularity</option>
+                    <option value="vote_average">Rating</option>
+                    <option value="first_air_date">Release Date</option>
+                  </select>
                 </div>
                 <div className="flex flex-col mb-4 sm:mb-0">
                   <label htmlFor="genre" className="text-white text-sm mb-2">
                     Genre
                   </label>
-                  <div className="">
-                    <select
-                      id="genre"
-                      value={genre}
-                      onChange={handleGenreChange}
-                      className="p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto"
-                    >
-                      <option value={""}>Select Genre</option>
-                      {genre_.map((genre) => (
-                        <option key={genre.id} value={genre.id}>
-                          {genre.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <select
+                    id="genre"
+                    value={genre}
+                    onChange={handleGenreChange}
+                    className="p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto"
+                  >
+                    <option value="">Select Genre</option>
+                    {genre_.map((genre) => (
+                      <option key={genre.id} value={genre.id}>
+                        {genre.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="year" className="text-white text-sm mb-2">
@@ -169,6 +152,7 @@ const TVShowsPage = ({ options, type_ }) => {
                           setYear((prev) => (prev ? Number(prev) + 1 : 1))
                         }
                         className="p-1 px-2 bg-gray-900 text-white rounded-t hover:bg-gray-800"
+                        aria-label="Increase Year"
                       >
                         ▲
                       </button>
@@ -178,6 +162,7 @@ const TVShowsPage = ({ options, type_ }) => {
                           setYear((prev) => (prev ? Number(prev) - 1 : 0))
                         }
                         className="p-1 px-2 bg-gray-900 text-white rounded-b hover:bg-gray-800"
+                        aria-label="Decrease Year"
                       >
                         ▼
                       </button>
@@ -192,33 +177,9 @@ const TVShowsPage = ({ options, type_ }) => {
               <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-300 mb-10">
                 {type_ === "movie" ? "Movies" : "Series"}
               </h2>
-              <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
                 {filteredShows.map((show) => (
-                  <Link
-                    key={show.id}
-                    to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
-                    className="block bg-gray-800 rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto"
-                  >
-                    <LazyLoader
-                      src={
-                        show.backdrop_path
-                          ? `https://image.tmdb.org/t/p/w500${show.backdrop_path}`
-                          : "https://via.placeholder.com/150x140?text=No+Image"
-                      }
-                      alt={show.name || show.title}
-                      className={"w-full  object-cover"}
-                    />
-                    <div className="p-4">
-                      <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">
-                        {show.name || show.title}
-                      </h3>
-                      <p className="text-gray-400 text-sm mb-4">
-                        {show.overview.length > 100
-                          ? `${show.overview.slice(0, 100)}...`
-                          : show.overview}
-                      </p>
-                    </div>
-                  </Link>
+                  <ShowCard key={show.id} show={show} type_={type_} type={1} />
                 ))}
               </div>
 

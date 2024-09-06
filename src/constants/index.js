@@ -1,3 +1,4 @@
+// Navigation Links
 export const navLinks = [
   { label: "Home", href: "/", icon: "fa-house", order: 3, index: 1 },
   { label: "TV Shows", href: "/series", icon: "fa-tv", order: 1, index: 2 },
@@ -5,14 +6,18 @@ export const navLinks = [
   { label: "Trending", href: "/trending", icon: "fa-fire", order: 4, index: 4 },
   { label: "My List", href: "/list", icon: "fa-list", order: 5, index: 5 },
 ];
+
+// Footer Links (Consider adding href if navigation is required)
 export const footerLinks = [
-  { label: "Audio Description" },
-  { label: "Help Centre" },
-  { label: "Gift Cards" },
-  { label: "Media Centre" },
-  { label: "Investor Relations" },
-  { label: "Jobs" },
+  { label: "Audio Description", href: "#" },
+  { label: "Help Centre", href: "#" },
+  { label: "Gift Cards", href: "#" },
+  { label: "Media Centre", href: "#" },
+  { label: "Investor Relations", href: "#" },
+  { label: "Jobs", href: "#" },
 ];
+
+// Movie Genres
 export const movieGenre = [
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
@@ -34,6 +39,8 @@ export const movieGenre = [
   { id: 10752, name: "War" },
   { id: 37, name: "Western" },
 ];
+
+// TV Genres
 export const tvGenre = [
   { id: 10759, name: "Action & Adventure" },
   { id: 16, name: "Animation" },
@@ -52,6 +59,8 @@ export const tvGenre = [
   { id: 10768, name: "War & Politics" },
   { id: 37, name: "Western" },
 ];
+
+// Calculate Age Function
 export function calculateAge(birthDate) {
   const today = new Date();
   const birth = new Date(birthDate);
@@ -75,3 +84,26 @@ export function calculateAge(birthDate) {
 
   return { years: age, months, days };
 }
+
+export const faqs = [
+  {
+    question: "What is ShowRoom?",
+    answer: "ShowRoom is your gateway to entertainment, offering a wide range of movies and TV shows for streaming. We provide personalized recommendations and an easy-to-use interface.",
+  },
+  {
+    question: "How can I create an account?",
+    answer: "To create an account, click on the 'Sign Up' button on the homepage or the login page. Enter your details, including your name, email, and password, and follow the prompts.",
+  },
+  {
+    question: "How do I reset my password?",
+    answer: "If you’ve forgotten your password, click on the 'Forgot Password' link on the login page. Enter your email address, and you’ll receive instructions to reset your password.",
+  },
+  {
+    question: "Can I cancel my subscription?",
+    answer: "Yes, you can cancel your subscription at any time through your account settings. If you need assistance, please contact our support team.",
+  },
+  {
+    question: "How do I contact customer support?",
+    answer: "You can contact our customer support team by visiting the 'Contact Us' page on our website. We’re available 24/7 to assist you with any issues or questions.",
+  },
+];

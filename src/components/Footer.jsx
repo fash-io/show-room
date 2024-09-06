@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className=" text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto">
+    <div className="text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto">
       {/* Social Media Icons */}
       <div className="flex justify-center sm:justify-start gap-4 mb-8">
         <a href="#" aria-label="YouTube" className="transition transform hover:scale-110">
@@ -28,7 +28,7 @@ const Footer = () => {
       <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center sm:text-left">
         {footerLinks.map((val, index) => (
           <li key={index} className="text-sm sm:text-base">
-            <Link href={val.url} className="hover:text-yellow-400 transition duration-200">
+            <Link to={val.url} className="hover:text-yellow-400 transition duration-200">
               {val.label}
             </Link>
           </li>
@@ -41,10 +41,10 @@ const Footer = () => {
           © 2024 ShowRoom, Inc. All rights reserved.
         </p>
         <p className="text-center sm:text-left mt-2">
-          <img src="/favicon.ico" alt="ShowRoom logo" className="inline-block w-6 h-6 mr-2" />
           ShowRoom – Your gateway to entertainment.
         </p>
       </div>
+      <div className="h-20 w-full block sm:hidden"></div>
     </div>
   );
 };

@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { useSwipeable } from "react-swipeable";
-import play_icon from "../assets/play_icon.png";
-import info_icon from "../assets/info_icon.png";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
+import info_icon from "../assets/info_icon.png";
+import play_icon from "../assets/play_icon.png"; // Consider if you need this
 
 const Slider = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef();
   const intervalRef = useRef();
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start as true to show loading initially
   const [error, setError] = useState("");
-  // eslint-disable-next-line react/prop-types
   const { height, type, options } = props;
 
   useEffect(() => {
@@ -25,7 +24,8 @@ const Slider = (props) => {
         const data = await response.json();
         setMovies(data.results);
       } catch (err) {
-        setError("Failed to load new releases.", err);
+        setError("Failed to load new releases.");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -77,8 +77,13 @@ const Slider = (props) => {
     onSwipedRight: () => goToPreviousSlide(),
     trackMouse: true,
   });
-  if (!movies) {
+
+  if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-600">{error}</div>;
   }
 
   return (
@@ -86,6 +91,7 @@ const Slider = (props) => {
       {/* Left button for manual navigation */}
       <button
         onClick={goToPreviousSlide}
+        aria-label="Previous slide"
         className="hidden sm:block absolute left-2 md:left-10 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-2 md:p-3 rounded-full z-10 hover:bg-black/70 transition duration-200"
       >
         ❮
@@ -137,6 +143,7 @@ const Slider = (props) => {
       {/* Right button for manual navigation */}
       <button
         onClick={goToNextSlide}
+        aria-label="Next slide"
         className="hidden sm:block absolute right-2 md:right-10 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-2 md:p-3 rounded-full z-10 hover:bg-black/70 transition duration-200"
       >
         ❯

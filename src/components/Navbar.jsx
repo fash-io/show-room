@@ -23,7 +23,6 @@ const Navbar = () => {
 
     return () => unsubscribe(); // Cleanup on unmount
   }, [navigate]);
-  console.log(user);
 
   const { pathname } = useLocation();
 
@@ -122,7 +121,8 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      <ul className="fixed bottom-0 right-0 left-0 w-full bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-[10%] md:hidden z-50 rounded-t-lg">
+
+      <ul className="fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-50 rounded-t-lg">
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
@@ -141,12 +141,12 @@ const Navbar = () => {
                 <i
                   className={`fa-solid ${val.icon} ${
                     pathname === val.href
-                      ? "font-bold text-sm skew-x-[25deg]"
+                      ? "font-bold text-base skew-x-[25deg]"
                       : ""
                   }`}
                 ></i>
               </span>
-              <li className={`cursor-pointer py-2 px-4 whitespace-nowrap`}>
+              <li className={`cursor-pointer text-[10px] py-2 px-4 whitespace-nowrap`}>
                 {val.label}
               </li>
             </Link>

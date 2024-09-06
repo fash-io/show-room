@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../utils/firebase'; // Import your Firebase configuration
 import { doc, getDoc } from 'firebase/firestore';
-import Loading from "../components/Loading"
+import { onAuthStateChanged } from 'firebase/auth';
+import Loading from "../components/Loading";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async (uid) => {
@@ -18,9 +20,11 @@ const ProfilePage = () => {
           setUserData(userDocSnap.data());
         } else {
           console.log("No such document with UID:", uid);
+          setError("No user data found.");
         }
       } catch (error) {
         console.error("Error fetching user data:", error.message);
+        setError("Error fetching user data.");
       } finally {
         setIsLoading(false); // Set loading state to false after fetching
       }
@@ -31,6 +35,7 @@ const ProfilePage = () => {
         fetchUserData(user.uid);
       } else {
         setUserData(null);
+        setIsLoading(false);
       }
     });
 
@@ -38,27 +43,34 @@ const ProfilePage = () => {
   }, []);
 
   if (isLoading) {
-    return <Loading/>
+    return <Loading />;
   }
 
+  if (error) {
+    return <div className="p-8 min-h-screen flex justify-center items-center text-white">
+      <p>{error}</p>
+    </div>;
+  }
 
   if (userData === null) {
-    return <Loading/>
+    return <div className="p-8 min-h-screen flex justify-center items-center text-white">
+      <p>No user data available.</p>
+    </div>;
   }
 
   return (
     <div className="p-8 min-h-screen flex justify-center items-center">
       <div className="max-w-2xl w-full bg-slate-800 shadow-lg rounded-lg p-8">
         <div className="flex flex-col items-center">
-         {userData.photoURL ? (
-           <img
-           src={userData.photoURL}
-           alt="Profile"
-           className="rounded-full w-32 h-32 object-cover shadow-md"
-         />
-         ) : (
-          <i className='fa fa-user w-32 h-32 shadow-md'></i>
-         )}
+          {userData.photoURL ? (
+            <img
+              src={userData.photoURL}
+              alt="Profile"
+              className="rounded-full w-32 h-32 object-cover shadow-md"
+            />
+          ) : (
+            <i className='fa fa-user w-32 h-32 shadow-md'></i>
+          )}
           <h2 className="mt-4 text-2xl font-semibold text-gray-100">
             {userData.name}
           </h2>

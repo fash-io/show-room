@@ -24,6 +24,7 @@ const PersonPage = (props) => {
           options
         );
         const actorData = await actorResponse.json();
+        console.log(actorData);
         if (actorResponse.ok) {
           setActor(actorData);
         } else {
@@ -35,14 +36,13 @@ const PersonPage = (props) => {
           options
         );
         const movieData = await moviesResponse.json();
-        console.log(movieData);
         if (moviesResponse.ok) {
           setActorMovies(movieData);
         } else {
           setError(movieData.status_message || "Error fetching movies.");
         }
       } catch (err) {
-        console.error("Failed to fetch actor details or credits:", err);
+        console.error(err);
         setError("Failed to load actor details.");
       }
     };
@@ -59,7 +59,7 @@ const PersonPage = (props) => {
   // Filter TV shows with more than 2 episodes or all movies if not a TV show
 const movies_ = movies?.cast?.filter((credit) => {
   if (credit.media_type === "tv") {
-    return credit.episode_count > 2;
+    return credit.episode_count > 5;
   }
   return true; // Keep all movies (or if media_type isn't 'tv')
 }) || [];
