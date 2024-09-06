@@ -57,46 +57,46 @@ const PersonPage = (props) => {
     setSort(e.target.value);
   };
   // Filter TV shows with more than 2 episodes or all movies if not a TV show
-const movies_ = movies?.cast?.filter((credit) => {
-  if (credit.media_type === "tv") {
-    return credit.episode_count > 5;
-  }
-  return true; // Keep all movies (or if media_type isn't 'tv')
-}) || [];
-
-// Filter movies based on the selected filter
-const filteredMovies = movies_?.length
-  ? filter === "all"
-    ? movies_
-    : movies_.filter((credit) => credit.media_type === filter)
-  : [];
-
-// Filter director jobs from the crew based on selected filter
-const filteredMoviesDir = movies?.crew?.length
-  ? filter === "all"
-    ? movies.crew.filter((member) => member.job === "Director")
-    : movies.crew
-        .filter((credit) => credit.media_type === filter)
-        .filter((member) => member.job === "Director")
-  : [];
-
-
-    const sortedMoviesDir = [...filteredMoviesDir].sort((a, b) => {
-      switch (sortType) {
-        case "name":
-          return (a.title || a.name).localeCompare(b.title || b.name);
-        case "release_date":
-          return (a.release_date || a.first_air_date || "").localeCompare(
-            b.release_date || b.first_air_date || ""
-          );
-        case "popularity":
-          return b.popularity - a.popularity;
-        case "rating":
-          return b.vote_average - a.vote_average;
-        default:
-          return 0;
+  const movies_ =
+    movies?.cast?.filter((credit) => {
+      if (credit.media_type === "tv") {
+        return credit.episode_count > 5;
       }
-    });
+      return true; // Keep all movies (or if media_type isn't 'tv')
+    }) || [];
+
+  // Filter movies based on the selected filter
+  const filteredMovies = movies_?.length
+    ? filter === "all"
+      ? movies_
+      : movies_.filter((credit) => credit.media_type === filter)
+    : [];
+
+  // Filter director jobs from the crew based on selected filter
+  const filteredMoviesDir = movies?.crew?.length
+    ? filter === "all"
+      ? movies.crew.filter((member) => member.job === "Director")
+      : movies.crew
+          .filter((credit) => credit.media_type === filter)
+          .filter((member) => member.job === "Director")
+    : [];
+
+  const sortedMoviesDir = [...filteredMoviesDir].sort((a, b) => {
+    switch (sortType) {
+      case "name":
+        return (a.title || a.name).localeCompare(b.title || b.name);
+      case "release_date":
+        return (a.release_date || a.first_air_date || "").localeCompare(
+          b.release_date || b.first_air_date || ""
+        );
+      case "popularity":
+        return b.popularity - a.popularity;
+      case "rating":
+        return b.vote_average - a.vote_average;
+      default:
+        return 0;
+    }
+  });
 
   const sortedMovies = [...filteredMovies].sort((a, b) => {
     switch (sortType) {
@@ -122,7 +122,7 @@ const filteredMoviesDir = movies?.crew?.length
   if (!actor || !movies) {
     return <Loading />;
   }
-  const today = new Date;
+  const today = new Date();
   today.getFullYear;
   return (
     <>
@@ -146,10 +146,12 @@ const filteredMoviesDir = movies?.crew?.length
 
           {/* Actor Information */}
           <div className="lg:w-2/3 space-y-4 lg:p-0">
-            <h1 className="text-3xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent inline-block"
-            style={{
-              backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
-            }}>
+            <h1
+              className="text-3xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent inline-block"
+              style={{
+                backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
+              }}
+            >
               {actor.name}
             </h1>
             <p className="text-base lg:text-lg leading-relaxed">
@@ -164,15 +166,22 @@ const filteredMoviesDir = movies?.crew?.length
               </p>
               <p>
                 <span className="font-semibold text-slate-500">Birthday:</span>{" "}
-                {actor.birthday} <span className="text-sm">({calculateAge(actor.birthday).years} years old)</span>
+                {actor.birthday}{" "}
+                <span className="text-sm">
+                  ({calculateAge(actor.birthday).years} years old)
+                </span>
               </p>
               <p>
-                <span className="font-semibold text-slate-500">Place of Birth:</span>{" "}
+                <span className="font-semibold text-slate-500">
+                  Place of Birth:
+                </span>{" "}
                 {actor.place_of_birth}
               </p>
               {actor.homepage && (
                 <p>
-                  <span className="font-semibold text-slate-500">Official Website:</span>{" "}
+                  <span className="font-semibold text-slate-500">
+                    Official Website:
+                  </span>{" "}
                   <a
                     href={actor.homepage}
                     target="_blank"
@@ -185,7 +194,9 @@ const filteredMoviesDir = movies?.crew?.length
               )}
               {actor.imdb_id && (
                 <p>
-                  <span className="font-semibold text-slate-500">IMDb Profile:</span>{" "}
+                  <span className="font-semibold text-slate-500">
+                    IMDb Profile:
+                  </span>{" "}
                   <a
                     href={`https://www.imdb.com/name/${actor.imdb_id}`}
                     target="_blank"
@@ -201,7 +212,9 @@ const filteredMoviesDir = movies?.crew?.length
         </div>
 
         {/* Filter and Movie/Series Display */}
-        {(actor.known_for_department === "Acting" ? sortedMovies.length : sortedMoviesDir.length) > 0 && (
+        {(actor.known_for_department === "Acting"
+          ? sortedMovies.length
+          : sortedMoviesDir.length) > 0 && (
           <div className="mt-12">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <h2 className="text-2xl md:text-4xl font-semibold">
@@ -230,7 +243,10 @@ const filteredMoviesDir = movies?.crew?.length
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {(actor.known_for_department === "Acting" ? sortedMovies : sortedMoviesDir).map((credit) => (
+              {(actor.known_for_department === "Acting"
+                ? sortedMovies
+                : sortedMoviesDir
+              ).map((credit) => (
                 <Link
                   key={credit.credit_id}
                   to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
@@ -247,8 +263,17 @@ const filteredMoviesDir = movies?.crew?.length
                     alt={credit.title || credit.name}
                     className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10"
                   />
-                  <div className="pb-0 sm:p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent" style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}>
-                    {credit.character ? (<h3 className="hidden sm:block text-gray-100 text-sm">AS: {credit.character}</h3>) : (<p className="text-gray-400">{credit.job}</p>)}
+                  <div
+                    className="pb-0 sm:p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent"
+                    style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}
+                  >
+                    {credit.character ? (
+                      <h3 className="hidden sm:block text-gray-100 text-sm">
+                        AS: {credit.character}
+                      </h3>
+                    ) : (
+                      <p className="text-gray-400">{credit.job}</p>
+                    )}
                     <p className="text-gray-400 text-xs">
                       {credit.release_date || credit.first_air_date}
                     </p>

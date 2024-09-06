@@ -45,7 +45,9 @@ const SearchPage = (props) => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=${page}`,
+        `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(
+          query
+        )}&include_adult=false&language=en-US&page=${page}`,
         options
       );
       if (!response.ok) throw new Error("Network response was not ok");
@@ -143,9 +145,11 @@ const SearchPage = (props) => {
                       ? "movie"
                       : data.media_type === "tv"
                       ? "series"
-                      : data.media_type === "person" ?
-                      "person" 
-                      : filter === "tv" ? "series" : filter
+                      : data.media_type === "person"
+                      ? "person"
+                      : filter === "tv"
+                      ? "series"
+                      : filter
                   }/${data.id}`}
                   className="flex flex-col justify-between items-center bg-gray-80 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
                 >
@@ -174,27 +178,35 @@ const SearchPage = (props) => {
                         : data.release_date || data.first_air_date}
                     </p>
                     <p className="text-gray-200 text-sm mb-4">
-                      {data.overview ?
-                        (data.overview.length > 100
-                          ? `${data.overview.slice(0, 100)}...`
-                          : data.overview) :
-                          data.known_for ? (
-                            <div>
-                              Known for:{" "}
-                              {data.known_for
-                                .map((show) => {
-                                  return (
-                                    <Link
-                                      key={show.id}
-                                      to={`/${show.media_type === "movie" ? "movie" : "series"}/${show.id}`}
-                                    >
-                                      <li className="text-base sm:text-xs hover:underline underline-offset-2 duration-75 text-blue-300 hover:text-blue-500">{show.name || show.title}</li>
-                                    </Link>
-                                  );
-                                })}
-                            </div>
-                          ): ""
-                          }
+                      {data.overview ? (
+                        data.overview.length > 100 ? (
+                          `${data.overview.slice(0, 100)}...`
+                        ) : (
+                          data.overview
+                        )
+                      ) : data.known_for ? (
+                        <div>
+                          Known for:{" "}
+                          {data.known_for.map((show) => {
+                            return (
+                              <Link
+                                key={show.id}
+                                to={`/${
+                                  show.media_type === "movie"
+                                    ? "movie"
+                                    : "series"
+                                }/${show.id}`}
+                              >
+                                <li className="text-base sm:text-xs hover:underline underline-offset-2 duration-75 text-blue-300 hover:text-blue-500">
+                                  {show.name || show.title}
+                                </li>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </p>
                   </div>
                 </Link>

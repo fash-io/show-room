@@ -172,17 +172,20 @@ const Login = () => {
                 Login
               </span>
             </p>
-          ) : (<>
-            <p className="text-sm">
-              New to ShowRoom?{" "}
-              <span
-                onClick={handleSignState}
-                className="ml-1.5 text-white font-medium cursor-pointer"
-              >
-                Sign Up Now
-              </span>
-            </p>
-            <Link className="" to={'/'}>Continue without Login</Link>
+          ) : (
+            <>
+              <p className="text-sm">
+                New to ShowRoom?{" "}
+                <span
+                  onClick={handleSignState}
+                  className="ml-1.5 text-white font-medium cursor-pointer"
+                >
+                  Sign Up Now
+                </span>
+              </p>
+              <Link className="" to={"/"}>
+                Continue without Login
+              </Link>
             </>
           )}
         </div>

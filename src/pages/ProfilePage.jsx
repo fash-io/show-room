@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { db, auth } from '../utils/firebase'; // Import your Firebase configuration
-import { doc, getDoc } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import React, { useState, useEffect } from "react";
+import { db, auth } from "../utils/firebase"; // Import your Firebase configuration
+import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import Loading from "../components/Loading";
 
 const ProfilePage = () => {
@@ -47,15 +47,19 @@ const ProfilePage = () => {
   }
 
   if (error) {
-    return <div className="p-8 min-h-screen flex justify-center items-center text-white">
-      <p>{error}</p>
-    </div>;
+    return (
+      <div className="p-8 min-h-screen flex justify-center items-center text-white">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   if (userData === null) {
-    return <div className="p-8 min-h-screen flex justify-center items-center text-white">
-      <p>No user data available.</p>
-    </div>;
+    return (
+      <div className="p-8 min-h-screen flex justify-center items-center text-white">
+        <p>No user data available.</p>
+      </div>
+    );
   }
 
   return (
@@ -69,7 +73,7 @@ const ProfilePage = () => {
               className="rounded-full w-32 h-32 object-cover shadow-md"
             />
           ) : (
-            <i className='fa fa-user w-32 h-32 shadow-md'></i>
+            <i className="fa fa-user w-32 h-32 shadow-md"></i>
           )}
           <h2 className="mt-4 text-2xl font-semibold text-gray-100">
             {userData.name}
@@ -87,32 +91,44 @@ const ProfilePage = () => {
         <div className="mt-6 space-y-4">
           <div>
             <p className="text-gray-400 text-sm">Email:</p>
-            <p className="text-gray-100 font-medium">{userData.email || "N/A"}</p>
+            <p className="text-gray-100 font-medium">
+              {userData.email || "N/A"}
+            </p>
           </div>
           <div>
             <p className="text-gray-400 text-sm">Phone:</p>
-            <p className="text-gray-100 font-medium">{userData.phoneNumber || "N/A"}</p>
+            <p className="text-gray-100 font-medium">
+              {userData.phoneNumber || "N/A"}
+            </p>
           </div>
           <div>
             <p className="text-gray-400 text-sm">Address:</p>
             <p className="text-gray-100 font-medium">
-              {userData.address ? `${userData.address.street}, ${userData.address.city}, ${userData.address.state}, ${userData.address.zip}, ${userData.address.country}` : "N/A"}
+              {userData.address
+                ? `${userData.address.street}, ${userData.address.city}, ${userData.address.state}, ${userData.address.zip}, ${userData.address.country}`
+                : "N/A"}
             </p>
           </div>
           <div>
             <p className="text-gray-400 text-sm">Bio:</p>
-            <p className="text-gray-100 font-medium">{userData.additionalInfo ? userData.additionalInfo.bio : "N/A"}</p>
+            <p className="text-gray-100 font-medium">
+              {userData.additionalInfo ? userData.additionalInfo.bio : "N/A"}
+            </p>
           </div>
           <div>
             <p className="text-gray-400 text-sm">Hobbies:</p>
             <p className="text-gray-100 font-medium">
-              {userData.additionalInfo ? userData.additionalInfo.hobbies.join(", ") : "N/A"}
+              {userData.additionalInfo
+                ? userData.additionalInfo.hobbies.join(", ")
+                : "N/A"}
             </p>
           </div>
           <div>
             <p className="text-gray-400 text-sm">Member Since:</p>
             <p className="text-gray-100 font-medium">
-              {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString() : "N/A"}
+              {userData.createdAt
+                ? new Date(userData.createdAt).toLocaleDateString()
+                : "N/A"}
             </p>
           </div>
         </div>

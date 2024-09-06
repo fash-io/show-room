@@ -5,7 +5,7 @@ import LazyLoader from "./LazyLoader";
 const ShowCard = (props) => {
   const { show, type_, type } = props;
 
-  if  (type === 1) {
+  if (type === 1) {
     return (
       <Link
         key={show.id}
@@ -37,17 +37,17 @@ const ShowCard = (props) => {
   } else if (type === 2) {
     return (
       <Link
-      to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
-      key={show.id}
-      className="relative inline-block mr-3 w-auto overflow-hidden title-cards"
-    >
-      <img
-        src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-        alt={show.original_title || "Movie Poster"}
-        className="rounded cursor-pointer sm:w-auto object-scale-down h-64 sm:h-80 w-auto"
-      />
-    </Link>
-    )
+        to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
+        key={show.id}
+        className="relative inline-block mr-3 w-auto overflow-hidden title-cards"
+      >
+        <img
+          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+          alt={show.original_title || "Movie Poster"}
+          className="rounded cursor-pointer sm:w-auto object-scale-down h-64 sm:h-80 w-auto"
+        />
+      </Link>
+    );
   }
 };
 

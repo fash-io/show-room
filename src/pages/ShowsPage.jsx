@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import GoBackButton from "../components/GoBackButton";
 import Slider from "../components/Slider";

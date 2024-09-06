@@ -16,7 +16,9 @@ const TitleCards = (props) => {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://api.themoviedb.org/3/${type}/${category || "now_playing"}?language=en-US&page=1`,
+          `https://api.themoviedb.org/3/${type}/${
+            category || "now_playing"
+          }?language=en-US&page=1`,
           options
         );
         const data = await response.json();
@@ -31,15 +33,11 @@ const TitleCards = (props) => {
   }, [category, options]);
 
   if (loading) {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <Error/>
-    );
+    return <Error />;
   }
 
   return (
@@ -49,7 +47,7 @@ const TitleCards = (props) => {
       </h2>
       <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
         {apiData.map((card) => (
-          <ShowCard key={card.id} show={card} type_={type} type={2}/>
+          <ShowCard key={card.id} show={card} type_={type} type={2} />
         ))}
       </div>
     </div>

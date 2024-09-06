@@ -10,16 +10,32 @@ const Footer = () => {
     <div className="text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto">
       {/* Social Media Icons */}
       <div className="flex justify-center sm:justify-start gap-4 mb-8">
-        <a href="#" aria-label="YouTube" className="transition transform hover:scale-110">
+        <a
+          href="#"
+          aria-label="YouTube"
+          className="transition transform hover:scale-110"
+        >
           <img src={youtube_icon} alt="YouTube" width={40} />
         </a>
-        <a href="#" aria-label="Twitter" className="transition transform hover:scale-110">
+        <a
+          href="#"
+          aria-label="Twitter"
+          className="transition transform hover:scale-110"
+        >
           <img src={twitter_icon} alt="Twitter" width={40} />
         </a>
-        <a href="#" aria-label="Instagram" className="transition transform hover:scale-110">
+        <a
+          href="#"
+          aria-label="Instagram"
+          className="transition transform hover:scale-110"
+        >
           <img src={instagram_icon} alt="Instagram" width={40} />
         </a>
-        <a href="#" aria-label="Facebook" className="transition transform hover:scale-110">
+        <a
+          href="#"
+          aria-label="Facebook"
+          className="transition transform hover:scale-110"
+        >
           <img src={facebook_icon} alt="Facebook" width={40} />
         </a>
       </div>
@@ -28,7 +44,10 @@ const Footer = () => {
       <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center sm:text-left">
         {footerLinks.map((val, index) => (
           <li key={index} className="text-sm sm:text-base">
-            <Link to={val.url} className="hover:text-yellow-400 transition duration-200">
+            <Link
+              to={val.url}
+              className="hover:text-yellow-400 transition duration-200"
+            >
               {val.label}
             </Link>
           </li>

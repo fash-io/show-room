@@ -3,14 +3,13 @@ import { useSwipeable } from "react-swipeable";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
 import info_icon from "../assets/info_icon.png";
-import play_icon from "../assets/play_icon.png"; // Consider if you need this
 
 const Slider = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef();
   const intervalRef = useRef();
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true); // Start as true to show loading initially
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { height, type, options } = props;
 
