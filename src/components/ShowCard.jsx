@@ -44,7 +44,7 @@ const ShowCard = (props) => {
       <img
         src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
         alt={show.original_title || "Movie Poster"}
-        className="rounded cursor-pointer sm:w-auto object-scale-down h-80 w-auto"
+        className="rounded cursor-pointer sm:w-auto object-scale-down h-64 sm:h-80 w-auto"
       />
     </Link>
     )
