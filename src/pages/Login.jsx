@@ -12,7 +12,6 @@ const Login = () => {
   const [c_password, setC_password] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const navigator = useNavigate();
 
   const handleNameChange = (e) => setName(e.target.value);

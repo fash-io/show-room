@@ -1,9 +1,7 @@
 import { navLinks } from "../constants";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaSearch, FaBell, FaCaretDown, FaBars, FaTimes } from "react-icons/fa"; // Import free icons
-import { logout } from "../utils/firebase";
-import { ToastContainer, toast } from "react-toastify";
+import { FaSearch } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
@@ -146,7 +144,9 @@ const Navbar = () => {
                   }`}
                 ></i>
               </span>
-              <li className={`cursor-pointer text-[10px] py-2 px-4 whitespace-nowrap`}>
+              <li
+                className={`cursor-pointer text-[10px] py-2 px-4 whitespace-nowrap`}
+              >
                 {val.label}
               </li>
             </Link>

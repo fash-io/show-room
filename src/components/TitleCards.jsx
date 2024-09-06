@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Loading from "./Loading";
 import Error from "./Error";
 import ShowCard from "./ShowCard";

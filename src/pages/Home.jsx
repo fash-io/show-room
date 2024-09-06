@@ -3,8 +3,8 @@ import Loading from "../components/Loading";
 import TitleCards from "../components/TitleCards";
 import Footer from "../components/Footer";
 import Slider from "../components/Slider";
-import { useState } from "react";
 import Error from "../components/Error";
+import { useState } from "react";
 
 const Home = (props) => {
   const { options } = props;
@@ -20,15 +20,9 @@ const Home = (props) => {
   }
 
   return (
-    <div>
+    <>
       <Navbar />
-      <Slider
-        height="max-h-[95vh] max-sm:min-h-[60vh]"
-        setLoading={setLoading}
-        setError={setError}
-        type={"all"}
-        options={options}
-      />
+      <Slider height="max-h-[95vh] max-sm:min-h-[60vh]" setLoading={setLoading} setError={setError} type={"all"} options={options} />
       <div className="p-2 sm:px-10 gradient">
         <TitleCards title="Popular Movies" category="popular" options={options} type={"movie"}/>
         <TitleCards title="Top Rated Movies" category="top_rated" options={options} type={"movie"}/>
@@ -38,7 +32,7 @@ const Home = (props) => {
         <TitleCards title="On The Air" category="on_the_air" options={options} type={"tv"}/>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
