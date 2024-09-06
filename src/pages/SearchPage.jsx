@@ -151,24 +151,24 @@ const SearchPage = (props) => {
                       ? "series"
                       : filter
                   }/${data.id}`}
-                  className="flex flex-col justify-between items-center bg-gray-80 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
+                  className="flex flex-col items-center bg-gray-80 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
                 >
                   <img
                     src={
-                      data.poster_path ||
                       data.backdrop_path ||
+                      data.poster_path ||
                       data.profile_path
                         ? `https://image.tmdb.org/t/p/w500${
-                            data.poster_path ||
                             data.backdrop_path ||
+                            data.poster_path ||
                             data.profile_path
                           }`
                         : "https://via.placeholder.com/150x225?text=No+Image"
                     }
                     alt={data.name || data.title}
-                    className="w-full h-[23rem] object-scale -z-10"
+                    className={`${!(data.backdrop_path) ? filter === "person" ? "object-cover" : "max-h-44" :"w-full"}`}
                   />
-                  <div className="p-4">
+                  <div className="p-4 w-full">
                     <h3 className="text-2xl font-semibold text-white mb-3">
                       {data.name || data.title}
                     </h3>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Loading from "./Loading";
 
 const LazyLoader = ({ src, alt, className, ...props }) => {
