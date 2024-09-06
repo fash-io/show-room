@@ -152,7 +152,7 @@ const PopularPage = ({ options }) => {
                     {movie.media_type.toUpperCase()}
                   </p>
                 )}
-                <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.6)] to-transparent flex items-end p-2">
+                <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2">
                   {movie.release_date || movie.first_air_date}
                 </p>
               </div>
