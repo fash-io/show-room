@@ -10,7 +10,7 @@ const ShowCard = (props) => {
       <Link
         key={show.id}
         to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
-        className="block bg-gray-800 rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto"
+        className="flex flex-col justify-between items-center rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto"
         aria-label={show.name || show.title}
       >
         <LazyLoader

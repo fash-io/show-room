@@ -130,7 +130,7 @@ const SearchPage = (props) => {
 
         {error && <div className="text-red-500 text-center">{error}</div>}
 
-        <main className="sm:p-10 p-4">
+        <main className="sm:p-10 p-6">
           {results.length === 0 ? (
             <p className="text-center text-gray-500">No results found.</p>
           ) : (
@@ -147,7 +147,7 @@ const SearchPage = (props) => {
                       "person" 
                       : filter === "tv" ? "series" : filter
                   }/${data.id}`}
-                  className="block bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
+                  className="flex flex-col justify-between items-center bg-gray-80 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300"
                 >
                   <img
                     src={
@@ -162,7 +162,7 @@ const SearchPage = (props) => {
                         : "https://via.placeholder.com/150x225?text=No+Image"
                     }
                     alt={data.name || data.title}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-[23rem] object-scale -z-10"
                   />
                   <div className="p-4">
                     <h3 className="text-2xl font-semibold text-white mb-3">
