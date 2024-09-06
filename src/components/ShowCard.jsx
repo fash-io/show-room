@@ -37,7 +37,7 @@ const ShowCard = (props) => {
   } else if (type === 2) {
     return (
       <Link
-      to={`/${type === "movie" ? "movie" : "series"}/${show.id}`}
+      to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
       key={show.id}
       className="relative inline-block mr-3 w-auto overflow-hidden title-cards"
     >
