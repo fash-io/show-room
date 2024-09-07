@@ -19,7 +19,8 @@
     "react-router-dom": "^6.26.1",
     "react-swipeable": "^7.0.1",
     "react-toastify": "^10.0.5",
-    "show_room": "file:"
+    "show_room": "file:",
+    "swiper": "^11.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

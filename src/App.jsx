@@ -16,6 +16,8 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase";
+import { logout } from "./utils/firebase";
+import MyListPage from "./pages/MyList";
 
 const App = () => {
   const navigate = useNavigate();
@@ -42,6 +44,10 @@ const App = () => {
       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
     },
   };
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <>
@@ -53,7 +59,7 @@ const App = () => {
             isExploring || user ? <Home options={options} /> : <Login setIsExploring={setIsExploring} />
           }
         />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setIsExploring={setIsExploring}/>} />
         <Route
           path="/movies"
           element={<ShowsPage options={options} type_={"movie"} />}
@@ -69,6 +75,7 @@ const App = () => {
         <Route path="/profile" element={user ? <ProfilePage /> : <Login />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/list" element={<MyListPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

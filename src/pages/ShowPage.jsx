@@ -6,6 +6,10 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, storeWatchList } from "../utils/firebase";
+import { toast } from "react-toastify";
+
 
 const ContentPage = (props) => {
   const { id, type } = useParams();
@@ -15,6 +19,30 @@ const ContentPage = (props) => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const { options } = props;
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user_) => {
+      if (user_) {
+        setUser(user_);
+      } else {
+        setUser({});
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, [auth]);
+
+  const handleAddToWatchList = async () => {
+    try {
+      // Example user ID; you should replace it with the actual user ID
+      const userId = user.uid; // Replace with actual user ID from your auth system
+      await storeWatchList(userId, { id, type });
+    } catch (error) {
+      console.error("Error adding to watch list:", error);
+      toast.error(error)
+    }
+  };
 
   useEffect(() => {
     const fetchContentDetails = async () => {
@@ -29,6 +57,7 @@ const ContentPage = (props) => {
         const contentData = await contentResponse.json();
         if (contentResponse.ok) {
           setContent(contentData);
+          console.log("Content data:", contentData);
         } else {
           setError(contentData.status_message);
         }
@@ -232,15 +261,41 @@ const ContentPage = (props) => {
             </div>
 
             {content.homepage && (
-              <div className="mt-4">
-                <a
-                  href={content.homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
-                >
-                  Official Website
-                </a>
+              <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
+                <div>
+                  <a
+                    href={content.homepage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                  >
+                    Official Website
+                  </a>
+                </div>
+
+                <div className="">
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
+                    type="button" onClick={handleAddToWatchList}
+                  >
+                    <span className="mr-2">Add to Watch List</span>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 12l5 5L20 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                
               </div>
             )}
           </div>

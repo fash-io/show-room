@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, logout } from "../utils/firebase";
 
-const Navbar = () => {
+const Navbar = ({ noProfile }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
 
@@ -107,20 +107,22 @@ const Navbar = () => {
           </Link>
 
           {/* Profile and Logout links if user is logged in */}
-          {user && Object.keys(user).length !== 0 ? (
+          {!noProfile && (
             <>
-              <Link
-                to={"/profile"}
-                className="flex items-center gap-5 relative profile cursor-pointer"
-              >
-                <i className="fa-solid fa-user"></i>
-              </Link>
+              {user && Object.keys(user).length !== 0 ? (
+                <Link
+                  to={"/profile"}
+                  className="flex items-center gap-5 relative profile cursor-pointer"
+                >
+                  <i className="fa-solid fa-user"></i>
+                </Link>
+              ) : (
+                // Login link if no user is logged in
+                <Link to={"/login"} className="text-white">
+                  Login
+                </Link>
+              )}
             </>
-          ) : (
-            // Login link if no user is logged in
-            <Link to={"/login"}  className="text-white">
-              Login
-            </Link>
           )}
         </div>
       </nav>

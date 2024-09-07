@@ -187,9 +187,9 @@ const Login = ({ setIsExploring }) => {
                   Sign Up Now
                 </span>
               </p>
-              <p className="" onClick={handleExploring}>
+              <button className="" onClick={handleExploring}>
                 Continue without Login
-              </p>
+              </button>
             </>
           )}
         </div>

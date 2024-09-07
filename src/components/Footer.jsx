@@ -45,7 +45,7 @@ const Footer = () => {
         {footerLinks.map((val, index) => (
           <li key={index} className="text-sm sm:text-base">
             <Link
-              to={val.url}
+              to={val.href}
               className="hover:text-transparent transition duration-200 hover bg-clip-text bg-gradient-to-r from-[#1a2a6c] to-[#ff7e5f]"
             >
               {val.label}

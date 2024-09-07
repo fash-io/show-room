@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -16,10 +18,11 @@ const ContactUs = () => {
 
   const validate = () => {
     let formErrors = {};
-    if (!formData.name) formErrors.name = 'Name is required';
-    if (!formData.email) formErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) formErrors.email = 'Email is invalid';
-    if (!formData.message) formErrors.message = 'Message is required';
+    if (!formData.name) formErrors.name = "Name is required";
+    if (!formData.email) formErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      formErrors.email = "Email is invalid";
+    if (!formData.message) formErrors.message = "Message is required";
     return formErrors;
   };
 
@@ -28,10 +31,10 @@ const ContactUs = () => {
     const formErrors = validate();
     if (Object.keys(formErrors).length === 0) {
       try {
-        toast.success('Message sent successfully!');
-        setFormData({ name: '', email: '', message: '' });
+        toast.success("Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
       } catch (error) {
-        toast.error('Failed to send message. Please try again.');
+        toast.error("Failed to send message. Please try again.");
       }
     } else {
       setErrors(formErrors);
@@ -39,55 +42,80 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="bg-slate-800 text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Contact Us</h1>
-      <div className="bg-slate-700 p-6 rounded-lg shadow-lg">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-lg font-semibold mb-2">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-3 border border-slate-600 rounded-lg bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-            />
-            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-lg font-semibold mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-3 border border-slate-600 rounded-lg bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
-          <div className="mb-4">
-            <label htmlFor="message" className="block text-lg font-semibold mb-2">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows="5"
-              className="w-full p-3 border border-slate-600 rounded-lg bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-            ></textarea>
-            {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-gray-900 p-3 rounded-lg font-semibold hover:from-teal-400 hover:to-blue-500 transition-colors duration-200"
-          >
-            Send Message
-          </button>
-        </form>
+    <>
+      <Navbar />
+      <div className="bg-gradient-to-r pt-20 from-gray-800 via-gray-900 to-black text-white py-12 px-6 sm:px-12 max-w-4xl mx-auto rounded-lg shadow-lg">
+        <h1 className="text-4xl font-bold mb-8 text-center">Contact Us</h1>
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label
+                htmlFor="name"
+                className="block text-xl font-semibold mb-2"
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+              {errors.name && (
+                <p className="text-red-400 text-sm mt-2">{errors.name}</p>
+              )}
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="email"
+                className="block text-xl font-semibold mb-2"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+              {errors.email && (
+                <p className="text-red-400 text-sm mt-2">{errors.email}</p>
+              )}
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="message"
+                className="block text-xl font-semibold mb-2"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows="6"
+                className="w-full p-4 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              ></textarea>
+              {errors.message && (
+                <p className="text-red-400 text-sm mt-2">{errors.message}</p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-gray-900 p-4 rounded-lg font-semibold hover:from-teal-400 hover:to-blue-500 transition-colors duration-200"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

@@ -9,12 +9,10 @@ export const navLinks = [
 
 // Footer Links (Consider adding href if navigation is required)
 export const footerLinks = [
-  { label: "Audio Description", href: "#" },
-  { label: "Help Centre", href: "#" },
-  { label: "Gift Cards", href: "#" },
-  { label: "Media Centre", href: "#" },
-  { label: "Investor Relations", href: "#" },
-  { label: "Jobs", href: "#" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact Us", href: "/contact-us" },
+  { label: "Sign In", href: "/login" },
+  { label: "Search", href: "/search" },
 ];
 
 // Movie Genres

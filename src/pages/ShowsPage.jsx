@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
@@ -19,6 +19,7 @@ const TVShowsPage = ({ options, type_ }) => {
   const debouncedYear = useDebounce(year, 1000);
   const [loading, setLoading] = useState(true);
   const genre_ = type_ === "movie" ? movieGenre : tvGenre;
+  const showsRef = useRef();
 
   const fetchShows = useCallback(async () => {
     setLoading(true);
@@ -59,8 +60,9 @@ const TVShowsPage = ({ options, type_ }) => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
-      setLoading(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (showsRef.current) {
+        showsRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -75,8 +77,6 @@ const TVShowsPage = ({ options, type_ }) => {
         <Slider
           height="min-h-[50vh] sm:max-h-[70vh] md:max-h-[80vh] lg:max-h-[90vh]"
           movies={filteredShows}
-          setLoading={setLoading}
-          loading={loading}
           options={options}
           type={type_}
         />
@@ -94,7 +94,7 @@ const TVShowsPage = ({ options, type_ }) => {
         ) : (
           <>
             {/* Filters Section */}
-            <div className="p-4 sm:p-6 rounded-lg mb-8 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 ring-gray-700">
+            <div className="p-4 sm:p-6 rounded-lg mb-8 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 ring-gray-700" ref={showsRef}>
               <div className="flex flex-col sm:flex-row sm:space-x-6 w-full ml-auto justify-end">
                 <div className="flex flex-col mb-4 sm:mb-0">
                   <label htmlFor="sort" className="text-white text-sm mb-2">
@@ -162,7 +162,7 @@ const TVShowsPage = ({ options, type_ }) => {
                         aria-label="Decrease Year"
                       >
                         ▼
-                      </button>
+                      </button >
                     </div>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ const TVShowsPage = ({ options, type_ }) => {
             </div>
 
             {/* Main Content Area */}
-            <div>
+            <div >
               <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-300 mb-10">
                 {type_ === "movie" ? "Movies" : "Series"}
               </h2>
@@ -181,31 +181,56 @@ const TVShowsPage = ({ options, type_ }) => {
               </div>
 
               {/* Pagination */}
-              <div className="mt-8 flex justify-center items-center space-x-4">
+              <div className="mt-8 flex justify-center items-center ">
                 <button
-                  onClick={() => handlePageChange(page - 1)}
+                  onClick={() => handlePageChange(1)}
                   disabled={page === 1 || loading}
-                  className={`py-2 px-4 rounded ${
+                  className={`py-2 px-4 rounded-l ${
                     page === 1 || loading
                       ? "bg-gray-700 text-gray-500 cursor-not-allowed"
                       : "bg-gray-800 text-white hover:bg-gray-700"
                   }`}
+                  title="Go to First Page"
                 >
-                  Previous
+                  «
                 </button>
-                <span className="text-white">
-                  Page {page} of {totalPages}
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1 || loading}
+                  className={`py-2 px-4 rounded-r ${
+                    page === 1 || loading
+                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                      : "bg-gray-800 text-white hover:bg-gray-700"
+                  }`}
+                  title="Go to Previous Page"
+                >
+                  ‹
+                </button>
+                <span className="text-white mx-4">
+                  {page}
                 </span>
                 <button
                   onClick={() => handlePageChange(page + 1)}
                   disabled={page === totalPages || loading}
-                  className={`py-2 px-4 rounded ${
+                  className={`py-2 px-4 rounded-l ${
                     page === totalPages || loading
                       ? "bg-gray-700 text-gray-500 cursor-not-allowed"
                       : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`}
+                  }`} title="Go to Next Page"
                 >
-                  Next
+                  ›
+                </button>
+                <button
+                  onClick={() => handlePageChange(totalPages)}
+                  disabled={page === totalPages || loading}
+                  className={`py-2 px-4 rounded-r ${
+                    page === totalPages || loading
+                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                      : "bg-gray-800 text-white hover:bg-gray-700"
+                  }`
+                }title={`Go to Last Page (${totalPages})`}
+                >
+                  »
                 </button>
               </div>
             </div>

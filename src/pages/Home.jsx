@@ -30,6 +30,7 @@ const Home = (props) => {
         <TitleCards title="Popular Series" category="popular" options={options} type={"tv"}/>
         <TitleCards title="Top Rated Series" category="top_rated" options={options} type={"tv"}/>
         <TitleCards title="On The Air" category="on_the_air" options={options} type={"tv"}/>
+        <TitleCards title="Your Watch List" userWatchlist={true} options={options}/>
       </div>
       <Footer />
     </>
