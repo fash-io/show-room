@@ -122,7 +122,7 @@ const Slider = (props) => {
                 {movie.title || movie.name}
               </h1>
 
-              <p className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-sm md:text-lg mb-2 sm:mb-4 hidden sm:block" style={{textShadow: '2px 2px 4px #000000'}}>
+              <p className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs md:text-lg mb-2 sm:mb-4 hidden sm:block" style={{textShadow: '2px 2px 4px #000000'}}>
                 {movie.overview}
               </p>
               <p className="text-xs sm:text-sm md:text-md mb-2 uppercase tracking-wider text-slate-400 font-bold" style={{textShadow: '2px 2px 4px #000000'}}>

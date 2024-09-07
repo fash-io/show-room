@@ -31,7 +31,7 @@ const TVShowsPage = ({ options, type_ }) => {
         : "";
       const response = await fetch(
         `https://api.themoviedb.org/3/discover/${type_}?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sort}.desc&${yearParam}&vote_count.gte=${
-          sort === "popularity" ? 800 : sort === "vote_average" ? 1700 : 0
+          sort === "popularity" ? 600 : sort === "vote_average" ? 1500 : 15
         }&with_genres=${genre}`,
         options
       );
