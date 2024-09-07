@@ -260,8 +260,8 @@ const ContentPage = (props) => {
               </div>
             </div>
 
-            {content.homepage && (
               <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
+            {content.homepage && (
                 <div>
                   <a
                     href={content.homepage}
@@ -272,8 +272,9 @@ const ContentPage = (props) => {
                     Official Website
                   </a>
                 </div>
+            )}
 
-                <div className="">
+                <div>
                   <button
                     className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
                     type="button" onClick={handleAddToWatchList}
@@ -297,7 +298,7 @@ const ContentPage = (props) => {
                 </div>
                 
               </div>
-            )}
+            
           </div>
         </div>
         {type === "series" && content.next_episode_to_air && (
