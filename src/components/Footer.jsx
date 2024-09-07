@@ -60,7 +60,7 @@ const Footer = () => {
         <p className="text-stone-400 text-xs sm:text-sm text-center sm:text-left">
           © 2024 ShowRoom, Inc. All rights reserved.
         </p>
-        <p className="text-center sm:text-left mt-2">
+        <p className="text-center text-xs sm:text-left mt-2">
           ShowRoom – Your gateway to entertainment.
         </p>
       </div>

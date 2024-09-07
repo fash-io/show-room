@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../utils/firebase";
+import { auth, logout } from "../utils/firebase";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,6 +23,11 @@ const Navbar = () => {
   }, [navigate]);
 
   const { pathname } = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const navRef = useRef();
 
@@ -113,7 +118,7 @@ const Navbar = () => {
             </>
           ) : (
             // Login link if no user is logged in
-            <Link to={"/login"} className="text-white">
+            <Link to={"/login"}  className="text-white">
               Login
             </Link>
           )}
