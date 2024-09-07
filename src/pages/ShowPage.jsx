@@ -369,8 +369,8 @@ const ContentPage = (props) => {
             <>
               <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Cast</h2>
               <div
-                className={`flex overflow-x-scroll space-x-4 pb-4 div1 ${
-                  credits.cast.length < 11 ? "div" : ""
+                className={`flex overflow-x-scroll space-x-4 pb-4 ${
+                  credits.cast.length < 11 ? "div" : "div"
                 }`}
               >
                 {credits.cast.map((actor) => (
