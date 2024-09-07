@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db, auth, storage } from "../utils/firebase"; // Import Firebase configuration
+import { db, auth, storage, logout } from "../utils/firebase"; // Import Firebase configuration
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Error from "../components/Error";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -15,6 +16,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async (uid) => {
@@ -92,6 +94,10 @@ const ProfilePage = () => {
       setIsLoading(false);
     }
   };
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -114,7 +120,7 @@ const ProfilePage = () => {
   return (
     <>
       <Navbar noProfile={true} />
-      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center sm:pt-20">
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center sm:pt-20 flex-col">
         <div className="sm:bg-gray-900/80 text-white rounded-lg sm:shadow-xl max-w-3xl w-full p-8">
           <div className="flex flex-col items-center">
             {userData.photoURL ? (
@@ -240,6 +246,7 @@ const ProfilePage = () => {
           </div>
           )}
         </div>
+        <button onClick={handleLogout} className="px-5 py-2 bg-red-700 rounded">Logout</button>
       </div>
       <Footer />
     </>

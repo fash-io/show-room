@@ -139,7 +139,7 @@ const TitleCards = (props) => {
             />
           ))
         ) : (
-          <p>No data available</p>
+          <p className="p-5 border border-white/20 rounded">List is Empty or Not Logged In</p>
         )}
       </div>
     </div>

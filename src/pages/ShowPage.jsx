@@ -10,7 +10,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, storeWatchList } from "../utils/firebase";
 import { toast } from "react-toastify";
 
-
 const ContentPage = (props) => {
   const { id, type } = useParams();
   const [content, setContent] = useState(null);
@@ -20,7 +19,7 @@ const ContentPage = (props) => {
   const [loading, setLoading] = useState(true); // Add loading state
   const { options } = props;
   const [user, setUser] = useState(null);
-  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user_) => {
       if (user_) {
@@ -34,13 +33,18 @@ const ContentPage = (props) => {
   }, [auth]);
 
   const handleAddToWatchList = async () => {
-    try {
-      // Example user ID; you should replace it with the actual user ID
-      const userId = user.uid; // Replace with actual user ID from your auth system
-      await storeWatchList(userId, { id, type });
-    } catch (error) {
-      console.error("Error adding to watch list:", error);
-      toast.error(error)
+    if (user) {
+      try {
+        // Example user ID; you should replace it with the actual user ID
+        const userId = user.uid; // Replace with actual user ID from your auth system
+        await storeWatchList(userId, { id, type });
+      } catch (error) {
+        console.error("Error adding to watch list:", error);
+        toast.error(error);
+      }
+    }
+    else {
+      toast.error("You Need To Create An Account")
     }
   };
 
@@ -260,8 +264,8 @@ const ContentPage = (props) => {
               </div>
             </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
-            {content.homepage && (
+            <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
+              {content.homepage && (
                 <div>
                   <a
                     href={content.homepage}
@@ -272,33 +276,32 @@ const ContentPage = (props) => {
                     Official Website
                   </a>
                 </div>
-            )}
+              )}
 
-                <div>
-                  <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
-                    type="button" onClick={handleAddToWatchList}
+              <div>
+                <button
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
+                  type="button"
+                  onClick={handleAddToWatchList}
+                >
+                  <span className="mr-2">Add to Watch List</span>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <span className="mr-2">Add to Watch List</span>
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 12l5 5L20 7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 12l5 5L20 7"
+                    />
+                  </svg>
+                </button>
               </div>
-            
+            </div>
           </div>
         </div>
         {type === "series" && content.next_episode_to_air && (

@@ -7,6 +7,7 @@ import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { FaCheck, FaHeart } from "react-icons/fa"; // Importing icon for favorites
+import Error from "../components/Error";
 
 const MyListPage = () => {
   const [shows, setShows] = useState([]);
@@ -82,37 +83,47 @@ const MyListPage = () => {
     fetchWatchlistData();
   }, [user, db]);
 
-  const handleWatched = async (showId) => {
-    if (user) {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        // Update the watchlist or another relevant field
-        await updateDoc(userDocRef, {
-          // Example update: mark show as watched
-          watchList: arrayRemove({ id: showId, type: "movie" }) // Adjust type as necessary
-        });
-        // Optionally update local state or UI here
-      } catch (error) {
-        console.error("Failed to mark as watched:", error);
-      }
-    }
-  };
+  // const handleWatched = async (showId) => {
+  //   if (user) {
+  //     try {
+  //       const userDocRef = doc(db, "users", user.uid);
+  //       // Update the watchlist or another relevant field
+  //       await updateDoc(userDocRef, {
+  //         // Example update: mark show as watched
+  //         watchList: arrayRemove({ id: showId, type: "movie" }) // Adjust type as necessary
+  //       });
+  //       // Optionally update local state or UI here
+  //     } catch (error) {
+  //       console.error("Failed to mark as watched:", error);
+  //     }
+  //   }
+  // };
 
-  const handleFavorite = async (showId) => {
-    if (user) {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        // Update the favorites or another relevant field
-        await updateDoc(userDocRef, {
-          // Example update: add to favorites
-          favorites: arrayUnion(showId) // Adjust to your data structure
-        });
-        // Optionally update local state or UI here
-      } catch (error) {
-        console.error("Failed to add to favorites:", error);
-      }
-    }
-  };
+  // const handleFavorite = async (showId) => {
+  //   if (user) {
+  //     try {
+  //       const userDocRef = doc(db, "users", user.uid);
+  //       // Update the favorites or another relevant field
+  //       await updateDoc(userDocRef, {
+  //         // Example update: add to favorites
+  //         favorites: arrayUnion(showId) // Adjust to your data structure
+  //       });
+  //       // Optionally update local state or UI here
+  //     } catch (error) {
+  //       console.error("Failed to add to favorites:", error);
+  //     }
+  //   }
+  // };
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+          <div className="h-[100vh]">
+          <Error error={"Not Logged In"}/>
+          </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -139,14 +150,12 @@ const MyListPage = () => {
                     <ShowCard show={show} type_={show.type} type={1} />
                     <div className="absolute top-2 right-2 flex space-x-2">
                       <button
-                        onClick={() => handleWatched(show.id)}
                         className="p-2 rounded-full bg-gray-900 hover:bg-gray-800 transition-colors duration-200"
                         title="Mark as Watched"
                       >
                         <FaCheck className="w-6 h-6 text-gray-200/50 hover:text-gray-200 duration-200"/>
                       </button>
-                      <button
-                        onClick={() => handleFavorite(show.id)}
+                      <button 
                         className="p-2 rounded-full bg-gray-900 hover:bg-gray-800 transition-colors duration-200"
                         title="Add to Favorites"
                       >

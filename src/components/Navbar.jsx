@@ -24,10 +24,7 @@ const Navbar = ({ noProfile }) => {
 
   const { pathname } = useLocation();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+
 
   const navRef = useRef();
 
