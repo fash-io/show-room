@@ -88,13 +88,18 @@ const Slider = (props) => {
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
       {/* Left button for manual navigation */}
-      <button
+      <div
         onClick={goToPreviousSlide}
-        aria-label="Previous slide"
-        className="hidden sm:block absolute left-2 md:left-10 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-2 md:p-3 rounded-full z-10 hover:bg-black/70 transition duration-200"
+        className="hidden sm:flex justify-center items-center w-32 absolute h-full z-10 cursor-pointer text-white"
+        title="Previous slide"
       >
-        ❮
-      </button>
+        <button
+          aria-label="Previous slide"
+          className="md:left-10 left-2 bg-black/50 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+        >
+          ❮
+        </button>
+      </div>
 
       {/* Slider container */}
       <div
@@ -140,13 +145,18 @@ const Slider = (props) => {
       </div>
 
       {/* Right button for manual navigation */}
-      <button
+      <div
         onClick={goToNextSlide}
-        aria-label="Next slide"
-        className="hidden sm:block absolute right-2 md:right-10 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-2 md:p-3 rounded-full z-10 hover:bg-black/70 transition duration-200"
+        className="hidden sm:flex justify-center items-center w-32 absolute right-0 top-0 h-full z-10 cursor-pointer text-white"
+        title="Next slide"
       >
-        ❯
-      </button>
+        <button
+          aria-label="Previous slide"
+          className="md:left-10 left-2 bg-black/50 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+        >
+          ❯
+        </button>
+      </div>
     </div>
   );
 };

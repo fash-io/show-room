@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { login, signup } from "../utils/firebase";
+import { useEffect, useState } from "react";
+import { auth, login, signup } from "../utils/firebase";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import { Link, useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
-const Login = () => {
+const Login = ({ setIsExploring }) => {
   const [signState, setSignState] = useState("Login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -85,6 +86,10 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+  const handleExploring = () => {
+    setIsExploring(true);
+    navigator("/");
   };
 
   if (loading) {
@@ -182,9 +187,9 @@ const Login = () => {
                   Sign Up Now
                 </span>
               </p>
-              <Link className="" to={"/"}>
+              <p className="" onClick={handleExploring}>
                 Continue without Login
-              </Link>
+              </p>
             </>
           )}
         </div>

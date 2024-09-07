@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Home,
   Login,
@@ -11,15 +12,34 @@ import {
   ContactUs,
   FAQ,
 } from "./pages";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./utils/firebase";
+
 const App = () => {
+  const navigate = useNavigate();
+  const [isExploring, setIsExploring] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user_) => {
+      if (user_) {
+        setUser(user_);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
     },
   };
 
@@ -27,7 +47,12 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Home options={options} />} />
+        <Route
+          path="/"
+          element={
+            isExploring || user ? <Home options={options} /> : <Login setIsExploring={setIsExploring} />
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route
           path="/movies"
@@ -41,10 +66,9 @@ const App = () => {
         <Route path="/person/:id" element={<PersonPage options={options} />} />
         <Route path="/:type/:id" element={<ShowPage options={options} />} />
         <Route path="/search" element={<SearchPage options={options} />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/contact-us" element={<ContactUs />} />{" "}
-        {/* Add new route */}
-        <Route path="/faq" element={<FAQ />} /> {/* Add new route */}
+        <Route path="/profile" element={user ? <ProfilePage /> : <Login />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>
