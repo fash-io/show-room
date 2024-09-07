@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
-import GoBackButton from "../components/GoBackButton"; // Import the GoBackButton component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
 
@@ -86,7 +85,6 @@ const ContentPage = (props) => {
   return (
     <>
       <Navbar />
-      <GoBackButton />
       <div className="text-white min-h-screen">
         {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">

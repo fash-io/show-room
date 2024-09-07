@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import GoBackButton from "../components/GoBackButton";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { calculateAge } from "../constants";
@@ -128,7 +127,6 @@ const PersonPage = (props) => {
     <>
       <Navbar />
       <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
-        <GoBackButton />
 
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 sm:p-8 p-2">
           {/* Actor Profile Image */}

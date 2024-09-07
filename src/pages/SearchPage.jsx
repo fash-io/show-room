@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
-import GoBackButton from "../components/GoBackButton";
 
 const SearchPage = (props) => {
   const [query, setQuery] = useState("");
@@ -92,7 +91,6 @@ const SearchPage = (props) => {
   return (
     <>
       <Navbar />
-      <GoBackButton />
 
       <div className="min-h-screen pt-20 text-white">
         <header className="mb-6 px-20">

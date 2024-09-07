@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
-import GoBackButton from "../components/GoBackButton";
 import Error from "../components/Error";
 
 const PopularPage = ({ options }) => {
@@ -62,7 +61,6 @@ const PopularPage = ({ options }) => {
   return (
     <>
       <Navbar />
-      <GoBackButton />
 
       <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
         {/* Filter and Time Window Controls */}

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
-import GoBackButton from "../components/GoBackButton";
 import Slider from "../components/Slider";
 import useDebounce from "../utils/useDebounce";
 import { movieGenre, tvGenre } from "../constants";
@@ -81,7 +80,6 @@ const TVShowsPage = ({ options, type_ }) => {
           options={options}
           type={type_}
         />
-        <GoBackButton />
       </div>
 
       <div className="container lg:mt-20 mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white">
