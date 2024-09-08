@@ -7,12 +7,14 @@ export const navLinks = [
   { label: "My List", href: "/list", icon: "fa-list", order: 5, index: 5 },
 ];
 
-// Footer Links (Consider adding href if navigation is required)
 export const footerLinks = [
   { label: "FAQ", href: "/faq" },
   { label: "Contact Us", href: "/contact-us" },
-  { label: "Sign In", href: "/login" },
+  { label: "Login", href: "/login" },
   { label: "Search", href: "/search" },
+  { label: "Random Actor", href: `/person/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
+  { label: "Random Movie", href: `/movie/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
+  { label: "Random Tv Show", href: `/series/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
 ];
 
 // Movie Genres
@@ -86,22 +88,27 @@ export function calculateAge(birthDate) {
 export const faqs = [
   {
     question: "What is ShowRoom?",
-    answer: "ShowRoom is your gateway to entertainment, offering a wide range of movies and TV shows for streaming. We provide personalized recommendations and an easy-to-use interface.",
+    answer:
+      "ShowRoom is your gateway to entertainment, offering a wide range of movies and TV shows for streaming. We provide personalized recommendations and an easy-to-use interface.",
   },
   {
     question: "How can I create an account?",
-    answer: "To create an account, click on the 'Sign Up' button on the homepage or the login page. Enter your details, including your name, email, and password, and follow the prompts.",
+    answer:
+      "To create an account, click on the 'Sign Up' button on the homepage or the login page. Enter your details, including your name, email, and password, and follow the prompts.",
   },
   {
     question: "How do I reset my password?",
-    answer: "If you’ve forgotten your password, click on the 'Forgot Password' link on the login page. Enter your email address, and you’ll receive instructions to reset your password.",
+    answer:
+      "If you’ve forgotten your password, click on the 'Forgot Password' link on the login page. Enter your email address, and you’ll receive instructions to reset your password.",
   },
   {
     question: "Can I cancel my subscription?",
-    answer: "Yes, you can cancel your subscription at any time through your account settings. If you need assistance, please contact our support team.",
+    answer:
+      "Yes, you can cancel your subscription at any time through your account settings. If you need assistance, please contact our support team.",
   },
   {
     question: "How do I contact customer support?",
-    answer: "You can contact our customer support team by visiting the 'Contact Us' page on our website. We’re available 24/7 to assist you with any issues or questions.",
+    answer:
+      "You can contact our customer support team by visiting the 'Contact Us' page on our website. We’re available 24/7 to assist you with any issues or questions.",
   },
 ];

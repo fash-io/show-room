@@ -3,27 +3,17 @@ import { getFirestore } from "firebase/firestore";
 import Loading from "./Loading";
 import Error from "./Error";
 import ShowCard from "./ShowCard";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 const TitleCards = (props) => {
-  const { title, category, options, type, userWatchlist } = props;
+  const { title, category, options, type, userWatchlist, user } = props;
   const [apiData, setApiData] = useState([]);
   const [watchlistData, setWatchlistData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user_) => {
-      setUser(user_ || null);
-    });
-
-    return () => unsubscribe(); // Cleanup on unmount
-  }, []);
 
   const db = getFirestore(); // Initialize Firestore
+  console.log(user)
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -136,6 +126,7 @@ const TitleCards = (props) => {
               show={card}
               type_={card.type || type}
               type={2}
+              user={user}
             />
           ))
         ) : (

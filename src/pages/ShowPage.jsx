@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaHeart, FaCheck } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, storeWatchList } from "../utils/firebase";
-import { toast } from "react-toastify";
+import { handleAddToFavorites, handleAddToWatchList, handleAddToWatched } from "../utils/firebaseHandlers";
+
 
 const ContentPage = (props) => {
   const { id, type } = useParams();
@@ -17,36 +16,7 @@ const ContentPage = (props) => {
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
-  const { options } = props;
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user_) => {
-      if (user_) {
-        setUser(user_);
-      } else {
-        setUser({});
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup on unmount
-  }, [auth]);
-
-  const handleAddToWatchList = async () => {
-    if (user) {
-      try {
-        // Example user ID; you should replace it with the actual user ID
-        const userId = user.uid; // Replace with actual user ID from your auth system
-        await storeWatchList(userId, { id, type });
-      } catch (error) {
-        console.error("Error adding to watch list:", error);
-        toast.error(error);
-      }
-    }
-    else {
-      toast.error("You Need To Create An Account")
-    }
-  };
+  const { options, user } = props; 
 
   useEffect(() => {
     const fetchContentDetails = async () => {
@@ -117,7 +87,7 @@ const ContentPage = (props) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user}/>
       <div className="text-white min-h-screen">
         {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">
@@ -271,18 +241,18 @@ const ContentPage = (props) => {
                     href={content.homepage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
                   >
                     Official Website
                   </a>
                 </div>
               )}
 
-              <div>
+              <div className="flex flex-col sm:flex-row gap-3 items-center">
                 <button
                   className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
                   type="button"
-                  onClick={handleAddToWatchList}
+                  onClick={() => handleAddToWatchList(content.id, type, user)}
                 >
                   <span className="mr-2">Add to Watch List</span>
                   <svg
@@ -301,6 +271,22 @@ const ContentPage = (props) => {
                   </svg>
                 </button>
               </div>
+            </div>
+            <div>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                title="Add to favorites"
+                onClick={() => handleAddToFavorites(content.id, type, user)}
+              >
+                <FaHeart className="" />
+              </button>
+              <button
+                className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                title="Mark as watched"
+                onClick={() => handleAddToWatched(content.id, type, user)}
+              >
+                <FaCheck className="" />
+              </button>
             </div>
           </div>
         </div>
@@ -440,7 +426,7 @@ const ContentPage = (props) => {
             </h2>
             <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
               {recommendations.map((rec) => (
-                <ShowCard key={rec.id} show={rec} type_={type} type={2} />
+                <ShowCard key={rec.id} show={rec} type_={type} type={2} user={user}/>
               ))}
             </div>
           </div>

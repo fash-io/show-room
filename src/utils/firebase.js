@@ -68,34 +68,37 @@ const logout = async () => {
 };
 
 
-export const storeWatchList = async (uid, newItem) => {
+const storeItem = async (uid, newItem, listType) => {
   try {
     const userDocRef = doc(db, "users", uid);
     const userDoc = await getDoc(userDocRef);
 
-    let watchList = [];
+    let list = [];
 
     if (userDoc.exists()) {
-      watchList = userDoc.data().watchList || [];
-      if (!Array.isArray(watchList)) {
-        watchList = [];
+      list = userDoc.data()[listType] || [];
+      if (!Array.isArray(list)) {
+        list = [];
       }
     }
 
-    // Check if the item already exists in the watch list
-    if (!watchList.find(item => item.id === newItem.id && item.type === newItem.type)) {
-      watchList.push(newItem);
-      await setDoc(userDocRef, { watchList }, { merge: true });
-      console.log("Watch list updated successfully");
-      toast.success("Added to watch list");
+    // Check if the item already exists in the list
+    if (!list.find(item => item.id === newItem.id && item.type === newItem.type)) {
+      list.push(newItem);
+      await setDoc(userDocRef, { [listType]: list }, { merge: true });
+      console.log(`${listType.charAt(0).toUpperCase() + listType.slice(1)} updated successfully`);
+      toast.success(`Added to ${listType}`);
     } else {
-      console.log("Item already in watch list");
-      toast.error("Item already in watch list");
+      console.log(`Item already in ${listType}`);
+      toast.error(`Item already in ${listType}`);
     }
   } catch (error) {
-    console.error("Error storing watch list:", error.message);
+    console.error(`Error storing ${listType}:`, error.message);
   }
 };
 
-
+// Usage
+export const storeWatchList = (uid, newItem) => storeItem(uid, newItem, "watchList");
+export const storeFavorite = (uid, newItem) => storeItem(uid, newItem, "favorite");
+export const storeWatched = (uid, newItem) => storeItem(uid, newItem, "watched");
 export { auth, db, storage, signup, login, logout  }; // Export storage

@@ -15,14 +15,24 @@ import {
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./utils/firebase";
-import { logout } from "./utils/firebase";
+import { auth, logout } from "./utils/firebase";
 import MyListPage from "./pages/MyList";
+import Loading from "./components/Loading";
+
+// Move the API options outside of the component
+const apiOptions = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
+  },
+};
 
 const App = () => {
-  const navigate = useNavigate();
   const [isExploring, setIsExploring] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user_) => {
@@ -31,51 +41,67 @@ const App = () => {
       } else {
         setUser(null);
       }
+      setLoading(false); // Set loading to false after Firebase check
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
-    },
-  };
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  if (loading) {
+    return <Loading/>; // Show a loading spinner or message while checking auth
+  }
 
   return (
     <>
       <ToastContainer />
       <Routes>
-        <Route
-          path="/"
-          element={
-            isExploring || user ? <Home options={options} /> : <Login setIsExploring={setIsExploring} />
+        {/* Home Route */}
+        <Route path="/" element={ isExploring || user ? (
+              <Home options={apiOptions} user={user} />
+            ) : (
+              <Login setIsExploring={setIsExploring} />
+            )
           }
         />
-        <Route path="/login" element={<Login setIsExploring={setIsExploring}/>} />
+
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login setIsExploring={setIsExploring} />} />
+        <Route path="/profile" element={user ? <ProfilePage /> : <Login setIsExploring={setIsExploring} />} />
+        <Route path="/list" element={<MyListPage user={user} options={apiOptions}/>}/>
+
+        {/* Show and Movie Routes */}
         <Route
           path="/movies"
-          element={<ShowsPage options={options} type_={"movie"} />}
+          element={
+            <ShowsPage options={apiOptions} type_={"movie"} user={user} />
+          }
         />
         <Route
           path="/series"
-          element={<ShowsPage options={options} type_={"tv"} />}
+          element={
+            <ShowsPage options={apiOptions} type_={"tv"} user={user} />
+          }
         />
-        <Route path="/trending" element={<PopularPage options={options} />} />
-        <Route path="/person/:id" element={<PersonPage options={options} />} />
-        <Route path="/:type/:id" element={<ShowPage options={options} />} />
-        <Route path="/search" element={<SearchPage options={options} />} />
-        <Route path="/profile" element={user ? <ProfilePage /> : <Login />} />
+        <Route
+          path="/trending"
+          element={<PopularPage options={apiOptions} user={user} />}
+        />
+        <Route
+          path="/person/:id"
+          element={<PersonPage options={apiOptions} user={user} />}
+        />
+        <Route
+          path="/:type/:id"
+          element={<ShowPage options={apiOptions} user={user} />}
+        />
+
+        {/* Misc Routes */}
+        <Route
+          path="/search"
+          element={<SearchPage options={apiOptions} user={user} />}
+        />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/faq" element={<FAQ />} />
-        <Route path="/list" element={<MyListPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

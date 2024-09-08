@@ -13,7 +13,7 @@ const SearchPage = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null); // For error handling
 
-  const { options } = props;
+  const { options, user } = props;
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -90,7 +90,7 @@ const SearchPage = (props) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user} />
 
       <div className="min-h-screen pt-20 text-white">
         <header className="mb-6 px-20">
@@ -164,7 +164,13 @@ const SearchPage = (props) => {
                         : "https://via.placeholder.com/150x225?text=No+Image"
                     }
                     alt={data.name || data.title}
-                    className={`${!(data.backdrop_path) ? filter === "person" ? "object-cover" : "max-h-44" :"w-full"}`}
+                    className={`${
+                      !data.backdrop_path
+                        ? filter === "person"
+                          ? "object-cover"
+                          : "max-h-44"
+                        : "w-full"
+                    }`}
                   />
                   <div className="p-4 w-full">
                     <h3 className="text-2xl font-semibold text-white mb-3">

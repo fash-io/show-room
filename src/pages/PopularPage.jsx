@@ -5,7 +5,8 @@ import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-const PopularPage = ({ options }) => {
+const PopularPage = (props) => {
+  const { options, user } = props;
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,7 +61,7 @@ const PopularPage = ({ options }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user}/>
 
       <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
         {/* Filter and Time Window Controls */}
@@ -128,7 +129,7 @@ const PopularPage = ({ options }) => {
               to={`/${movie.media_type === "movie" ? "movie" : "series"}/${
                 movie.id
               }`}
-              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform sm:hover:scale-105 sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
+              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
             >
               <img
                 src={
@@ -137,7 +138,7 @@ const PopularPage = ({ options }) => {
                     : "https://via.placeholder.com/300x450?text=No+Image"
                 }
                 alt={movie.title || movie.name}
-                className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10"
+                className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
               />
               <div
                 className="p-4  "

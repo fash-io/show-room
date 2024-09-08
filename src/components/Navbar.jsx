@@ -1,30 +1,12 @@
 import { navLinks } from "../constants";
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, logout } from "../utils/firebase";
 
-const Navbar = ({ noProfile }) => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user_) => {
-      if (user_) {
-        setUser(user_);
-      } else {
-        setUser({});
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup on unmount
-  }, [navigate]);
-
+const Navbar = (props) => {
+  const { noProfile, user } = props
   const { pathname } = useLocation();
-
-
 
   const navRef = useRef();
 

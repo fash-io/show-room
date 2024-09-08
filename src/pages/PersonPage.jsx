@@ -13,7 +13,7 @@ const PersonPage = (props) => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [sortType, setSort] = useState("popularity");
-  const { options } = props;
+  const { options, user } = props;
 
   useEffect(() => {
     const fetchActorDetails = async () => {
@@ -64,55 +64,44 @@ const PersonPage = (props) => {
       return true; // Keep all movies (or if media_type isn't 'tv')
     }) || [];
 
-  // Filter movies based on the selected filter
   const filteredMovies = movies_?.length
     ? filter === "all"
       ? movies_
       : movies_.filter((credit) => credit.media_type === filter)
     : [];
 
-  // Filter director jobs from the crew based on selected filter
+  // Filter and sort director jobs from the crew based on selected filter
   const filteredMoviesDir = movies?.crew?.length
-    ? filter === "all"
-      ? movies.crew.filter((member) => member.job === "Director")
-      : movies.crew
-          .filter((credit) => credit.media_type === filter)
-          .filter((member) => member.job === "Director")
+    ? movies.crew.filter(
+        (member) =>
+          member.job === "Director" &&
+          (filter === "all" || member.media_type === filter)
+      )
     : [];
 
-  const sortedMoviesDir = [...filteredMoviesDir].sort((a, b) => {
-    switch (sortType) {
-      case "name":
-        return (a.title || a.name).localeCompare(b.title || b.name);
-      case "release_date":
-        return (a.release_date || a.first_air_date || "").localeCompare(
-          b.release_date || b.first_air_date || ""
-        );
-      case "popularity":
-        return b.popularity - a.popularity;
-      case "rating":
-        return b.vote_average - a.vote_average;
-      default:
-        return 0;
-    }
-  });
+  // Sort by the selected sortType
+  const sortMovies = (moviesToSort) => {
+    return moviesToSort.sort((a, b) => {
+      switch (sortType) {
+        case "name":
+          return (a.title || a.name).localeCompare(b.title || b.name);
+        case "release_date":
+          return (a.release_date || a.first_air_date || "").localeCompare(
+            b.release_date || b.first_air_date || ""
+          );
+        case "popularity":
+          return b.popularity - a.popularity;
+        case "rating":
+          return b.vote_average - a.vote_average;
+        default:
+          return 0;
+      }
+    });
+  };
 
-  const sortedMovies = [...filteredMovies].sort((a, b) => {
-    switch (sortType) {
-      case "name":
-        return (a.title || a.name).localeCompare(b.title || b.name);
-      case "release_date":
-        return (a.release_date || a.first_air_date || "").localeCompare(
-          b.release_date || b.first_air_date || ""
-        );
-      case "popularity":
-        return b.popularity - a.popularity;
-      case "rating":
-        return b.vote_average - a.vote_average;
-      default:
-        return 0;
-    }
-  });
+  // Sort both the filtered movie lists
+  const sortedMovies = sortMovies(filteredMovies);
+  const sortedMoviesDir = sortMovies(filteredMoviesDir);
 
   if (error) {
     return <Error error={error} />;
@@ -125,9 +114,8 @@ const PersonPage = (props) => {
   today.getFullYear;
   return (
     <>
-      <Navbar />
+      <Navbar user={user}/>
       <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
-
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 sm:p-8 p-2">
           {/* Actor Profile Image */}
           <div className="lg:w-1/3 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:sticky lg:top-32 max-sm:w-full">
@@ -250,7 +238,7 @@ const PersonPage = (props) => {
                   to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
                     credit.id
                   }`}
-                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg sm:transition-transform transform sm:hover:scale-105 sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end"
+                  className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg  transform  sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end group"
                 >
                   <img
                     src={
@@ -259,7 +247,7 @@ const PersonPage = (props) => {
                         : "https://via.placeholder.com/200x300?text=No+Image"
                     }
                     alt={credit.title || credit.name}
-                    className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10"
+                    className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 duration-200"
                   />
                   <div
                     className="pb-0 sm:p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent"

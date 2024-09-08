@@ -7,7 +7,8 @@ import useDebounce from "../utils/useDebounce";
 import { movieGenre, tvGenre } from "../constants";
 import ShowCard from "../components/ShowCard";
 
-const TVShowsPage = ({ options, type_ }) => {
+const TVShowsPage = (props) => {
+  const { options, type_, user } = props;
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
   const [page, setPage] = useState(1);
@@ -72,7 +73,7 @@ const TVShowsPage = ({ options, type_ }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user}/>
       <div>
         <Slider
           height="min-h-[50vh] sm:max-h-[70vh] md:max-h-[80vh] lg:max-h-[90vh]"

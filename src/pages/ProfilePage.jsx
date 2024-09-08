@@ -8,15 +8,15 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Error from "../components/Error";
 import { useNavigate } from "react-router-dom";
+import { handleLogout } from "../utils/firebaseHandlers";
 
-const ProfilePage = () => {
+const ProfilePage = ({ user }) => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async (uid) => {
@@ -71,7 +71,10 @@ const ProfilePage = () => {
       let photoURL = userData.photoURL;
 
       if (file) {
-        const storageRef = ref(storage, `profileImages/${auth.currentUser.uid}/${file.name}`);
+        const storageRef = ref(
+          storage,
+          `profileImages/${auth.currentUser.uid}/${file.name}`
+        );
         await uploadBytes(storageRef, file);
         photoURL = await getDownloadURL(storageRef);
       }
@@ -94,19 +97,13 @@ const ProfilePage = () => {
       setIsLoading(false);
     }
   };
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   if (isLoading) {
     return <Loading />;
   }
 
   if (error) {
-    return (
-      <Error error={error}/>
-    );
+    return <Error error={error} />;
   }
 
   if (userData === null) {
@@ -119,7 +116,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Navbar noProfile={true} />
+      <Navbar noProfile={true} user={user} />
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center sm:pt-20 flex-col">
         <div className="sm:bg-gray-900/80 text-white rounded-lg sm:shadow-xl max-w-3xl w-full p-8">
           <div className="flex flex-col items-center">
@@ -155,7 +152,7 @@ const ProfilePage = () => {
                   className="w-full p-3 mt-1 bg-gray-700 rounded-lg text-white"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm text-gray-400">Phone:</label>
                 <input
@@ -196,7 +193,9 @@ const ProfilePage = () => {
                       ...formData,
                       additionalInfo: {
                         ...formData.additionalInfo,
-                        hobbies: e.target.value.split(",").map(hobby => hobby.trim()),
+                        hobbies: e.target.value
+                          .split(",")
+                          .map((hobby) => hobby.trim()),
                       },
                     })
                   }
@@ -204,7 +203,9 @@ const ProfilePage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400">Profile Image:</label>
+                <label className="block text-sm text-gray-400">
+                  Profile Image:
+                </label>
                 <input
                   type="file"
                   accept="image/*"
@@ -223,30 +224,34 @@ const ProfilePage = () => {
 
           {!isEditing && (
             <div className="mt-6 space-y-4">
-            <div>
-              <p className="text-sm text-gray-400">Email:</p>
-              <p className="text-lg">{userData.email || "N/A"}</p>
+              <div>
+                <p className="text-sm text-gray-400">Email:</p>
+                <p className="text-lg">{userData.email || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Phone:</p>
+                <p className="text-lg">{userData.phoneNumber || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Address:</p>
+                <p className="text-lg">{userData.address || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Bio:</p>
+                <p className="text-lg">{userData.bio || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Hobbies:</p>
+                <p className="text-lg">
+                  {userData.additionalInfo?.hobbies.join(", ") || "N/A"}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Phone:</p>
-              <p className="text-lg">{userData.phoneNumber || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Address:</p>
-              <p className="text-lg">{userData.address || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Bio:</p>
-              <p className="text-lg">{userData.bio || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Hobbies:</p>
-              <p className="text-lg">{userData.additionalInfo?.hobbies.join(", ") || "N/A"}</p>
-            </div>
-          </div>
           )}
+        <button onClick={handleLogout} className=" float-right my-3  px-5 mx-auto py-2 bg-red-700 rounded">
+          Logout
+        </button>
         </div>
-        <button onClick={handleLogout} className="px-5 py-2 bg-red-700 rounded">Logout</button>
       </div>
       <Footer />
     </>
