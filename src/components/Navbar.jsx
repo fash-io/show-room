@@ -31,7 +31,7 @@ const Navbar = (props) => {
     <>
       <nav
         ref={navRef}
-        className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-50 text-sm duration-300 ${
+        className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300 ${
           pathname === "/login" ? "hidden" : ""
         }`}
         style={{
@@ -106,7 +106,7 @@ const Navbar = (props) => {
         </div>
       </nav>
 
-      <ul className="fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-50 rounded-t-lg">
+      <ul className="fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-[998] ">
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
@@ -118,7 +118,7 @@ const Navbar = (props) => {
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-6 py-2 -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
+                    ? "absolute px-6   py-2 -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
                     : ""
                 }`}
               >

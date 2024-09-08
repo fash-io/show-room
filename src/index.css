@@ -8,9 +8,6 @@ html{
 *{
   font-family: "Poppins", sans-serif;
 }
-.profile:hover .dropdown{
-  display: block;
-}
 .banner-img{
   mask-image: linear-gradient(to right, transparent, black 75%);
   --webkit-mask-image: linear-gradient(to right, transparent, black 75%);
@@ -39,23 +36,89 @@ html{
 .spans span:nth-child(3) {
   animation: blink 600ms linear -200ms infinite alternate;
 }
-::-webkit-scrollbar {
-  width: 12px;
+ ::-webkit-scrollbar {
+  width: 5px;
 }
 
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: #2d2d2d;
   border-radius: 10px;
-}
-
+} */
 ::-webkit-scrollbar-thumb {
   background: #4a4a4a;
   border-radius: 10px; 
 }
+/*
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6a6a6a;
-}
+} */
 .gg{
   background-image: linear-gradient(to right, #ff7e5f, #1a2a6c);
+}
+.divvv{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: min-content;
+}
+.divv{
+  height: 100%;
+  position: relative;
+  min-height: 180px;
+   overflow-y: hidden ;
+   overflow-x: hidden;
+}
+.divv::after{
+  content: "";
+  /* background: #e62429; */
+  background: linear-gradient(to bottom, #732711, #1a2a6c);
+  width: 100%;
+  height: 102%;
+  position: absolute;
+  top: -100%;
+  transition: 300ms;
+}
+.divvv:hover .divv::after{ 
+  top: 0; 
+  z-index: 40;
+}
+.divv::before{
+  content: "";
+  background-color: #000;
+  width: 50px;
+  height: 40px;
+  z-index: 50;
+  position: absolute;
+  bottom: -10%;
+  right: -15%;
+  transform: rotate(135deg);
+}
+.slider-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.slider {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  animation: slide 20s linear infinite;
+}
+
+.slider-item img {
+  width: 200px; /* Adjust to your needs */
+  height: auto;
+  border-radius: 10px;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }

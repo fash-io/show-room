@@ -6,8 +6,12 @@ import { FaStar, FaStarHalfAlt, FaHeart, FaCheck } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
-import { handleAddToFavorites, handleAddToWatchList, handleAddToWatched } from "../utils/firebaseHandlers";
-
+import {
+  handleAddToFavorites,
+  handleAddToWatchList,
+  handleAddToWatched,
+} from "../utils/firebaseHandlers";
+import SlidingImages from "../components/SlidingImages";
 
 const ContentPage = (props) => {
   const { id, type } = useParams();
@@ -16,7 +20,7 @@ const ContentPage = (props) => {
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
-  const { options, user } = props; 
+  const { options, user } = props;
 
   useEffect(() => {
     const fetchContentDetails = async () => {
@@ -87,7 +91,7 @@ const ContentPage = (props) => {
 
   return (
     <>
-      <Navbar user={user}/>
+      <Navbar user={user} />
       <div className="text-white min-h-screen">
         {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">
@@ -234,59 +238,66 @@ const ContentPage = (props) => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
-              {content.homepage && (
-                <div>
-                  <a
-                    href={content.homepage}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
-                  >
-                    Official Website
-                  </a>
-                </div>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-lg">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center mt-4 items-start gap-4">
+                  {content.homepage && (
+                    <div>
+                      <a
+                        href={content.homepage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                      >
+                        Official Website
+                      </a>
+                    </div>
+                  )}
 
-              <div className="flex flex-col sm:flex-row gap-3 items-center">
-                <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
-                  type="button"
-                  onClick={() => handleAddToWatchList(content.id, type, user)}
-                >
-                  <span className="mr-2">Add to Watch List</span>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div className="flex flex-col gap-3 items-center">
+                    <button
+                      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
+                      type="button"
+                      onClick={() =>
+                        handleAddToWatchList(content.id, type, user)
+                      }
+                    >
+                      <span className="mr-2">Add to Watch List</span>
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 12l5 5L20 7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    title="Add to favorites"
+                    onClick={() => handleAddToFavorites(content.id, type, user)}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 12l5 5L20 7"
-                    />
-                  </svg>
-                </button>
+                    <FaHeart className="" />
+                  </button>
+                  <button
+                    className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    title="Mark as watched"
+                    onClick={() => handleAddToWatched(content.id, type, user)}
+                  >
+                    <FaCheck className="" />
+                  </button>
+                </div>
               </div>
-            </div>
-            <div>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
-                title="Add to favorites"
-                onClick={() => handleAddToFavorites(content.id, type, user)}
-              >
-                <FaHeart className="" />
-              </button>
-              <button
-                className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
-                title="Mark as watched"
-                onClick={() => handleAddToWatched(content.id, type, user)}
-              >
-                <FaCheck className="" />
-              </button>
+              <SlidingImages images={content.production_companies} />
             </div>
           </div>
         </div>
@@ -315,41 +326,6 @@ const ContentPage = (props) => {
           </div>
         )}
 
-        {/* Seasons Section (Only for TV Series) */}
-        {type === "series" && (
-          <div className="p-4 sm:p-6 md:p-10 lg:p-20">
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-8">
-              {content.seasons.map((season) => (
-                <div
-                  key={season.id}
-                  className="bg-gray-900 rounded-lg shadow-lg p-4"
-                >
-                  <img
-                    src={
-                      season.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
-                        : "https://via.placeholder.com/150x225?text=No+Image"
-                    }
-                    alt={`Season ${season.season_number} Poster`}
-                    className=" rounded-lg mb-4 object-scale-down"
-                  />
-                  <h3 className="text-xl sm:text-2xl font-semibold mb-2">
-                    {season.name}
-                  </h3>
-                  <p>
-                    <span className="font-semibold">Air Date:</span>{" "}
-                    {season.air_date || "N/A"}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Episodes:</span>{" "}
-                    {season.episode_count}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Cast and Crew Section */}
         <div className="p-4 sm:p-6 md:p-10 lg:p-20">
@@ -360,26 +336,32 @@ const ContentPage = (props) => {
               <div
                 className={`flex overflow-x-scroll space-x-4 pb-4 ${
                   credits.cast.length < 11 ? "div" : "div"
-                }`}
+                  }`}
               >
                 {credits.cast.map((actor) => (
                   <Link key={actor.cast_id} to={`/person/${actor.id}`}>
-                    <div className="flex-shrink-0 w-28 sm:w-32">
-                      <img
-                        src={
-                          actor.profile_path
+                    <div className="flex-shrink-0 w-40 sm:w-48 divvv group">
+                      <div className="overflow-hidden w-full h-full">
+                        <img
+                          src={
+                            actor.profile_path
                             ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
                             : "https://via.placeholder.com/150x225?text=No+Image"
-                        }
-                        alt={actor.name}
-                        className="w-full h-40 object-cover rounded-lg shadow-md mb-2"
-                      />
-                      <p className="text-center font-semibold text-sm sm:text-base">
-                        {actor.name}
-                      </p>
-                      <p className="text-center text-xs sm:text-sm text-gray-400">
-                        as {actor.character}
-                      </p>
+                          }
+                          alt={actor.name}
+                          className="w-full object-cover z-50 group-hover:scale-110 duration-500"
+                          />
+                      </div>
+                      <div className="divv pt-2 bg-[#191919] ">
+                        <div className="absolute z-50 px-1 h-full flex flex-col justify-between pb-5 pr-7">
+                          <p className="text-center font-semibold text-sm sm:text-base duration-200  hover:text-white group-hover:text-white">
+                            {actor.name}
+                          </p>
+                          <p className=" text-xs sm:text-sm  group-hover:text-gray-200 duration-200 text-gray-400">
+                            as {actor.character}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -396,19 +378,25 @@ const ContentPage = (props) => {
               <div className="flex overflow-x-scroll space-x-4 pb-4 div">
                 {directors.map((director) => (
                   <Link key={director.id} to={`/person/${director.id}`}>
-                    <div className="flex-shrink-0 w-28 sm:w-32">
-                      <img
-                        src={
-                          director.profile_path
+                    <div className="flex-shrink-0 w-40 sm:w-48 divvv group overflow-hidden ">
+                      <div className="overflow-hidden w-full h-full">
+                        <img
+                          src={
+                            director.profile_path
                             ? `https://image.tmdb.org/t/p/w300${director.profile_path}`
                             : "https://via.placeholder.com/150x225?text=No+Image"
-                        }
-                        alt={director.name}
-                        className="w-full h-40 object-cover rounded-lg shadow-md mb-2"
-                      />
-                      <p className="text-center font-semibold text-sm sm:text-base">
-                        {director.name}
-                      </p>
+                          }
+                          alt={director.name}
+                          className="w-full object-cover z-50 group-hover:scale-105 duration-500"
+                          />
+                      </div>
+                      <div className="divv pt-2 bg-[#191919]">
+                        <div className="absolute z-50 px-1 h-full flex flex-col justify-between pb-5 pl-7">
+                          <p className="text-center font-semibold text-sm sm:text-base duration-200  hover:text-white group-hover:text-white">
+                            {director.name}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -419,6 +407,70 @@ const ContentPage = (props) => {
           )}
         </div>
 
+          {/* Seasons Section (Only for TV Series) */}
+          {type === "series" && (
+            <div className="p-4 sm:p-6 md:p-10 lg:p-20">
+              <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-8">
+                {content.seasons.map((season) => (
+                  <div
+                    key={season.id}
+                    className="bg-gray-900 rounded-lg shadow-lg p-4"
+                  >
+                    <img
+                      src={
+                        season.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
+                          : "https://via.placeholder.com/150x225?text=No+Image"
+                      }
+                      alt={`Season ${season.season_number} Poster`}
+                      className=" rounded-lg mb-4 object-scale-down"
+                    />
+                    <h3 className="text-xl sm:text-2xl font-semibold mb-2">
+                      {season.name}
+                    </h3>
+                    <p>
+                      <span className="font-semibold">Air Date:</span>{" "}
+                      {season.air_date || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Episodes:</span>{" "}
+                      {season.episode_count}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {content.belongs_to_collection && (
+            <>
+              <div className="p-4 sm:p-6 md:p-10 lg:p-20 max-w-full flex flex-col">
+                <h2 className="text-2xl sm:text-3xl font-semibold mb-6">
+                  Collection
+                </h2>
+                <Link
+                  to={`/collection/${content.belongs_to_collection.id}`}
+                  className="max-w-52 rounded-lg shadow-lg p-4 flex flex-col w-full group divvv"
+                >
+                  <div className=" max-w-min flex flex-col w-full">
+                  <img
+                    src={
+                      content.belongs_to_collection.backdrop_path
+                        ? `https://image.tmdb.org/t/p/w500${content.belongs_to_collection.backdrop_path}`
+                        : "https://via.placeholder.com/150x225?text=No+Image"
+                    }
+                    alt="Collection Poster"
+                    className=" rounded-lg mb-4 object-cover min-w-72 md:min-w-96 group-hover:scale-105 duration-500"
+                  />
+                  <h3 className="text-xl sm:text-2xl font-semibold mb-2 divv">
+                    {content.belongs_to_collection.name}
+                  </h3>
+                  </div>
+                </Link>
+              </div>
+            </>
+          )}
+          {/* Recommendations */}
         {recommendations.length > 0 && (
           <div className="p-4 sm:p-6 md:p-10">
             <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
@@ -426,7 +478,13 @@ const ContentPage = (props) => {
             </h2>
             <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
               {recommendations.map((rec) => (
-                <ShowCard key={rec.id} show={rec} type_={type} type={2} user={user}/>
+                <ShowCard
+                  key={rec.id}
+                  show={rec}
+                  type_={type}
+                  type={2}
+                  user={user}
+                />
               ))}
             </div>
           </div>

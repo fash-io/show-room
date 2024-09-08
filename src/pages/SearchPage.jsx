@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
+import Pagination from "../components/Pagination";
 
 const SearchPage = (props) => {
   const [query, setQuery] = useState("");
@@ -122,6 +123,7 @@ const SearchPage = (props) => {
                   <option value="movie">Movies</option>
                   <option value="person">Person</option>
                   <option value="tv">Series</option>
+                  <option value="collection">Collections</option>
                 </select>
               )}
             </div>
@@ -221,35 +223,12 @@ const SearchPage = (props) => {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="mt-8 flex justify-center items-center space-x-4">
-            <button
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page === 1 || loading}
-              className={`py-2 px-4 rounded ${
-                page === 1 || loading
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-900 text-white hover:bg-slate-900"
-              }`}
-              aria-label="Previous page"
-            >
-              Previous
-            </button>
-            <span className="text-white">
-              Page {page} of {totalPages}
-            </span>
-            <button
-              onClick={() => handlePageChange(page + 1)}
-              disabled={page === totalPages || loading}
-              className={`py-2 px-4 rounded ${
-                page === totalPages || loading
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-900 text-white hover:bg-slate-900"
-              }`}
-              aria-label="Next page"
-            >
-              Next
-            </button>
-          </div>
+          <Pagination
+            totalPages={totalPages}
+            page={page}
+            handlePageChange={handlePageChange}
+            loading={loading}
+          />
         )}
       </div>
       <Footer />

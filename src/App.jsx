@@ -11,6 +11,7 @@ import {
   ProfilePage,
   ContactUs,
   FAQ,
+  CollectionPage,
 } from "./pages";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -48,15 +49,18 @@ const App = () => {
   }, [auth]);
 
   if (loading) {
-    return <Loading/>; // Show a loading spinner or message while checking auth
+    return <Loading />; // Show a loading spinner or message while checking auth
   }
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer className={"toast-container z-[1000]"} />
       <Routes>
         {/* Home Route */}
-        <Route path="/" element={ isExploring || user ? (
+        <Route
+          path="/"
+          element={
+            isExploring || user ? (
               <Home options={apiOptions} user={user} />
             ) : (
               <Login setIsExploring={setIsExploring} />
@@ -65,9 +69,20 @@ const App = () => {
         />
 
         {/* Auth Routes */}
-        <Route path="/login" element={<Login setIsExploring={setIsExploring} />} />
-        <Route path="/profile" element={user ? <ProfilePage /> : <Login setIsExploring={setIsExploring} />} />
-        <Route path="/list" element={<MyListPage user={user} options={apiOptions}/>}/>
+        <Route
+          path="/login"
+          element={<Login setIsExploring={setIsExploring} />}
+        />
+        <Route
+          path="/profile"
+          element={
+            user ? <ProfilePage /> : <Login setIsExploring={setIsExploring} />
+          }
+        />
+        <Route
+          path="/list"
+          element={<MyListPage user={user} options={apiOptions} />}
+        />
 
         {/* Show and Movie Routes */}
         <Route
@@ -78,9 +93,7 @@ const App = () => {
         />
         <Route
           path="/series"
-          element={
-            <ShowsPage options={apiOptions} type_={"tv"} user={user} />
-          }
+          element={<ShowsPage options={apiOptions} type_={"tv"} user={user} />}
         />
         <Route
           path="/trending"
@@ -91,9 +104,17 @@ const App = () => {
           element={<PersonPage options={apiOptions} user={user} />}
         />
         <Route
+          path="/collection/:id"
+          element={<CollectionPage options={apiOptions} user={user} />}
+        />
+
+        <Route
           path="/:type/:id"
           element={<ShowPage options={apiOptions} user={user} />}
         />
+
+        {/* 404 Route */}
+        <Route path="/404" element={<Error error={"mad"} />} />
 
         {/* Misc Routes */}
         <Route

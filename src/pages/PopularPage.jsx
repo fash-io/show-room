@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
+import Pagination from "../components/Pagination";
 
 const PopularPage = (props) => {
   const { options, user } = props;
@@ -159,33 +160,12 @@ const PopularPage = (props) => {
           ))}
         </div>
         {/* Pagination */}
-        <div className="mt-8 flex justify-center items-center space-x-4">
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1 || loading}
-            className={`py-2 px-4 rounded ${
-              page === 1 || loading
-                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                : "bg-gray-800 text-white hover:bg-gray-700"
-            }`}
-          >
-            Previous
-          </button>
-          <span className="text-white">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages || loading}
-            className={`py-2 px-4 rounded ${
-              page === totalPages || loading
-                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                : "bg-gray-800 text-white hover:bg-gray-700"
-            }`}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          handlePageChange={handlePageChange}
+          loading={loading}
+        />
       </div>
 
       <Footer />

@@ -6,6 +6,7 @@ import Slider from "../components/Slider";
 import useDebounce from "../utils/useDebounce";
 import { movieGenre, tvGenre } from "../constants";
 import ShowCard from "../components/ShowCard";
+import Pagination from "../components/Pagination";
 
 const TVShowsPage = (props) => {
   const { options, type_, user } = props;
@@ -182,58 +183,12 @@ const TVShowsPage = (props) => {
               </div>
 
               {/* Pagination */}
-              <div className="mt-8 flex justify-center items-center ">
-                <button
-                  onClick={() => handlePageChange(1)}
-                  disabled={page === 1 || loading}
-                  className={`py-2 px-4 rounded-l ${
-                    page === 1 || loading
-                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`}
-                  title="Go to First Page"
-                >
-                  «
-                </button>
-                <button
-                  onClick={() => handlePageChange(page - 1)}
-                  disabled={page === 1 || loading}
-                  className={`py-2 px-4 rounded-r ${
-                    page === 1 || loading
-                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`}
-                  title="Go to Previous Page"
-                >
-                  ‹
-                </button>
-                <span className="text-white mx-4">
-                  {page}
-                </span>
-                <button
-                  onClick={() => handlePageChange(page + 1)}
-                  disabled={page === totalPages || loading}
-                  className={`py-2 px-4 rounded-l ${
-                    page === totalPages || loading
-                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`} title="Go to Next Page"
-                >
-                  ›
-                </button>
-                <button
-                  onClick={() => handlePageChange(totalPages)}
-                  disabled={page === totalPages || loading}
-                  className={`py-2 px-4 rounded-r ${
-                    page === totalPages || loading
-                      ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`
-                }title={`Go to Last Page (${totalPages})`}
-                >
-                  »
-                </button>
-              </div>
+              <Pagination
+                totalPages={totalPages}
+                page={page}
+                handlePageChange={handlePageChange}
+                loading={loading}
+              />
             </div>
           </>
         )}
