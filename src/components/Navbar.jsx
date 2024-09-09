@@ -1,20 +1,36 @@
 import { navLinks } from "../constants";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../utils/firebase";
 
 const Navbar = (props) => {
   const { noProfile, user } = props
   const { pathname } = useLocation();
+  const [photo , setPhoto] = useState('')
 
   const navRef = useRef();
+
+  const fetchWatchlistData = async () => {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      setPhoto(userDocSnap.data().photoURL);
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "instant",
     });
+
+    fetchWatchlistData();
   }, [pathname]);
 
   useEffect(() => {
@@ -32,7 +48,7 @@ const Navbar = (props) => {
       <nav
         ref={navRef}
         className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300 ${
-          pathname === "/login" ? "hidden" : ""
+          pathname === "/login"  ? "hidden" : ""
         }`}
         style={{
           backgroundImage:
@@ -43,7 +59,7 @@ const Navbar = (props) => {
         <div className="flex items-center gap-12 logo">
           <Link to={"/"}>
             <span
-              className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent"
+              className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent "
               style={{
                 backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
               }}
@@ -79,7 +95,7 @@ const Navbar = (props) => {
         </div>
 
         {/* Right Icons Container */}
-        <div className="flex gap-10 lg:gap-15 items-center">
+        <div className="flex gap-5 lg:gap-15 items-center">
           {/* Search icon */}
           <Link to={"/search"}>
             <FaSearch className="cursor-pointer" size={20} />
@@ -91,9 +107,9 @@ const Navbar = (props) => {
               {user && Object.keys(user).length !== 0 ? (
                 <Link
                   to={"/profile"}
-                  className="flex items-center gap-5 relative profile cursor-pointer"
+                  className="flex items-center relative profile cursor-pointer"
                 >
-                  <i className="fa-solid fa-user"></i>
+                  {photo ? <img src={photo} alt="Profile" className="w-10 h-10 rounded-full object-cover" /> : <i className="fa-solid fa-user"></i>}
                 </Link>
               ) : (
                 // Login link if no user is logged in
@@ -118,7 +134,7 @@ const Navbar = (props) => {
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-6   py-2 -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
+                    ? "absolute px-[22px] py-[7px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
                     : ""
                 }`}
               >

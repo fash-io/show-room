@@ -15,28 +15,28 @@ const Footer = () => {
           aria-label="YouTube"
           className="transition transform hover:scale-110"
         >
-          <img src={youtube_icon} alt="YouTube" width={40} />
+          <img src={youtube_icon} alt="YouTube" width={25} />
         </a>
         <a
           href="#"
           aria-label="Twitter"
           className="transition transform hover:scale-110"
         >
-          <img src={twitter_icon} alt="Twitter" width={40} />
+          <img src={twitter_icon} alt="Twitter" width={25} />
         </a>
         <a
           href="#"
           aria-label="Instagram"
           className="transition transform hover:scale-110"
         >
-          <img src={instagram_icon} alt="Instagram" width={40} />
+          <img src={instagram_icon} alt="Instagram" width={25} />
         </a>
         <a
           href="#"
           aria-label="Facebook"
           className="transition transform hover:scale-110"
         >
-          <img src={facebook_icon} alt="Facebook" width={40} />
+          <img src={facebook_icon} alt="Facebook" width={25} />
         </a>
       </div>
 

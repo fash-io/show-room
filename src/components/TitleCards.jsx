@@ -12,7 +12,7 @@ const TitleCards = (props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const db = getFirestore(); // Initialize Firestore
+  const db = getFirestore(); 
   console.log(user)
 
   useEffect(() => {
