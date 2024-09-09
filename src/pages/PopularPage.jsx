@@ -9,7 +9,7 @@ import Pagination from "../components/Pagination";
 const PopularPage = (props) => {
   const { options, user } = props;
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [mediaType, setMediaType] = useState("all"); // 'all', 'movie', 'tv'
   const [timeWindow, setTimeWindow] = useState("day"); // 'day', 'week'
