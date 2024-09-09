@@ -1,7 +1,7 @@
 const Loading = ({ isSmall }) => {
   return (
     <div
-      className={`bg-gradient-to-r from-gray-800 via-gray-900 to-black  text-white flex items-center justify-center z-[997] ${
+      className={`bg-gradient-to-r from-gray-800 via-gray-900 to-black  text-white flex items-center justify-center z-[998] ${
         isSmall
           ? "z-10 h-full w-full"
           : "fixed top-0 bottom-0 left-0 right-0 h-screen z-50"

@@ -8,7 +8,7 @@ import Pagination from "../components/Pagination";
 const SearchPage = (props) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [filter, setFilter] = useState("multi");
+  const [filter, setFilter] = useState("keyword");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -39,15 +39,14 @@ const SearchPage = (props) => {
   // Function to handle the search
   const searchMovies = async (page = 1) => {
     if (query.trim() === "") return;
-
     setLoading(true);
-    setError(null); // Reset error
+    setError(null);
 
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(
           query
-        )}&include_adult=false&language=en-US&page=${page}`,
+        )}&include_adult=false&page=${page}`,
         options
       );
       if (!response.ok) throw new Error("Network response was not ok");
