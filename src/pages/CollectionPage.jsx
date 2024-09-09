@@ -98,7 +98,7 @@ const CollectionPage = (props) => {
          </div>
          <div className="col-span-2 space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold ">Overview</h2>
-            <p className="text-sm sm:text-lg">{collection.overview}</p>
+            <p className="text-sm sm:text-lg p-9">{collection.overview}</p>
             {/* <SlidingImages images={collectionImages.backdrops} className={"h-full"}/> */}
             </div>
          </div>

@@ -3,7 +3,7 @@ const Error = ({
 }, isSmall) => {
   return (
     <div
-    className={`bg-gradient-to-r from-gray-800 via-gray-900 to-black  text-white flex items-center justify-center ${
+    className={`bg-gradient-to-r min-h-screen from-gray-800 via-gray-900 to-black  text-white flex items-center justify-center ${
       isSmall
         ? "z-10 h-full w-full"
         : "fixed top-0 bottom-0 left-0 right-0 h-screen z-50"

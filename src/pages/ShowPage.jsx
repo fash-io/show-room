@@ -334,7 +334,7 @@ const ContentPage = (props) => {
             <>
               <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Cast</h2>
               <div
-                className={`flex overflow-x-scroll space-x-4 pb-4 ${
+                className={`flex overflow-x-scroll space-x-4 sm:space-x-7 pb-4 ${
                   credits.cast.length < 11 ? "div" : "div"
                   }`}
               >
@@ -349,7 +349,7 @@ const ContentPage = (props) => {
                             : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={actor.name}
-                          className="w-full object-cover z-50 group-hover:scale-110 duration-500"
+                          className="w-full h-52 object-top object-cover z-50 group-hover:scale-110 duration-500"
                           />
                       </div>
                       <div className="divv pt-2 bg-[#191919] ">
@@ -387,7 +387,7 @@ const ContentPage = (props) => {
                             : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={director.name}
-                          className="w-full object-cover z-50 group-hover:scale-105 duration-500"
+                          className="w-full h-52 object-top object-cover z-50 group-hover:scale-105 duration-500"
                           />
                       </div>
                       <div className="divv pt-2 bg-[#191919]">

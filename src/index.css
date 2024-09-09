@@ -95,25 +95,9 @@ html{
   right: -15%;
   transform: rotate(135deg);
 }
-.slider-wrapper {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-}
-
 .slider {
-  display: flex;
-  gap: 10px;
-  width: max-content;
   animation: slide 20s linear infinite;
 }
-
-.slider-item img {
-  width: 200px; /* Adjust to your needs */
-  height: auto;
-  border-radius: 10px;
-}
-
 @keyframes slide {
   0% {
     transform: translateX(100%);
