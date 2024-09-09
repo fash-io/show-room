@@ -29,7 +29,6 @@ const PopularPage = (props) => {
   useEffect(() => {
     const fetchNewReleases = async () => {
       try {
-        setLoading(true); // Set loading true before fetching data
         const url = `https://api.themoviedb.org/3/trending/${mediaType}/${timeWindow}?language=en-US&page=${page}`;
         const response = await fetch(url, options);
         if (!response.ok) {
@@ -41,8 +40,6 @@ const PopularPage = (props) => {
       } catch (err) {
         console.error("Failed to fetch new releases:", err);
         setError("Failed to load new releases.");
-      } finally {
-        setLoading(false); // Ensure loading is set to false after fetching data
       }
     };
     fetchNewReleases();
