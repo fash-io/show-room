@@ -67,7 +67,7 @@ const Login = ({ setIsExploring }) => {
         }
         await signup(name, email, password);
         toast.success("Sign up successful.");
-        navigator(-1);
+        navigator(-2);
       } else {
         if (email.trim().length < 1) {
           toast.error("Please enter your email");
@@ -79,7 +79,7 @@ const Login = ({ setIsExploring }) => {
         }
         await login(email, password);
         toast.success("Login successful.");
-        navigator(-2);
+        navigator(-1);
       }
     } catch (error) {
       toast.error(error.message);
