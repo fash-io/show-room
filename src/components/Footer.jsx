@@ -3,12 +3,11 @@ import twitter_icon from "../assets/twitter_icon.png";
 import instagram_icon from "../assets/instagram_icon.png";
 import facebook_icon from "../assets/facebook_icon.png";
 import { footerLinks } from "../constants";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const { pathname } = useLocation();
   return (
-    <div className={"text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto "+ (pathname === "/login" || pathname === "/signup" ? "hidden" : "")}>
+    <div className={"text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto "}>
       {/* Social Media Icons */}
       <div className="flex justify-center sm:justify-start gap-4 mb-8">
         <a

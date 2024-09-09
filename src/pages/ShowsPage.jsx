@@ -1,6 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import Slider from "../components/Slider";
 import useDebounce from "../utils/useDebounce";
@@ -9,7 +7,7 @@ import ShowCard from "../components/ShowCard";
 import Pagination from "../components/Pagination";
 
 const TVShowsPage = (props) => {
-  const { options, type_, user } = props;
+  const { options, type_ } = props;
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
   const [page, setPage] = useState(1);

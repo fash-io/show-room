@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { calculateAge } from "../constants";
@@ -13,7 +11,7 @@ const PersonPage = (props) => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [sortType, setSort] = useState("popularity");
-  const { options, user } = props;
+  const { options } = props;
 
   useEffect(() => {
     const fetchActorDetails = async () => {
@@ -230,9 +228,9 @@ const PersonPage = (props) => {
               {(actor.known_for_department === "Acting"
                 ? sortedMovies
                 : sortedMoviesDir
-              ).map((credit) => (
+              ).map((credit, index) => (
                 <Link
-                  key={credit.credit_id}
+                  key={credit.credit_id + index}
                   to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
                     credit.id
                   }`}

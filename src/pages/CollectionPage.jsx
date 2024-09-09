@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Link, useParams } from "react-router-dom";
-import SlidingImages from "../components/SlidingImages";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ShowCard from "../components/ShowCard";
 
 const CollectionPage = (props) => {
   const [collection, setCollection] = useState(null);
-  const [collectionImages, setCollectionImages] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const { options, user } = props;
+  const { options } = props;
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -20,16 +16,12 @@ const CollectionPage = (props) => {
           `https://api.themoviedb.org/3/collection/${id}?language=en-US`,
           options
         );
-        const imageResponse = await fetch(
-          `https://api.themoviedb.org/3/collection/${id}/images`,options
-        )
-        if (!response.ok || !imageResponse.ok) {
+        if (!response.ok) {
           throw new Error("Failed to fetch collection.");
         }
         const data = await response.json();
-        const imageDate = await imageResponse.json();
         setCollection(data);
-        setCollectionImages(imageDate);
+        
       } catch (err) {
         console.error("Failed to fetch collection:", err);
         setError("Failed to load collection.");
@@ -56,14 +48,12 @@ const CollectionPage = (props) => {
         <div className="min-h-screen flex justify-center items-center">
           <p className="text-2xl text-red-500">{error}</p>
         </div>
-        <Footer />
       </>
     );
   }
 
   return (
     <>
-      <Navbar user={user} />
       <div className="min-h-screen text-white">
         {/* Collection Header Section */}
         {collection && (
@@ -95,7 +85,6 @@ const CollectionPage = (props) => {
          <div className="col-span-2 space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold ">Overview</h2>
             <p className="text-sm sm:text-lg p-9">{collection.overview}</p>
-            {/* <SlidingImages images={collectionImages.backdrops} className={"h-full"}/> */}
             </div>
          </div>
          

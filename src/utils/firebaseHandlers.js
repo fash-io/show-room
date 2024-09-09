@@ -3,28 +3,32 @@ import { db, logout, storeFavorite, storeWatched, storeWatchList } from "./fireb
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const updateUserDocument = async (user, updateFn, type) => {
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists()) {
-      console.error("User document not found");
-      return;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        console.error("User document not found");
+        return;
+      }
+  
+      const items = userDoc.data()[type] || [];
+      const updatedItems = updateFn(items);
+  
+      if (updatedItems.length === items.length) {
+        toast.error(`Item not found in ${type}`);
+        return;
+      }
+  
+      await setDoc(userDocRef, { [type]: updatedItems }, { merge: true });
+      toast.info(`Item removed from ${type}`);
+    } catch (error) {
+      console.error(`Error updating ${type}:`, error.message);
+      toast.error(`Error updating ${type}: ${error.message}`);
     }
-
-    const items = userDoc.data()[type] || [];
-    const updatedItems = updateFn(items);
-
-    if (updatedItems.length === items.length) {
-      toast.error(`Item not found in ${type}`);
-      return;
-    }
-
-    await setDoc(userDocRef, { [type]: updatedItems }, { merge: true });
-    toast.info(`Item removed from ${type}`);
-  } catch (error) {
-    console.error(`Error updating ${type}:`, error.message);
-    toast.error(`Error updating ${type}: ${error.message}`);
+  } else {
+    toast.error("You need to create an account");
   }
 };
 
@@ -111,45 +115,57 @@ const handleRemoveWatchedItem = async (showId, showType, user) => {
 };
 
 export const fetchFavorites = async (user) => {
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists()) {
-      console.error("User document not found");
-      return;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        console.error("User document not found");
+        return;
+      }
+      return userDoc.data().favorite;
+    } catch (error) {
+      console.error("Error fetching user document:", error);
     }
-    return userDoc.data().favorite;
-  } catch (error) {
-    console.error("Error fetching user document:", error);
+  } else {
+    toast.error("You need to create an account");
   }
 };
 export const fetchWatchList = async (user) => {
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists()) {
-      console.error("User document not found");
-      return;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        console.error("User document not found");
+        return;
+      }
+      return userDoc.data().watchList;
+    } catch (error) {
+      console.error("Error fetching user document:", error);
     }
-    return userDoc.data().watchList;
-  } catch (error) {
-    console.error("Error fetching user document:", error);
+  } else {
+    toast.error("You need to create an account");
   }
 };
 export const fetchWatched = async (user) => {
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists()) {
-      console.error("User document not found");
-      return;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        console.error("User document not found");
+        return;
+      }
+      return userDoc.data().watched;
+    } catch (error) {
+      console.error("Error fetching user document:", error);
     }
-    return userDoc.data().watched;
-  } catch (error) {
-    console.error("Error fetching user document:", error);
+  } else {
+    toast.error("You need to create an account");
   }
 };
 

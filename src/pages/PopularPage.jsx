@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 import Pagination from "../components/Pagination";
 
 const PopularPage = (props) => {
-  const { options, user } = props;
+  const { options } = props;
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

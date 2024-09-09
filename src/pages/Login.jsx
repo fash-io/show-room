@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { auth, login, signup } from "../utils/firebase";
+import { useState } from "react";
+import { login, signup } from "../utils/firebase";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
-import { Link, useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Login = ({ setIsExploring }) => {
   const [signState, setSignState] = useState("Login");

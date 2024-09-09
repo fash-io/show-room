@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import {
   FaStar,
   FaStarHalfAlt,
@@ -382,7 +380,7 @@ const ContentPage = (props) => {
                 }`}
               >
                 {credits.cast.map((actor) => (
-                  <Link key={actor.cast_id} to={`/person/${actor.id}`}>
+                  <Link key={actor.id} to={`/person/${actor.id}`}>
                     <div className="flex-shrink-0 w-40 sm:w-48 divvv group">
                       <div className="overflow-hidden w-full h-full">
                         <img
@@ -520,9 +518,9 @@ const ContentPage = (props) => {
               Recommendations
             </h2>
             <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
-              {recommendations.map((rec) => (
+              {recommendations.map((rec, index) => (
                 <ShowCard
-                  key={rec.id}
+                  key={`${rec.id} + ${index} `}
                   show={rec}
                   type_={type}
                   type={2}

@@ -18,7 +18,7 @@ const SlidingImages = ({ images }) => {
           <>
             {image.file_path ||
               (image.logo_path && (
-                <div key={index} className="slider-item h-full flex items-center mx-5 scale-90">
+                <div key={`${index} + ${image.file_path || image.logo_path}`} className="slider-item h-full flex items-center mx-5 scale-90">
                   <img
                     src={`https://image.tmdb.org/t/p/original${
                       image.file_path || image.logo_path

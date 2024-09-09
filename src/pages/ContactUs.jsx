@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
-const ContactUs = ({ user }) => {
+const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",

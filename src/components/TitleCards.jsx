@@ -38,7 +38,7 @@ const TitleCards = (props) => {
       if (!user) {
         setWatchlistData([]);
         setLoading(false);
-        return; // Ensure user is defined
+        return; 
       }
 
       try {

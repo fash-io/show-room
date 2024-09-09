@@ -14,12 +14,14 @@ const Navbar = (props) => {
   const navRef = useRef();
 
   const fetchWatchlistData = async () => {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-      setPhoto(userDocSnap.data().photoURL);
-    } catch (err) {
-      console.error(err);
+    if(user) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        setPhoto(userDocSnap.data().photoURL);
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -46,9 +48,7 @@ const Navbar = (props) => {
     <>
       <nav
         ref={navRef}
-        className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300 ${
-          pathname === "/login" ? "hidden" : ""
-        }`}
+        className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300`}
         style={{
           backgroundImage:
             "linear-gradient(180deg, rgba(0,0,0,0.7) 30%, transparent)",

@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
@@ -8,13 +6,13 @@ import Pagination from "../components/Pagination";
 const SearchPage = (props) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [filter, setFilter] = useState("keyword");
+  const [filter, setFilter] = useState("multi");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null); // For error handling
 
-  const { options, user } = props;
+  const { options } = props;
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);

@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-import { db, auth, storage, logout } from "../utils/firebase"; // Import Firebase configuration
+import { db, auth, storage } from "../utils/firebase"; // Import Firebase configuration
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Loading from "../components/Loading";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Error from "../components/Error";
-import { useNavigate } from "react-router-dom";
 import { handleLogout } from "../utils/firebaseHandlers";
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);

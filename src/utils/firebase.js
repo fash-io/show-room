@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, setDoc, doc, getDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; // Import Firebase Storage
 import { toast } from "react-toastify";
 // import { db } from "./firebase"; // Adjust the import based on your project structure

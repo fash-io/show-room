@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { faqs } from "../constants";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 
-const FAQ = ({ user }) => {
+const FAQ = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const toggleFAQ = (index) => {

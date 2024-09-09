@@ -1,6 +1,4 @@
   import { useEffect, useState } from "react";
-  import Navbar from "../components/Navbar";
-  import Footer from "../components/Footer";
   import Loading from "../components/Loading";
   import ShowCard from "../components/ShowCard";
   import Error from "../components/Error";
