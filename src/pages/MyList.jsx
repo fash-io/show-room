@@ -183,7 +183,7 @@
             </div>
 
             {/* Data Set Selector */}
-            <div className="flex flex-wrap items-center space-x-4">
+            <div className="flex flex-wrap items-center space-x-2">
               {["favorite", "watchList", "watched"].map((set) => (
                 <button
                   key={set}

@@ -22,7 +22,7 @@ const Home = (props) => {
   return (
     <>
       <Navbar user={user}/>
-      <Slider height="max-h-[95vh] max-sm:min-h-[60vh]" type={"all"} options={options} />
+      <Slider height="max-h-[95vh] max-sm:min-h-[60vh]" type={"all"} options={options} setLoading={setLoading} setError={setError}/>
       <div className="p-2 sm:px-10">
         <TitleCards title="Popular Movies" category="popular" options={options} type={"movie"} user={user}/>
         <TitleCards title="Top Rated Movies" category="top_rated" options={options} type={"movie"} user={user}/>
