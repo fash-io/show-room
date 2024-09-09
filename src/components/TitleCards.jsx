@@ -90,7 +90,6 @@ const TitleCards = (props) => {
         setWatchlistData(detailedWatchlistData.filter((item) => item !== null));
       } catch (err) {
         setError("Failed to load watchlist data.");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -108,7 +107,7 @@ const TitleCards = (props) => {
   }
 
   if (error) {
-    return <Error message={error} />;
+    return <Error message={error} isSmall={true} />;
   }
 
   const dataToDisplay = userWatchlist ? watchlistData : apiData;
@@ -130,7 +129,7 @@ const TitleCards = (props) => {
             />
           ))
         ) : (
-          <p className="p-5 border border-white/20 rounded">List is Empty or Not Logged In</p>
+          <p className="p-5 border border-white/20 rounded">{user ? "No items found in WatchList." : "Not Logged In."}</p>
         )}
       </div>
     </div>

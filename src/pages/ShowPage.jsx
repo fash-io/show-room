@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FaStar, FaStarHalfAlt, FaHeart, FaCheck } from "react-icons/fa";
+import {
+  FaStar,
+  FaStarHalfAlt,
+  FaHeart,
+  FaCheck,
+  FaHeartBroken,
+  FaTimes,
+} from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
@@ -10,16 +17,25 @@ import {
   handleAddToFavorites,
   handleAddToWatchList,
   handleAddToWatched,
+  handleRemoveFavoriteItem,
+  handleRemoveWatchListItem,
+  handleRemoveWatchedItem,
 } from "../utils/firebaseHandlers";
 import SlidingImages from "../components/SlidingImages";
+// import { fetchFavorites, fetchWatchList, fetchWatched } from "../utils/firebaseHandlers";
 
 const ContentPage = (props) => {
+  
+
   const { id, type } = useParams();
   const [content, setContent] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  // const [favorites, setFavorite] = useState([]);
+  // const [watchList, setWatchList] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const { options, user } = props;
 
   useEffect(() => {
@@ -72,6 +88,12 @@ const ContentPage = (props) => {
         setLoading(false); // Set loading to false after data is fetched
       }
     };
+  //   setWatched(fetchWatched(user));
+  // setWatchList(fetchWatchList(user));
+  // setFavorite(fetchFavorites(user));
+  //   console.log(watched);
+  //   console.log(favorites)
+  //   console.log(watchList);;
 
     fetchContentDetails();
   }, [id, type]);
@@ -295,6 +317,33 @@ const ContentPage = (props) => {
                   >
                     <FaCheck className="" />
                   </button>
+                  {/* <button
+                    className="bg-red-500 ml-3 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    title="Mark as watched"
+                    onClick={() =>
+                      handleRemoveFavoriteItem(content.id, type, user)
+                    }
+                  >
+                    <FaHeartBroken className="" />
+                  </button>
+                  <button
+                    className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    title="Mark as watched"
+                    onClick={() =>
+                      handleRemoveWatchedItem(content.id, type, user)
+                    }
+                  >
+                    <FaTimes className="" />
+                  </button>
+                  <button
+                    className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    title="Mark as watched"
+                    onClick={() =>
+                      handleRemoveFavoriteItem(content.id, type, user)
+                    }
+                  >
+                    <FaTimes className="" />
+                  </button> */}
                 </div>
               </div>
               <SlidingImages images={content.production_companies} />
@@ -326,7 +375,6 @@ const ContentPage = (props) => {
           </div>
         )}
 
-
         {/* Cast and Crew Section */}
         <div className="p-4 sm:p-6 md:p-10 lg:p-20">
           {/* Cast */}
@@ -336,7 +384,7 @@ const ContentPage = (props) => {
               <div
                 className={`flex overflow-x-scroll space-x-4 sm:space-x-7 pb-4 ${
                   credits.cast.length < 11 ? "div" : "div"
-                  }`}
+                }`}
               >
                 {credits.cast.map((actor) => (
                   <Link key={actor.cast_id} to={`/person/${actor.id}`}>
@@ -345,12 +393,12 @@ const ContentPage = (props) => {
                         <img
                           src={
                             actor.profile_path
-                            ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
-                            : "https://via.placeholder.com/150x225?text=No+Image"
+                              ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
+                              : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={actor.name}
                           className="w-full h-52 object-top object-cover z-50 group-hover:scale-110 duration-500"
-                          />
+                        />
                       </div>
                       <div className="divv pt-2 bg-[#191919] ">
                         <div className="absolute z-50 px-1 h-full flex flex-col justify-between pb-5 pr-7">
@@ -383,12 +431,12 @@ const ContentPage = (props) => {
                         <img
                           src={
                             director.profile_path
-                            ? `https://image.tmdb.org/t/p/w300${director.profile_path}`
-                            : "https://via.placeholder.com/150x225?text=No+Image"
+                              ? `https://image.tmdb.org/t/p/w300${director.profile_path}`
+                              : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={director.name}
                           className="w-full h-52 object-top object-cover z-50 group-hover:scale-105 duration-500"
-                          />
+                        />
                       </div>
                       <div className="divv pt-2 bg-[#191919]">
                         <div className="absolute z-50 px-1 h-full flex flex-col justify-between pb-5 pl-7">
@@ -407,52 +455,52 @@ const ContentPage = (props) => {
           )}
         </div>
 
-          {/* Seasons Section (Only for TV Series) */}
-          {type === "series" && (
-            <div className="p-4 sm:p-6 md:p-10 lg:p-20">
-              <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-8">
-                {content.seasons.map((season) => (
-                  <div
-                    key={season.id}
-                    className="bg-gray-900 rounded-lg shadow-lg p-4"
-                  >
-                    <img
-                      src={
-                        season.poster_path
-                          ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
-                          : "https://via.placeholder.com/150x225?text=No+Image"
-                      }
-                      alt={`Season ${season.season_number} Poster`}
-                      className=" rounded-lg mb-4 object-scale-down"
-                    />
-                    <h3 className="text-xl sm:text-2xl font-semibold mb-2">
-                      {season.name}
-                    </h3>
-                    <p>
-                      <span className="font-semibold">Air Date:</span>{" "}
-                      {season.air_date || "N/A"}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Episodes:</span>{" "}
-                      {season.episode_count}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {content.belongs_to_collection && (
-            <>
-              <div className="p-4 sm:p-6 md:p-10 lg:p-20 max-w-full flex flex-col">
-                <h2 className="text-2xl sm:text-3xl font-semibold mb-6">
-                  Collection
-                </h2>
-                <Link
-                  to={`/collection/${content.belongs_to_collection.id}`}
-                  className="max-w-52 rounded-lg shadow-lg p-4 flex flex-col w-full group divvv"
+        {/* Seasons Section (Only for TV Series) */}
+        {type === "series" && (
+          <div className="p-4 sm:p-6 md:p-10 lg:p-20">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-8">
+              {content.seasons.map((season) => (
+                <div
+                  key={season.id}
+                  className="bg-gray-900 rounded-lg shadow-lg p-4"
                 >
-                  <div className=" max-w-min flex flex-col w-full">
+                  <img
+                    src={
+                      season.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
+                        : "https://via.placeholder.com/150x225?text=No+Image"
+                    }
+                    alt={`Season ${season.season_number} Poster`}
+                    className=" rounded-lg mb-4 object-scale-down"
+                  />
+                  <h3 className="text-xl sm:text-2xl font-semibold mb-2">
+                    {season.name}
+                  </h3>
+                  <p>
+                    <span className="font-semibold">Air Date:</span>{" "}
+                    {season.air_date || "N/A"}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Episodes:</span>{" "}
+                    {season.episode_count}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {content.belongs_to_collection && (
+          <>
+            <div className="p-4 sm:p-6 md:p-10 lg:p-20 max-w-full flex flex-col">
+              <h2 className="text-2xl sm:text-3xl font-semibold mb-6">
+                Collection
+              </h2>
+              <Link
+                to={`/collection/${content.belongs_to_collection.id}`}
+                className="max-w-52 rounded-lg shadow-lg p-4 flex flex-col w-full group divvv"
+              >
+                <div className=" max-w-min flex flex-col w-full">
                   <img
                     src={
                       content.belongs_to_collection.backdrop_path
@@ -465,12 +513,12 @@ const ContentPage = (props) => {
                   <h3 className="text-xl sm:text-2xl font-semibold mb-2 divv">
                     {content.belongs_to_collection.name}
                   </h3>
-                  </div>
-                </Link>
-              </div>
-            </>
-          )}
-          {/* Recommendations */}
+                </div>
+              </Link>
+            </div>
+          </>
+        )}
+        {/* Recommendations */}
         {recommendations.length > 0 && (
           <div className="p-4 sm:p-6 md:p-10">
             <h2 className="text-2xl sm:text-3xl font-semibold mb-4">

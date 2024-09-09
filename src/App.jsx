@@ -121,8 +121,8 @@ const App = () => {
           path="/search"
           element={<SearchPage options={apiOptions} user={user} />}
         />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/faq" element={<FAQ />} />
+        <Route path="/contact-us" element={<ContactUs user={user} />} />
+        <Route path="/faq" element={<FAQ user={user} />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

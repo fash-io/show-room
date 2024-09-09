@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc, deleteDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; // Import Firebase Storage
 import { toast } from "react-toastify";
 // import { db } from "./firebase"; // Adjust the import based on your project structure
@@ -96,6 +96,24 @@ const storeItem = async (uid, newItem, listType) => {
     console.error(`Error storing ${listType}:`, error.message);
   }
 };
+
+// utils/fetchDetails.js
+export const fetchDetails = async (id, type, options) => {
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/${type === "movie" ? "movie" : "tv"}/${id}?language=en-US`,
+      options
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch details for ${type} with ID ${id}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 
 // Usage
 export const storeWatchList = (uid, newItem) => storeItem(uid, newItem, "watchList");

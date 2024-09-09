@@ -13,20 +13,20 @@ const FAQ = ({ user }) => {
   return (
     <>
       <Navbar user={user} />
-      <div className=" text-white py-16 px-6 sm:px-12 lg:px-24 xl:px-32 max-w-7xl mx-auto">
+      <div className=" text-white py-24 px-6 sm:px-12 lg:px-24 xl:px-32 max-w-7xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center text-gradient bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-transparent mb-12">
           Frequently Asked Questions
         </h1>
         <div className="space-y-6">
           {faqs.map((faq, index) => (
             <div
+              onClick={() => toggleFAQ(index)}
               key={index}
-              className="bg-gray-800/60 p-6 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+              className={"bg-gray-800/60 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-200 cursor-pointer"+
+              (expandedIndex === index ? " bg-gray-800/80, scale-105" : "")
+              }
             >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full text-left focus:outline-none"
-              >
+              <button className="w-full text-left focus:outline-none">
                 <h2 className="text-xl font-semibold flex items-center justify-between text-gray-300 hover:text-white transition-colors duration-300">
                   {faq.question}
                   <span
@@ -38,11 +38,9 @@ const FAQ = ({ user }) => {
                   </span>
                 </h2>
               </button>
-              {expandedIndex === index && (
-                <div className="mt-4 pl-1 border-l-2 border-teal-500">
+                <div className={"mt-4 pl-1 border-l-2 border-teal-500 duration-200 max-h-0 overflow-hidden "+ (expandedIndex === index ? "max-h-40" : "")}>
                   <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
                 </div>
-              )}
             </div>
           ))}
         </div>
