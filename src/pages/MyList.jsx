@@ -11,7 +11,7 @@
     const [favorites, setFavorites] = useState([]);
     const [watchList, setWatchlist] = useState([]);
     const [watched, setWatched] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
     const [dataSet, setDataSet] = useState("favorite");
@@ -24,12 +24,12 @@
           return;
         }
         try {
-          setLoading(true);
+          // setLoading(true);
           const userDocRef = doc(db, "users", user.uid);
           const userDocSnap = await getDoc(userDocRef);
           if (!userDocSnap.exists()) {
             setError("User document not found.");
-            setLoading(false);
+            // setLoading(false);
             return;
           }
 
@@ -127,7 +127,6 @@
     if (!user) {
       return (
         <>
-          <Navbar user={user} />
           <div className="h-[100vh] flex items-center justify-center">
             <Error error={"Not Logged In"} />
           </div>
@@ -145,7 +144,6 @@
 
     return (
       <>
-        <Navbar user={user} />
         <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
           {/* Small Navigation Bar */}
           <div className="flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20">
@@ -246,7 +244,6 @@
             )}
           </div>
         </div>
-        <Footer />
       </>
     );
   };

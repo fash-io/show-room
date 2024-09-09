@@ -12,7 +12,6 @@ const FAQ = ({ user }) => {
 
   return (
     <>
-      <Navbar user={user} />
       <div className=" text-white py-24 px-6 sm:px-12 lg:px-24 xl:px-32 max-w-7xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center text-gradient bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-transparent mb-12">
           Frequently Asked Questions
@@ -45,7 +44,6 @@ const FAQ = ({ user }) => {
           ))}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

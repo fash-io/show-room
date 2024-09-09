@@ -74,7 +74,6 @@ const TVShowsPage = (props) => {
 
   return (
     <>
-      <Navbar user={user}/>
       <div>
         <Slider
           height="min-h-[50vh] sm:max-h-[70vh] md:max-h-[80vh] lg:max-h-[90vh]"
@@ -193,7 +192,6 @@ const TVShowsPage = (props) => {
           </>
         )}
       </div>
-      <Footer />
     </>
   );
 };

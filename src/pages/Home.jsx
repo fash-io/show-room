@@ -21,7 +21,6 @@ const Home = (props) => {
 
   return (
     <>
-      <Navbar user={user}/>
       <Slider height="max-h-[95vh] max-sm:min-h-[60vh]" type={"all"} options={options} setLoading={setLoading} setError={setError}/>
       <div className="p-2 sm:px-10">
         <TitleCards title="Popular Movies" category="popular" options={options} type={"movie"} user={user}/>
@@ -32,7 +31,6 @@ const Home = (props) => {
         <TitleCards title="On The Air" category="on_the_air" options={options} type={"tv"} user={user}/>
         <TitleCards title="Your Watch List" userWatchlist={true} options={options} user={user}/>
       </div>
-      <Footer />
     </>
   );
 };

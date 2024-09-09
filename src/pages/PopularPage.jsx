@@ -59,7 +59,6 @@ const PopularPage = (props) => {
 
   return (
     <>
-      <Navbar user={user}/>
 
       <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
         {/* Filter and Time Window Controls */}
@@ -165,7 +164,6 @@ const PopularPage = (props) => {
         />
       </div>
 
-      <Footer />
     </>
   );
 };

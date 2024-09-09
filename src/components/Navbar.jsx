@@ -7,9 +7,9 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 const Navbar = (props) => {
-  const { noProfile, user } = props
+  const { user } = props;
   const { pathname } = useLocation();
-  const [photo , setPhoto] = useState('')
+  const [photo, setPhoto] = useState("");
 
   const navRef = useRef();
 
@@ -18,11 +18,10 @@ const Navbar = (props) => {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
       setPhoto(userDocSnap.data().photoURL);
-
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   useEffect(() => {
     window.scrollTo({
@@ -48,7 +47,7 @@ const Navbar = (props) => {
       <nav
         ref={navRef}
         className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300 ${
-          pathname === "/login"  ? "hidden" : ""
+          pathname === "/login" ? "hidden" : ""
         }`}
         style={{
           backgroundImage:
@@ -95,21 +94,29 @@ const Navbar = (props) => {
         </div>
 
         {/* Right Icons Container */}
-        <div className="flex gap-5 lg:gap-15 items-center">
-          {/* Search icon */}
-          <Link to={"/search"}>
-            <FaSearch className="cursor-pointer" size={20} />
-          </Link>
+        {!(pathname === "/profile") && (
+          <>
+            <div className="flex gap-5 lg:gap-15 items-center">
+              {/* Search icon */}
+              <Link to={"/search"}>
+                <FaSearch className="cursor-pointer" size={20} />
+              </Link>
 
-          {/* Profile and Logout links if user is logged in */}
-          {!noProfile && (
-            <>
+              {/* Profile and Logout links if user is logged in */}
               {user && Object.keys(user).length !== 0 ? (
                 <Link
                   to={"/profile"}
                   className="flex items-center relative profile cursor-pointer"
                 >
-                  {photo ? <img src={photo} alt="Profile" className="w-10 h-10 rounded-full object-cover" /> : <i className="fa-solid fa-user"></i>}
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <i className="fa-solid fa-user"></i>
+                  )}
                 </Link>
               ) : (
                 // Login link if no user is logged in
@@ -117,12 +124,17 @@ const Navbar = (props) => {
                   Login
                 </Link>
               )}
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </nav>
 
-      <ul className="fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-[999] ">
+      <ul
+        className={
+          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-[999] " +
+          (pathname === "/login" || pathname === "/signup" ? "hidden" : "")
+        }
+      >
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (

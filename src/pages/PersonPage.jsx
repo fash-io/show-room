@@ -23,7 +23,6 @@ const PersonPage = (props) => {
           options
         );
         const actorData = await actorResponse.json();
-        console.log(actorData);
         if (actorResponse.ok) {
           setActor(actorData);
         } else {
@@ -114,7 +113,6 @@ const PersonPage = (props) => {
   today.getFullYear;
   return (
     <>
-      <Navbar user={user}/>
       <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 sm:p-8 p-2">
           {/* Actor Profile Image */}
@@ -270,7 +268,6 @@ const PersonPage = (props) => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };

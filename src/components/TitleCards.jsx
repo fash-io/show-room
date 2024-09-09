@@ -13,7 +13,6 @@ const TitleCards = (props) => {
   const [error, setError] = useState(null);
 
   const db = getFirestore(); 
-  console.log(user)
 
   useEffect(() => {
     const fetchApiData = async () => {

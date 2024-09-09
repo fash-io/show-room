@@ -28,7 +28,6 @@ const CollectionPage = (props) => {
         }
         const data = await response.json();
         const imageDate = await imageResponse.json();
-        console.log("Collection data:", imageDate);
         setCollection(data);
         setCollectionImages(imageDate);
       } catch (err) {
@@ -44,11 +43,9 @@ const CollectionPage = (props) => {
   if (loading) {
     return (
       <>
-        <Navbar user={user} />
         <div className="min-h-screen flex justify-center items-center">
           <p className="text-2xl">Loading...</p>
         </div>
-        <Footer />
       </>
     );
   }
@@ -56,7 +53,6 @@ const CollectionPage = (props) => {
   if (error) {
     return (
       <>
-        <Navbar user={user} />
         <div className="min-h-screen flex justify-center items-center">
           <p className="text-2xl text-red-500">{error}</p>
         </div>
@@ -116,7 +112,6 @@ const CollectionPage = (props) => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

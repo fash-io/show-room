@@ -90,7 +90,6 @@ const SearchPage = (props) => {
 
   return (
     <>
-      <Navbar user={user} />
 
       <div className="min-h-screen pt-20 text-white">
         <header className="mb-6 px-20">
@@ -230,7 +229,6 @@ const SearchPage = (props) => {
           />
         )}
       </div>
-      <Footer />
     </>
   );
 };

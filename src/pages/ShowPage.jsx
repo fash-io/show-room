@@ -51,7 +51,6 @@ const ContentPage = (props) => {
         const contentData = await contentResponse.json();
         if (contentResponse.ok) {
           setContent(contentData);
-          console.log("Content data:", contentData);
         } else {
           setError(contentData.status_message);
         }
@@ -91,9 +90,6 @@ const ContentPage = (props) => {
   //   setWatched(fetchWatched(user));
   // setWatchList(fetchWatchList(user));
   // setFavorite(fetchFavorites(user));
-  //   console.log(watched);
-  //   console.log(favorites)
-  //   console.log(watchList);;
 
     fetchContentDetails();
   }, [id, type]);
@@ -113,7 +109,6 @@ const ContentPage = (props) => {
 
   return (
     <>
-      <Navbar user={user} />
       <div className="text-white min-h-screen">
         {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">
@@ -538,7 +533,6 @@ const ContentPage = (props) => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };

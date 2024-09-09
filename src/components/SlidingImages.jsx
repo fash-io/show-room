@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const SlidingImages = ({ images }) => {
   const [isHovered, setIsHovered] = useState(false);
-  console.log(images);
   useEffect(() => {
     const slider = document.querySelector(".slider");
     if (isHovered) {

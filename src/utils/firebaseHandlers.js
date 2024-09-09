@@ -22,7 +22,6 @@ const updateUserDocument = async (user, updateFn, type) => {
 
     await setDoc(userDocRef, { [type]: updatedItems }, { merge: true });
     toast.info(`Item removed from ${type}`);
-    console.log(`${type} item removed successfully`);
   } catch (error) {
     console.error(`Error updating ${type}:`, error.message);
     toast.error(`Error updating ${type}: ${error.message}`);
@@ -115,7 +114,6 @@ export const fetchFavorites = async (user) => {
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
-    console.log(userDoc.data().watchList);
 
     if (!userDoc.exists()) {
       console.error("User document not found");
@@ -144,7 +142,6 @@ export const fetchWatched = async (user) => {
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
-    console.log(userDoc.data().watchList);
 
     if (!userDoc.exists()) {
       console.error("User document not found");

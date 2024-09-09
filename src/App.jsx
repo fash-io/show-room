@@ -1,4 +1,12 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./utils/firebase";
+import MyListPage from "./pages/MyList";
+import Loading from "./components/Loading";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import {
   Home,
   Login,
@@ -13,23 +21,14 @@ import {
   FAQ,
   CollectionPage,
 } from "./pages";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, logout } from "./utils/firebase";
-import MyListPage from "./pages/MyList";
-import Loading from "./components/Loading";
 
-// Move the API options outside of the component
 const apiOptions = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A",
+    Authorization: import.meta.env.VITE_API_KEY,
   },
 };
-
 const App = () => {
   const [isExploring, setIsExploring] = useState(false);
   const [user, setUser] = useState(null);
@@ -54,6 +53,7 @@ const App = () => {
 
   return (
     <>
+    <Navbar user={user} options={apiOptions} />
       <ToastContainer className={"toast-container z-[1000]"} />
       <Routes>
         {/* Home Route */}
@@ -125,6 +125,7 @@ const App = () => {
         <Route path="/faq" element={<FAQ user={user} />} />
         <Route path="*" element={<Error />} />
       </Routes>
+      <Footer />
     </>
   );
 };
