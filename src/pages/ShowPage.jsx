@@ -162,9 +162,11 @@ const ContentPage = (props) => {
                               } m`
                             : "N/A"
                         }`
-                      : content.episode_run_time
-                      ? `${content.episode_run_time[0]} minutes / episode`
-                      : "N/A"}
+                      : content.episode_run_time > 60
+                      ? `${(content.episode_run_time / 60).toFixed(0)} h ${
+                        content.episode_run_time % 60
+                      } m / episode`
+                      : `${content.episode_run_time} m / episode`}
                   </p>
                 ) : (
                   ""
