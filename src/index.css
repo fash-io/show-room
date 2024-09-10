@@ -22,6 +22,7 @@ html{
 }
 .login {
   background-image: linear-gradient(#0000007e, #0000007e), url(/background_banner.jpg);
+  background-size: cover;
 }
 @keyframes blink {
   from {opacity: 0;}
