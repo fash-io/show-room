@@ -9,8 +9,8 @@ const PopularPage = (props) => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [mediaType, setMediaType] = useState("all"); // 'all', 'movie', 'tv'
-  const [timeWindow, setTimeWindow] = useState("day"); // 'day', 'week'
+  const [mediaType, setMediaType] = useState("all");
+  const [timeWindow, setTimeWindow] = useState("day");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -19,7 +19,7 @@ const PopularPage = (props) => {
       setPage(newPage);
       window.scrollTo({
         top: 0,
-        behavior: "smooth", // Changed to 'smooth' for a better user experience
+        behavior: "smooth",
       });
     }
   };

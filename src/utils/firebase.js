@@ -6,10 +6,9 @@ import {
   signOut,
 } from "firebase/auth";
 import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // Import Firebase Storage
+import { getStorage } from "firebase/storage";
 import { toast } from "react-toastify";
-// import { db } from "./firebase"; // Adjust the import based on your project structure
-
+// import { db } from "./firebase";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,11 +23,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app); // Initialize Firebase Storage
+const storage = getStorage(app);
 
 const signup = async (name, email, password) => {
   try {
-    const response = await createUserWithEmailAndPassword(auth, email, password);
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = response.user;
 
     const userDocRef = doc(db, "users", user.uid);
@@ -65,7 +68,6 @@ const logout = async () => {
   }
 };
 
-
 const storeItem = async (uid, newItem, listType) => {
   try {
     const userDocRef = doc(db, "users", uid);
@@ -81,7 +83,9 @@ const storeItem = async (uid, newItem, listType) => {
     }
 
     // Check if the item already exists in the list
-    if (!list.find(item => item.id === newItem.id && item.type === newItem.type)) {
+    if (
+      !list.find((item) => item.id === newItem.id && item.type === newItem.type)
+    ) {
       list.push(newItem);
       await setDoc(userDocRef, { [listType]: list }, { merge: true });
       toast.success(`Added to ${listType}`);
@@ -97,7 +101,9 @@ const storeItem = async (uid, newItem, listType) => {
 export const fetchDetails = async (id, type, options) => {
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/${type === "movie" ? "movie" : "tv"}/${id}?language=en-US`,
+      `https://api.themoviedb.org/3/${
+        type === "movie" ? "movie" : "tv"
+      }/${id}?language=en-US`,
       options
     );
     if (!response.ok) {
@@ -109,10 +115,17 @@ export const fetchDetails = async (id, type, options) => {
     return null;
   }
 };
-
-
-// Usage
-export const storeWatchList = (uid, newItem) => storeItem(uid, newItem, "watchList");
-export const storeFavorite = (uid, newItem) => storeItem(uid, newItem, "favorite");
-export const storeWatched = (uid, newItem) => storeItem(uid, newItem, "watched");
-export { auth, db, storage, signup, login, logout  }; // Export storage
+const storeWatchList = (uid, newItem) => storeItem(uid, newItem, "watchList");
+const storeFavorite = (uid, newItem) => storeItem(uid, newItem, "favorite");
+const storeWatched = (uid, newItem) => storeItem(uid, newItem, "watched");
+export {
+  auth,
+  db,
+  storage,
+  signup,
+  login,
+  logout,
+  storeWatchList,
+  storeWatched,
+  storeFavorite,
+}; // Export storage

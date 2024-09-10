@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import GoBackButton from "../components/GoBackButton";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -41,6 +42,7 @@ const ContactUs = () => {
 
   return (
     <>
+    <GoBackButton />
       <div className="bg-gradient-to-r pt-20 from-gray-800 via-gray-900 to-black text-white py-12 px-6 sm:px-12 max-w-4xl mx-auto rounded-lg shadow-lg">
         <h1 className="text-4xl font-bold mb-8 text-center">Contact Us</h1>
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg">

@@ -1,5 +1,11 @@
 import { toast } from "react-toastify";
-import { db, logout, storeFavorite, storeWatched, storeWatchList } from "./firebase";
+import {
+  db,
+  logout,
+  storeFavorite,
+  storeWatched,
+  storeWatchList,
+} from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const updateUserDocument = async (user, updateFn, type) => {
@@ -7,20 +13,20 @@ const updateUserDocument = async (user, updateFn, type) => {
     try {
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-  
+
       if (!userDoc.exists()) {
         console.error("User document not found");
         return;
       }
-  
+
       const items = userDoc.data()[type] || [];
       const updatedItems = updateFn(items);
-  
+
       if (updatedItems.length === items.length) {
         toast.error(`Item not found in ${type}`);
         return;
       }
-  
+
       await setDoc(userDocRef, { [type]: updatedItems }, { merge: true });
       toast.info(`Item removed from ${type}`);
     } catch (error) {
@@ -83,8 +89,10 @@ const handleLogout = async () => {
 
 const handleRemoveFavoriteItem = async (showId, showType, user) => {
   if (user) {
-    await updateUserDocument(user, (items) =>
-      items.filter((item) => item.id !== showId || item.type !== showType), 
+    await updateUserDocument(
+      user,
+      (items) =>
+        items.filter((item) => item.id !== showId || item.type !== showType),
       "favorite"
     );
   } else {
@@ -94,8 +102,10 @@ const handleRemoveFavoriteItem = async (showId, showType, user) => {
 
 const handleRemoveWatchListItem = async (showId, showType, user) => {
   if (user) {
-    await updateUserDocument(user, (items) =>
-      items.filter((item) => item.id !== showId || item.type !== showType), 
+    await updateUserDocument(
+      user,
+      (items) =>
+        items.filter((item) => item.id !== showId || item.type !== showType),
       "watchList"
     );
   } else {
@@ -105,8 +115,10 @@ const handleRemoveWatchListItem = async (showId, showType, user) => {
 
 const handleRemoveWatchedItem = async (showId, showType, user) => {
   if (user) {
-    await updateUserDocument(user, (items) =>
-      items.filter((item) => item.id !== showId || item.type !== showType), 
+    await updateUserDocument(
+      user,
+      (items) =>
+        items.filter((item) => item.id !== showId || item.type !== showType),
       "watched"
     );
   } else {
@@ -114,12 +126,12 @@ const handleRemoveWatchedItem = async (showId, showType, user) => {
   }
 };
 
-export const fetchFavorites = async (user) => {
+const fetchFavorites = async (user) => {
   if (user) {
     try {
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-  
+
       if (!userDoc.exists()) {
         console.error("User document not found");
         return;
@@ -132,12 +144,12 @@ export const fetchFavorites = async (user) => {
     toast.error("You need to create an account");
   }
 };
-export const fetchWatchList = async (user) => {
+const fetchWatchList = async (user) => {
   if (user) {
     try {
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-  
+
       if (!userDoc.exists()) {
         console.error("User document not found");
         return;
@@ -150,12 +162,12 @@ export const fetchWatchList = async (user) => {
     toast.error("You need to create an account");
   }
 };
-export const fetchWatched = async (user) => {
+const fetchWatched = async (user) => {
   if (user) {
     try {
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-  
+
       if (!userDoc.exists()) {
         console.error("User document not found");
         return;
@@ -169,4 +181,15 @@ export const fetchWatched = async (user) => {
   }
 };
 
-export { handleAddToWatchList, handleAddToFavorites, handleAddToWatched, handleLogout, handleRemoveFavoriteItem, handleRemoveWatchListItem, handleRemoveWatchedItem };
+export {
+  handleAddToWatchList,
+  handleAddToFavorites,
+  handleAddToWatched,
+  handleLogout,
+  handleRemoveFavoriteItem,
+  handleRemoveWatchListItem,
+  handleRemoveWatchedItem,
+  fetchFavorites,
+  fetchWatchList,
+  fetchWatched,
+};

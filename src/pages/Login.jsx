@@ -2,7 +2,7 @@ import { useState } from "react";
 import { login, signup } from "../utils/firebase";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ setIsExploring }) => {
   const [signState, setSignState] = useState("Login");
@@ -56,11 +56,11 @@ const Login = ({ setIsExploring }) => {
         if (!/[0-9]/.test(password)) {
           throw new Error("Password must contain at least one number");
         }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-          throw new Error(
-            "Password must contain at least one special character"
-          );
-        }
+        // if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        //   throw new Error(
+        //     "Password must contain at least one special character"
+        //   );
+        // }
         if (password !== c_password) {
           throw new Error("Passwords do not match");
         }
@@ -107,7 +107,7 @@ const Login = ({ setIsExploring }) => {
           ShowRoom
         </span>
       </Link>
-      <div className="w-full max-w-md bg-black bg-opacity-75 rounded py-16 px-10 sm:p-16 m-auto">
+      <div className="w-full max-w-md bg-black bg-opacity-75 rounded-xl shadow-lg py-16 px-10 sm:p-16 m-auto">
         <h1 className="text-3xl font-medium mb-7">{signState}</h1>
         <form onSubmit={user_auth}>
           {signState === "Sign Up" && (
@@ -116,7 +116,7 @@ const Login = ({ setIsExploring }) => {
               onChange={handleNameChange}
               type="text"
               placeholder="Your Name"
-              className="w-full h-12 bg-[#333] text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
             />
           )}
 
@@ -125,7 +125,7 @@ const Login = ({ setIsExploring }) => {
             onChange={handleEmailChange}
             type="email"
             placeholder="Email"
-            className="w-full h-12 bg-[#333] text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+            className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
           />
 
           <div className="relative w-full">
@@ -134,7 +134,7 @@ const Login = ({ setIsExploring }) => {
               onChange={handlePasswordChange}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full h-12 bg-[#333] text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
             />
             <button
               type="button"
@@ -151,7 +151,7 @@ const Login = ({ setIsExploring }) => {
               onChange={handleC_passwordChange}
               type="password"
               placeholder="Confirm Password"
-              className="w-full h-12 bg-[#333] text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
             />
           )}
 
@@ -186,8 +186,8 @@ const Login = ({ setIsExploring }) => {
                   Sign Up Now
                 </span>
               </p>
-              <button className="" onClick={handleExploring}>
-                Continue without Login
+              <button className="pt-2 font-semibold text-white" onClick={handleExploring}>
+                Just exploring?
               </button>
             </>
           )}

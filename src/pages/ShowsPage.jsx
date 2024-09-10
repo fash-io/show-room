@@ -8,7 +8,6 @@ import Pagination from "../components/Pagination";
 
 const TVShowsPage = (props) => {
   const { options, type_ } = props;
-  const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -42,7 +41,6 @@ const TVShowsPage = (props) => {
       }
 
       const data = await response.json();
-      setShows(data.results);
       setFilteredShows(data.results);
       setTotalPages(data.total_pages);
     } catch (error) {

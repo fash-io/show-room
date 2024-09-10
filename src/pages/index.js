@@ -10,3 +10,4 @@ export { default as ProfilePage } from "./ProfilePage";
 export { default as Error } from "./NotFound";
 export { default as ContactUs } from "./ContactUs";
 export { default as FAQ } from "./FAQ";
+export { default as MyList } from "./MyList";

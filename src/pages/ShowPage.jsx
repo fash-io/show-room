@@ -5,8 +5,8 @@ import {
   FaStarHalfAlt,
   FaHeart,
   FaCheck,
-  FaHeartBroken,
-  FaTimes,
+  // FaHeartBroken,
+  // FaTimes,
 } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
@@ -15,9 +15,9 @@ import {
   handleAddToFavorites,
   handleAddToWatchList,
   handleAddToWatched,
-  handleRemoveFavoriteItem,
-  handleRemoveWatchListItem,
-  handleRemoveWatchedItem,
+  // handleRemoveFavoriteItem,
+  // handleRemoveWatchListItem,
+  // handleRemoveWatchedItem,
 } from "../utils/firebaseHandlers";
 import SlidingImages from "../components/SlidingImages";
 // import { fetchFavorites, fetchWatchList, fetchWatched } from "../utils/firebaseHandlers";

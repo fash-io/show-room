@@ -6,6 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { handleLogout } from "../utils/firebaseHandlers";
+import GoBackButton from "../components/GoBackButton";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -113,7 +114,8 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center sm:pt-20 flex-col">
+    <GoBackButton />
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center flex-col">
         <div className="sm:bg-gray-900/80 text-white rounded-lg sm:shadow-xl max-w-3xl w-full p-8">
           <div className="flex flex-col items-center">
             {userData.photoURL ? (

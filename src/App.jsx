@@ -3,7 +3,6 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase";
-import MyListPage from "./pages/MyList";
 import Loading from "./components/Loading";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -20,6 +19,7 @@ import {
   ContactUs,
   FAQ,
   CollectionPage,
+  MyList,
 } from "./pages";
 
 const apiOptions = {
@@ -34,8 +34,8 @@ const apiOptions = {
 const App = () => {
   const [isExploring, setIsExploring] = useState(false);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // New loading state
-  const location = useLocation(); // Get the current pathname
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Redirect based on user authentication and exploration state
     if (!loading) {
       if (!isExploring && !user && location.pathname === "/") {
         navigate("/login");
@@ -67,17 +66,14 @@ const App = () => {
   const showNavbarPaths = [
     "/",
     "/movies",
-    "/profile",
+    // "/profile",
     "/list",
     "/series",
-    "/faq",
+    // "/faq",
     "/contact",
     "/search",
-    "/collection/:id",
     "/trending",
-    "/person/:id",
     "/movie",
-    "/:type/:id",
   ];
 
   // Check if the path should show the Navbar, including dynamic movie/series routes
@@ -107,7 +103,7 @@ const App = () => {
         />
         <Route
           path="/list"
-          element={<MyListPage user={user} options={apiOptions} />}
+          element={<MyList user={user} options={apiOptions} />}
         />
         <Route
           path="/movies"

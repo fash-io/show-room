@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ShowCard from "../components/ShowCard";
+import Loading from "../components/Loading";
+import Error from "../components/Error"
 
 const CollectionPage = (props) => {
   const [collection, setCollection] = useState(null);
@@ -35,9 +37,7 @@ const CollectionPage = (props) => {
   if (loading) {
     return (
       <>
-        <div className="min-h-screen flex justify-center items-center">
-          <p className="text-2xl">Loading...</p>
-        </div>
+        <Loading />
       </>
     );
   }
@@ -45,9 +45,7 @@ const CollectionPage = (props) => {
   if (error) {
     return (
       <>
-        <div className="min-h-screen flex justify-center items-center">
-          <p className="text-2xl text-red-500">{error}</p>
-        </div>
+        <Error error={error}/>
       </>
     );
   }

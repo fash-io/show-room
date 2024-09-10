@@ -13,7 +13,7 @@
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
     const [dataSet, setDataSet] = useState("watchList");
-    const [mediaType, setMediaType] = useState("all"); // 'all', 'movie', 'tv'
+    const [mediaType, setMediaType] = useState("all");
 
     useEffect(() => {
       const fetchWatchlistData = async () => {
