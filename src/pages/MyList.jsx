@@ -12,7 +12,7 @@
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
-    const [dataSet, setDataSet] = useState("favorite");
+    const [dataSet, setDataSet] = useState("watchList");
     const [mediaType, setMediaType] = useState("all"); // 'all', 'movie', 'tv'
 
     useEffect(() => {
@@ -180,7 +180,7 @@
 
             {/* Data Set Selector */}
             <div className="flex flex-wrap items-center space-x-2">
-              {["favorite", "watchList", "watched"].map((set) => (
+              {["watchList", "favorite", "watched"].map((set) => (
                 <button
                   key={set}
                   onClick={() => handleSetDataSet(set, mediaType)}
@@ -202,10 +202,10 @@
                       : "pink"
                   }-600 transition-colors`}
                 >
-                  {set === "favorite"
-                    ? "Favorite"
-                    : set === "watchList"
+                  {set === "watchList"
                     ? "Watch List"
+                    : set === "favorite"
+                    ? "Favorite"
                     : "Watched"}
                 </button>
               ))}

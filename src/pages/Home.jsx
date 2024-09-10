@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
 import TitleCards from "../components/TitleCards";
-import Footer from "../components/Footer";
 import Slider from "../components/Slider";
 import Error from "../components/Error";
 import { useState } from "react";
@@ -29,7 +28,7 @@ const Home = (props) => {
         <TitleCards title="Popular Series" category="popular" options={options} type={"tv"} user={user}/>
         <TitleCards title="Top Rated Series" category="top_rated" options={options} type={"tv"} user={user}/>
         <TitleCards title="On The Air" category="on_the_air" options={options} type={"tv"} user={user}/>
-        <TitleCards title="Your Watch List" userWatchlist={true} options={options} user={user}/>
+        {user && <TitleCards title="Your Watch List" userWatchlist={true} options={options} user={user}/>}
       </div>
     </>
   );

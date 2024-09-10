@@ -128,7 +128,7 @@ const TitleCards = (props) => {
             />
           ))
         ) : (
-          <p className="p-5 border border-white/20 rounded">{user ? "No items found in WatchList." : "Not Logged In."}</p>
+          <p className="p-5 border border-white/20 rounded">{"No items found in WatchList."}</p>
         )}
       </div>
     </div>
