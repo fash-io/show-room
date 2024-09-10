@@ -118,14 +118,23 @@ const Slider = (props) => {
               className={`w-full object-cover ${height}`}
             />
             <div className="absolute w-full px-4 sm:px-6 md:px-[6%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-10 font-bold" style={{textShadow: '2px 2px 4px #000000'}}>
+              <h1
+                className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-10 font-bold"
+                style={{ textShadow: "2px 2px 4px #000000" }}
+              >
                 {movie.title || movie.name}
               </h1>
 
-              <p className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs md:text-lg mb-2 sm:mb-4 hidden sm:block" style={{textShadow: '2px 2px 4px #000000'}}>
+              <p
+                className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs md:text-lg leading-5 mb-2 sm:mb-4 hidden sm:block"
+                style={{ textShadow: "2px 2px 4px #000000" }}
+              >
                 {movie.overview}
               </p>
-              <p className="text-xs sm:text-sm md:text-md mb-2 uppercase tracking-wider text-slate-400 font-bold" style={{textShadow: '2px 2px 4px #000000'}}>
+              <p
+                className="text-xs sm:text-sm md:text-md mb-2 uppercase tracking-wider text-slate-400 font-bold"
+                style={{ textShadow: "2px 2px 4px #000000" }}
+              >
                 {movie.media_type === "movie" ? "Movie" : "TV Show"}
               </p>
               <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-8 md:mb-12">
