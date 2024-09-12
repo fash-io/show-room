@@ -9,6 +9,7 @@ import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { toast } from "react-toastify";
 // import { db } from "./firebase";
+import { setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -51,6 +52,7 @@ const signup = async (name, email, password) => {
 
 const login = async (email, password) => {
   try {
+    await setPersistence(auth, browserLocalPersistence);
     const response = await signInWithEmailAndPassword(auth, email, password);
     const user = response.user;
   } catch (error) {
@@ -82,7 +84,6 @@ const storeItem = async (uid, newItem, listType) => {
       }
     }
 
-    // Check if the item already exists in the list
     if (
       !list.find((item) => item.id === newItem.id && item.type === newItem.type)
     ) {
@@ -128,4 +129,4 @@ export {
   storeWatchList,
   storeWatched,
   storeFavorite,
-}; // Export storage
+};

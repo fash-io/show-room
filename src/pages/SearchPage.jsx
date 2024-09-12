@@ -28,7 +28,7 @@ const SearchPage = (props) => {
     setKeywordId(null); // Reset the keyword ID when filter changes
     setKeywordSearch(false); // Reset keyword search state
   };
-  
+
   useEffect(() => {
     if (filter === "keyword" && keywordId !== null) {
       fetchMoviesByKeyword(keywordId, page);
@@ -36,7 +36,7 @@ const SearchPage = (props) => {
       searchMovies(page);
     }
   }, [filter, keywordId, page]);
-  
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= (totalPages || 1)) {
       setPage(newPage);
@@ -48,12 +48,10 @@ const SearchPage = (props) => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  
+
   const handleChange = (e) => {
     setQuery(e.target.value);
   };
-
-
 
   const searchMovies = async (page = 1) => {
     if (query.trim() === "") return;
@@ -153,7 +151,7 @@ const SearchPage = (props) => {
                 <option value="person">Person</option>
                 <option value="tv">Series</option>
                 <option value="collection">Collections</option>
-                <option value="keyword">Keywords</option>
+                <option value="keyword">Keyword for Movies (Experimental)</option>
               </select>
             )}
           </div>
@@ -185,7 +183,7 @@ const SearchPage = (props) => {
                   <Link
                     key={data.id}
                     to={`/${
-                      data.media_type === "movie"
+                      data.media_type === "movie" || filter === "keyword"
                         ? "movie"
                         : data.media_type === "tv"
                         ? "series"

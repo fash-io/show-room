@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import LazyLoader from "./LazyLoader";
 import { FaCheck, FaHeart } from "react-icons/fa"; // Importing icon for favorites

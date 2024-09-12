@@ -125,7 +125,7 @@ const App = () => {
           path="/collection/:id"
           element={<CollectionPage options={apiOptions} />}
         />
-        <Route path="/:type/:id" element={<ShowPage options={apiOptions} />} />
+        <Route path="/:type/:id" element={<ShowPage options={apiOptions} user={user}/>} />
         <Route path="/search" element={<SearchPage options={apiOptions} />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/faq" element={<FAQ />} />

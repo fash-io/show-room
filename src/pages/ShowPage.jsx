@@ -23,8 +23,6 @@ import SlidingImages from "../components/SlidingImages";
 // import { fetchFavorites, fetchWatchList, fetchWatched } from "../utils/firebaseHandlers";
 
 const ContentPage = (props) => {
-  
-
   const { id, type } = useParams();
   const [content, setContent] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
@@ -85,9 +83,9 @@ const ContentPage = (props) => {
         setLoading(false); // Set loading to false after data is fetched
       }
     };
-  //   setWatched(fetchWatched(user));
-  // setWatchList(fetchWatchList(user));
-  // setFavorite(fetchFavorites(user));
+    //   setWatched(fetchWatched(user));
+    // setWatchList(fetchWatchList(user));
+    // setFavorite(fetchFavorites(user));
 
     fetchContentDetails();
   }, [id, type]);
@@ -164,8 +162,8 @@ const ContentPage = (props) => {
                         }`
                       : content.episode_run_time > 60
                       ? `${(content.episode_run_time / 60).toFixed(0)} h ${
-                        content.episode_run_time % 60
-                      } m / episode`
+                          content.episode_run_time % 60
+                        } m / episode`
                       : `${content.episode_run_time} m / episode`}
                   </p>
                 ) : (
