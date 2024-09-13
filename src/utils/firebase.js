@@ -8,7 +8,6 @@ import {
 import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { toast } from "react-toastify";
-// import { db } from "./firebase";
 import { setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const firebaseConfig = {

@@ -14,7 +14,7 @@ const Navbar = (props) => {
   const navRef = useRef();
 
   const fetchWatchlistData = async () => {
-    if(user) {
+    if (user) {
       try {
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
@@ -131,7 +131,7 @@ const Navbar = (props) => {
 
       <ul
         className={
-          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-5 px-12 md:hidden z-[999] " +
+          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999] " +
           (pathname === "/login" || pathname === "/signup" ? "hidden" : "")
         }
       >
