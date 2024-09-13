@@ -48,7 +48,7 @@ const Navbar = (props) => {
     <>
       <nav
         ref={navRef}
-        className={`w-full fixed py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300`}
+        className={`w-full fixed py-3 md:py-5 px-[6%] flex justify-between items-center text-[#e5e5e5] z-[998] text-sm duration-300`}
         style={{
           backgroundImage:
             "linear-gradient(180deg, rgba(0,0,0,0.7) 30%, transparent)",
@@ -57,34 +57,21 @@ const Navbar = (props) => {
         {/* Logo and Links Container */}
         <div className="flex items-center gap-12 logo">
           <Link to={"/"}>
-            <span
-              className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent "
-              style={{
-                backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
-              }}
-            >
+            <span className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
               ShowRoom
             </span>
           </Link>
 
           {/* Desktop Links */}
-          <ul className="hidden lg:flex gap-5">
+          <ul className="hidden md:flex gap-8">
             {navLinks
               .sort((a, b) => a.index - b.index)
               .map((val, i) => (
                 <Link key={i} to={val.href}>
                   <li
-                    className={`cursor-pointer  duration-200 bg-clip-text p-1  ${
-                      pathname === val.href ? "font-bold text-transparent " : ""
+                    className={`cursor-pointer text-xs lg:text-base duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
+                      pathname === val.href ? "text-transparent" : ""
                     }`}
-                    style={
-                      pathname === val.href
-                        ? {
-                            backgroundImage:
-                              "linear-gradient(to right, #1a2a6c, #ff7e5f)",
-                          }
-                        : null
-                    }
                   >
                     {val.label}
                   </li>
@@ -93,16 +80,13 @@ const Navbar = (props) => {
           </ul>
         </div>
 
-        {/* Right Icons Container */}
         {!(pathname === "/profile") && (
           <>
-            <div className="flex gap-5 lg:gap-15 items-center">
+            <div className="flex gap-4 lg:gap-15 items-center">
               {/* Search icon */}
               <Link to={"/search"}>
                 <FaSearch className="cursor-pointer" size={20} />
               </Link>
-
-              {/* Profile and Logout links if user is logged in */}
               {user && Object.keys(user).length !== 0 ? (
                 <Link
                   to={"/profile"}
@@ -112,14 +96,13 @@ const Navbar = (props) => {
                     <img
                       src={photo}
                       alt="Profile"
-                      className="w-10 h-10 rounded-full object-cover"
+                      className="w-9 h-9 rounded-full object-cover"
                     />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}
                 </Link>
               ) : (
-                // Login link if no user is logged in
                 <Link to={"/login"} className="text-white">
                   Login
                 </Link>
@@ -131,8 +114,7 @@ const Navbar = (props) => {
 
       <ul
         className={
-          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999] " +
-          (pathname === "/login" || pathname === "/signup" ? "hidden" : "")
+          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999] "
         }
       >
         {navLinks
@@ -141,12 +123,12 @@ const Navbar = (props) => {
             <Link
               key={i}
               to={val.href}
-              className={`flex flex-col items-center justify-center min-w-[20%] max-w-[20%] `}
+              className={`flex flex-col items-center justify-center min-w-[20%] max-w-[20%]`}
             >
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-[22px] py-[7px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded-lg"
+                    ? "absolute px-[20px] py-[6px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c]"
                     : ""
                 }`}
               >

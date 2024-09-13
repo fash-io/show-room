@@ -23,6 +23,7 @@ import SlidingImages from "../components/SlidingImages";
 // import { fetchFavorites, fetchWatchList, fetchWatched } from "../utils/firebaseHandlers";
 
 const ContentPage = (props) => {
+  const { options, user } = props;
   const { id, type } = useParams();
   const [content, setContent] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
@@ -32,7 +33,6 @@ const ContentPage = (props) => {
   // const [favorites, setFavorite] = useState([]);
   // const [watchList, setWatchList] = useState([]);
   // const [watched, setWatched] = useState([]);
-  const { options, user } = props;
 
   useEffect(() => {
     const fetchContentDetails = async () => {

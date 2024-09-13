@@ -70,7 +70,7 @@ const ShowCard = (props) => {
       <img
         src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
         alt={show.original_title || "Movie Poster"}
-        className="cursor-pointer object-cover w-full h-64 sm:h-80 rounded-lg group-hover:scale-110 transition-transform duration-300"
+        className="cursor-pointer object-cover w-full rounded-lg sm:group-hover:scale-110 transition-transform duration-300"
       />
 
       {/* Rating */}

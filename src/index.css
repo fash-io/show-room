@@ -40,21 +40,9 @@ html{
  ::-webkit-scrollbar {
   width: 5px;
 }
-
-/* ::-webkit-scrollbar-track {
-  background: #2d2d2d;
-  border-radius: 10px;
-} */
 ::-webkit-scrollbar-thumb {
   background: #4a4a4a;
   border-radius: 10px; 
-}
-/*
-::-webkit-scrollbar-thumb:hover {
-  background: #6a6a6a;
-} */
-.gg{
-  background-image: linear-gradient(to right, #ff7e5f, #1a2a6c);
 }
 .divvv{
   height: 100%;

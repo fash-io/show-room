@@ -5,13 +5,13 @@ import Error from "../components/Error";
 import { calculateAge } from "../constants";
 
 const PersonPage = (props) => {
+  const { options } = props;
   const { id } = useParams();
   const [actor, setActor] = useState(null);
   const [movies, setActorMovies] = useState(null);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [sortType, setSort] = useState("popularity");
-  const { options } = props;
 
   useEffect(() => {
     const fetchActorDetails = async () => {

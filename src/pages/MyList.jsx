@@ -5,7 +5,8 @@
   import { doc, getDoc } from "firebase/firestore";
   import { db } from "../utils/firebase";
 
-  const MyListPage = ({ options, user }) => {
+  const MyListPage = (props) => {
+    const { options, user } = props
     const [favorites, setFavorites] = useState([]);
     const [watchList, setWatchlist] = useState([]);
     const [watched, setWatched] = useState([]);

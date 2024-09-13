@@ -5,13 +5,13 @@ import Loading from "./Loading";
 import info_icon from "../assets/info_icon.png";
 
 const Slider = (props) => {
+  const { height, type, options } = props;
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef();
   const intervalRef = useRef();
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { height, type, options } = props;
 
   useEffect(() => {
     const fetchNewReleases = async () => {
@@ -119,14 +119,14 @@ const Slider = (props) => {
             />
             <div className="absolute w-full px-4 sm:px-6 md:px-[6%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6">
               <h1
-                className="text-2xl sm:text-3xl md:text-5xl mb-4 md:mb-10 font-bold"
+                className="text-lg  sm:text-3xl md:text-4xl mb-4 md:mb-10 font-bold"
                 style={{ textShadow: "2px 2px 4px #000000" }}
               >
                 {movie.title || movie.name}
               </h1>
 
               <p
-                className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs md:text-lg leading-5 mb-2 sm:mb-4 hidden sm:block"
+                className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs lg:text-lg leading-5 mb-2 sm:mb-4 hidden md:block"
                 style={{ textShadow: "2px 2px 4px #000000" }}
               >
                 {movie.overview}

@@ -5,11 +5,11 @@ import Loading from "../components/Loading";
 import Error from "../components/Error"
 
 const CollectionPage = (props) => {
+  const { options } = props;
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const { options } = props;
 
   useEffect(() => {
     const fetchCollection = async () => {

@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = ({ setIsExploring }) => {
+const Login = (props) => {
+  const { setIsExploring } = props;
   const [signState, setSignState] = useState("Login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

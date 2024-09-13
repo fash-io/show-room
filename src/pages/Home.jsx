@@ -4,7 +4,6 @@ import TitleCards from "../components/TitleCards";
 import Slider from "../components/Slider";
 import Error from "../components/Error";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Home = (props) => {
   const { options, user } = props;

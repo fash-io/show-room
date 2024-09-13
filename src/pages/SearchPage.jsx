@@ -4,6 +4,7 @@ import Loading from "../components/Loading";
 import Pagination from "../components/Pagination";
 
 const SearchPage = (props) => {
+  const { options } = props;
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [filter, setFilter] = useState("multi");
@@ -14,7 +15,6 @@ const SearchPage = (props) => {
   const [keywordSearch, setKeywordSearch] = useState(false);
   const [keywordId, setKeywordId] = useState(null);
 
-  const { options } = props;
 
   useEffect(() => {
     if (query.trim() !== "") {
