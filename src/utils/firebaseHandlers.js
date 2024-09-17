@@ -7,7 +7,6 @@ import {
   storeWatchList,
 } from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-
 const updateUserDocument = async (user, updateFn, type) => {
   if (user) {
     try {
@@ -80,7 +79,6 @@ const handleAddToWatched = async (showId, showType, user) => {
 const handleLogout = async () => {
   try {
     await logout();
-    window.location.href = "/login";
   } catch (error) {
     console.error("Error logging out:", error.message);
     toast.error(`Error logging out: ${error.message}`);

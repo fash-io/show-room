@@ -7,8 +7,10 @@ import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { handleLogout } from "../utils/firebaseHandlers";
 import GoBackButton from "../components/GoBackButton";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
+  const navigator = useNavigate();
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -95,6 +97,10 @@ const ProfilePage = () => {
       setIsLoading(false);
     }
   };
+  const handleLogout = () => {
+    handleLogout();
+    navigator("/");
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -114,7 +120,7 @@ const ProfilePage = () => {
 
   return (
     <>
-    <GoBackButton />
+      <GoBackButton />
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center flex-col">
         <div className="sm:bg-gray-900/80 text-white rounded-lg sm:shadow-xl max-w-3xl w-full p-8">
           <div className="flex flex-col items-center">
@@ -246,9 +252,12 @@ const ProfilePage = () => {
               </div>
             </div>
           )}
-        <button onClick={handleLogout} className=" float-right my-3  px-5 mx-auto py-2 bg-red-700 rounded">
-          Logout
-        </button>
+          <button
+            onClick={handleLogout}
+            className=" float-right my-3  px-5 mx-auto py-2 bg-red-700 rounded"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </>
