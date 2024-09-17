@@ -97,7 +97,7 @@ const ProfilePage = () => {
       setIsLoading(false);
     }
   };
-  const handleLogout = () => {
+  const handle_Logout = () => {
     handleLogout();
     navigator("/");
   };
@@ -253,7 +253,7 @@ const ProfilePage = () => {
             </div>
           )}
           <button
-            onClick={handleLogout}
+            onClick={handle_Logout}
             className=" float-right my-3  px-5 mx-auto py-2 bg-red-700 rounded"
           >
             Logout
