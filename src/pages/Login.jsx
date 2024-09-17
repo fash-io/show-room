@@ -67,7 +67,7 @@ const Login = (props) => {
         }
         await signup(name, email, password);
         toast.success("Sign up successful.");
-        navigator(-2);
+        navigator("/login");
       } else {
         if (email.trim().length < 1) {
           toast.error("Please enter your email");
@@ -79,7 +79,7 @@ const Login = (props) => {
         }
         await login(email, password);
         toast.success("Login successful.");
-        navigator(-1);
+        navigator("/");
       }
     } catch (error) {
       toast.error(error.message);
@@ -187,7 +187,10 @@ const Login = (props) => {
                   Sign Up Now
                 </span>
               </p>
-              <button className="pt-2 font-semibold text-white" onClick={handleExploring}>
+              <button
+                className="pt-2 font-semibold text-white"
+                onClick={handleExploring}
+              >
                 Just exploring?
               </button>
             </>
