@@ -38,14 +38,16 @@ const PopularPage = (props) => {
       } catch (err) {
         console.error("Failed to fetch new releases:", err);
         setError("Failed to load new releases.");
+        setMovies((m) => m.filter((movie) => movie.backdrop_path));
       }
     };
     fetchNewReleases();
-  }, [options, mediaType, timeWindow, page]); // Added 'page' to dependencies
+  }, [options, mediaType, timeWindow, page]);
 
   useEffect(() => {
     setPage(1);
   }, [mediaType, timeWindow]);
+  console.log(movies);
 
   if (loading) {
     return <Loading />;
@@ -57,7 +59,6 @@ const PopularPage = (props) => {
 
   return (
     <>
-
       <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
         {/* Filter and Time Window Controls */}
         <div className="flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20">
@@ -118,41 +119,40 @@ const PopularPage = (props) => {
 
         {/* Movies Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-5 sm:gap-y-8">
-          {movies.map((movie) => (
-            <Link
-              key={movie.id}
-              to={`/${movie.media_type === "movie" ? "movie" : "series"}/${
-                movie.id
-              }`}
-              className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
-            >
-              <img
-                src={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "https://via.placeholder.com/300x450?text=No+Image"
-                }
-                alt={movie.title || movie.name}
-                className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
-              />
-              <div
-                className="p-4  "
-                style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}
+          {movies
+            .filter((movie) => movie.poster_path) // Filter movies that have a poster_path
+            .map((movie) => (
+              <Link
+                key={movie.id}
+                to={`/${movie.media_type === "movie" ? "movie" : "series"}/${
+                  movie.id
+                }`}
+                className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
               >
-                {mediaType !== "all" ? (
-                  ""
-                ) : (
-                  <p className="text-gray-100 text-sm float-right">
-                    {movie.media_type.toUpperCase()}
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title || movie.name}
+                  className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
+                />
+                <div
+                  className="p-4"
+                  style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}
+                >
+                  {mediaType !== "all" ? (
+                    ""
+                  ) : (
+                    <p className="text-gray-100 text-sm float-right">
+                      {movie.media_type.toUpperCase()}
+                    </p>
+                  )}
+                  <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2">
+                    {movie.release_date || movie.first_air_date}
                   </p>
-                )}
-                <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2">
-                  {movie.release_date || movie.first_air_date}
-                </p>
-              </div>
-            </Link>
-          ))}
+                </div>
+              </Link>
+            ))}
         </div>
+
         {/* Pagination */}
         <Pagination
           totalPages={totalPages}
@@ -161,7 +161,6 @@ const PopularPage = (props) => {
           loading={loading}
         />
       </div>
-
     </>
   );
 };

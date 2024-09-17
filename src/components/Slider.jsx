@@ -28,6 +28,7 @@ const Slider = (props) => {
       } finally {
         setLoading(false);
       }
+      setMovies(m => m.filter(movie => movie.backdrop_path));
     };
 
     fetchNewReleases();
@@ -111,7 +112,7 @@ const Slider = (props) => {
         }}
       >
         {movies
-          .filter((movie) => movie.backdrop_path)
+          
           .map((movie, index) => (
             <div key={index} className="min-w-full relative h-full">
               <img
