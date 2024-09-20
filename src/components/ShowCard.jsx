@@ -64,17 +64,17 @@ const ShowCard = (props) => {
       <Link
       to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
       key={show.id}
-      className="relative inline-block mr-3 w-48 overflow-hidden group duration-300 rounded-lg group"
+      className="relative inline-block mr-3 w-40 overflow-hidden group duration-300 rounded-lg group"
     >
       {/* Poster Image */}
       <img
         src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
         alt={show.original_title || "Movie Poster"}
-        className="cursor-pointer object-cover w-full rounded-lg sm:group-hover:scale-110 transition-transform duration-300"
+        className="cursor-pointer object-cover w-full rounded-lg sm:group-hover:scale-110 sm:transition-transform duration-300"
       />
 
       {/* Rating */}
-      <div className="absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg group-hover:opacity-100">
+      <div className="absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg sm:group-hover:opacity-100">
         {show.vote_average.toFixed(1)}
       </div>
 
