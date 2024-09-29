@@ -97,27 +97,7 @@ const storeItem = async (uid, newItem, listType) => {
   }
 };
 
-// utils/fetchDetails.js
-export const fetchDetails = async (id, type, options) => {
-  try {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/${
-        type === "movie" ? "movie" : "tv"
-      }/${id}?language=en-US`,
-      options
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch details for ${type} with ID ${id}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-const storeWatchList = (uid, newItem) => storeItem(uid, newItem, "watchList");
-const storeFavorite = (uid, newItem) => storeItem(uid, newItem, "favorite");
-const storeWatched = (uid, newItem) => storeItem(uid, newItem, "watched");
+
 export {
   auth,
   db,
@@ -125,7 +105,5 @@ export {
   signup,
   login,
   logout,
-  storeWatchList,
-  storeWatched,
-  storeFavorite,
+  storeItem,
 };

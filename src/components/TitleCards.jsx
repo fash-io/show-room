@@ -1,138 +1,89 @@
-import { useEffect, useState } from "react";
-import { getFirestore } from "firebase/firestore";
+import { useContext, useEffect, useState, useMemo } from "react";
+import PropTypes from "prop-types"; // Import PropTypes for validation
 import Loading from "./Loading";
 import Error from "./Error";
 import ShowCard from "./ShowCard";
-import { doc, getDoc } from "firebase/firestore";
+import { options, fetchDetails } from "../utils/api";
+import UserContext from "../UserContext";
 
-const TitleCards = (props) => {
-  const { title, category, options, type, userWatchlist, user } = props;
-  const [apiData, setApiData] = useState([]);
+const TitleCards = ({ title, category, type, userWatchlist }) => {
+  const { userData } = useContext(UserContext);
   const [watchlistData, setWatchlistData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const db = getFirestore(); 
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchApiData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const response = await fetch(
-          `https://api.themoviedb.org/3/${type}/${
-            category || "now_playing"
-          }?language=en-US&page=1`,
+          `https://api.themoviedb.org/3/${type}/${category}?language=en-US&page=1`,
           options
         );
-        const data = await response.json();
-        setApiData(data.results);
+        const jsonData = await response.json();
+        setData(jsonData.results || []); // Ensure to set the correct structure
       } catch (err) {
-        setError("Failed to load API data.");
+        setError("Failed to load API data. Please try again later.");
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchWatchlistData = async () => {
-      if (!user) {
-        setWatchlistData([]);
-        setLoading(false);
-        return; 
-      }
-
-      try {
-        setLoading(true);
-        const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (!userDocSnap.exists()) {
-          setError("User document not found.");
-          setLoading(false);
-          return;
-        }
-
-        const watchListItems = userDocSnap.data().watchList || [];
-
-        if (watchListItems.length === 0) {
-          setError("No items found in watchlist.");
-          setLoading(false);
-          return;
-        }
-
-        const fetchDetails = async (id, type) => {
-          try {
-            const response = await fetch(
-              `https://api.themoviedb.org/3/${
-                type === "movie" ? "movie" : "tv"
-              }/${id}?language=en-US`,
-              options
-            );
-            const data = await response.json();
-            return { ...data, type }; // Return data along with type
-          } catch (error) {
-            console.error(
-              `Error fetching details for ${type} with ID ${id}:`,
-              error
-            );
-            return null;
-          }
-        };
-
-        const detailedWatchlistData = await Promise.all(
-          watchListItems.map(async (item) => {
-            const details = await fetchDetails(item.id, item.type);
-            return details;
-          })
-        );
-
-        setWatchlistData(detailedWatchlistData.filter((item) => item !== null));
-      } catch (err) {
-        setError("Failed to load watchlist data.");
-      } finally {
-        setLoading(false);
-      }
+    const fetchWatchListData = async () => {
+      const watchlist = userData?.watchList || [];
+      const detailedWatchlistData = await Promise.all(
+        watchlist.map(async (item) => fetchDetails(item.id, item.type))
+      );
+      setWatchlistData(detailedWatchlistData);
     };
 
     if (userWatchlist) {
-      fetchWatchlistData();
+      fetchWatchListData();
     } else {
       fetchApiData();
     }
-  }, [category, options, type, userWatchlist, user, db]);
 
-  if (loading) {
-    return <Loading />;
-  }
+    // Cleanup
+    return () => {
+      setError(null);
+      setWatchlistData([]);
+    };
+  }, [category, type, userWatchlist, userData, setLoading]);
 
-  if (error) {
-    return <Error message={error} isSmall={true} />;
-  }
+  // Handle loading and error states
+  if (loading) return <Loading isSmall={true} />;
+  if (error) return <Error message={error} isSmall={true} />;
 
-  const dataToDisplay = userWatchlist ? watchlistData : apiData;
+  const dataToDisplay = userWatchlist ? watchlistData : data;
 
   return (
     <div className="mt-12 mb-8">
       <h2 className="mb-3 text-lg font-semibold">
         {title || "Popular on Netflix"}
       </h2>
-      <div className="overflow-x-scroll whitespace-nowrap div">
+      <div className="overflow-x-scroll whitespace-nowrap divv">
         {dataToDisplay.length > 0 ? (
           dataToDisplay.map((card) => (
-            <ShowCard
-              key={card.id}
-              show={card}
-              type_={card.type || type}
-              type={2}
-              user={user}
-            />
+            <ShowCard key={card.id} type_={type} show={card} type={2} />
           ))
         ) : (
-          <p className="p-5 border border-white/20 rounded">{"No items found in WatchList."}</p>
+          <p className="p-5 border border-white/20 rounded">
+            No items found in Watchlist.
+          </p>
         )}
       </div>
     </div>
   );
+};
+
+// Prop types for validation
+TitleCards.propTypes = {
+  title: PropTypes.string,
+  category: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };
 
 export default TitleCards;

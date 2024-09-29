@@ -1,42 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  FaStar,
-  FaStarHalfAlt,
-  FaHeart,
-  FaCheck,
-  // FaHeartBroken,
-  // FaTimes,
-} from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaHeart, FaCheck } from "react-icons/fa";
 import Loading from "../components/Loading"; // Import the Loading component
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
-import {
-  handleAddToFavorites,
-  handleAddToWatchList,
-  handleAddToWatched,
-  // handleRemoveFavoriteItem,
-  // handleRemoveWatchListItem,
-  // handleRemoveWatchedItem,
-} from "../utils/firebaseHandlers";
-import SlidingImages from "../components/SlidingImages";
-// import { fetchFavorites, fetchWatchList, fetchWatched } from "../utils/firebaseHandlers";
+import { handleAddItem } from "../utils/firebaseHandlers";
+import { options } from "../utils/api";
+import UserContext from "../UserContext";
 
-const ContentPage = (props) => {
-  const { options, user } = props;
+const ContentPage = () => {
   const { id, type } = useParams();
   const [content, setContent] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
-  // const [favorites, setFavorite] = useState([]);
-  // const [watchList, setWatchList] = useState([]);
-  // const [watched, setWatched] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchContentDetails = async () => {
-      setLoading(true); // Set loading to true before fetching data
+      setLoading(true);
       try {
         const contentResponse = await fetch(
           `https://api.themoviedb.org/3/${
@@ -80,12 +63,9 @@ const ContentPage = (props) => {
         console.error("Failed to fetch content details or credits:", err);
         setError("Failed to load content details.");
       } finally {
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       }
     };
-    //   setWatched(fetchWatched(user));
-    // setWatchList(fetchWatchList(user));
-    // setFavorite(fetchFavorites(user));
 
     fetchContentDetails();
   }, [id, type]);
@@ -147,14 +127,14 @@ const ContentPage = (props) => {
                   </span>{" "}
                   {content.release_date || content.first_air_date}
                 </p>
-                {content.runtime || content.episode_run_time[0] ? (
+                {content.runtime ? (
                   <p>
                     <span className="font-semibold text-slate-500">
                       Runtime:
                     </span>{" "}
                     {type === "movie"
                       ? `${
-                          content.runtime
+                          content.runtime || content.episode_run_time
                             ? `${(content.runtime / 60).toFixed(0)} h ${
                                 content.runtime % 60
                               } m`
@@ -262,7 +242,7 @@ const ContentPage = (props) => {
                         href={content.homepage}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                        className="underline decoration-2 text-white p-2 py-1 rounded-lg shadow-md transition duration-200"
                       >
                         Official Website
                       </a>
@@ -271,10 +251,10 @@ const ContentPage = (props) => {
 
                   <div className="flex flex-col gap-3 items-center">
                     <button
-                      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-200 flex items-center"
+                      className="bg-blue-600 hover:bg-blue-700 text-white p-2 py-1 rounded-lg shadow-md transition duration-200 flex items-center"
                       type="button"
                       onClick={() =>
-                        handleAddToWatchList(content.id, type, user)
+                        handleAddItem(content.id, type, user, "watchList")
                       }
                     >
                       <span className="mr-2">Add to Watch List</span>
@@ -297,18 +277,22 @@ const ContentPage = (props) => {
                 </div>
                 <div>
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition duration-200"
                     title="Add to favorites"
-                    onClick={() => handleAddToFavorites(content.id, type, user)}
+                    onClick={() =>
+                      handleAddItem(content.id, type, user, "favorite")
+                    }
                   >
-                    <FaHeart className="" />
+                    <FaHeart className="w-3 h-3" />
                   </button>
                   <button
-                    className="bg-slate-500 ml-3 hover:bg-slate-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
+                    className="bg-slate-500 ml-3 hover:bg-slate-600 text-white  p-2 rounded-full shadow-md transition duration-200"
                     title="Mark as watched"
-                    onClick={() => handleAddToWatched(content.id, type, user)}
+                    onClick={() =>
+                      handleAddItem(content.id, type, user, "watched")
+                    }
                   >
-                    <FaCheck className="" />
+                    <FaCheck className="w-3 h-3" />
                   </button>
                   {/* <button
                     className="bg-red-500 ml-3 hover:bg-red-600 text-white py-2 px-4 rounded-lg shadow-md transition duration-200"
@@ -339,7 +323,7 @@ const ContentPage = (props) => {
                   </button> */}
                 </div>
               </div>
-              <SlidingImages images={content.production_companies} />
+              {/* <SlidingImages images={content.production_companies} /> */}
             </div>
           </div>
         </div>
@@ -381,7 +365,7 @@ const ContentPage = (props) => {
               >
                 {credits.cast.map((actor) => (
                   <Link key={actor.id} to={`/person/${actor.id}`}>
-                    <div className="flex-shrink-0 w-40 sm:w-48 divvv group">
+                    <div className="flex-shrink-0 w-40 sm:w-44 divvv group">
                       <div className="overflow-hidden w-full h-full">
                         <img
                           src={
@@ -390,7 +374,7 @@ const ContentPage = (props) => {
                               : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={actor.name}
-                          className="w-full h-52 object-top object-cover z-50 group-hover:scale-110 duration-500"
+                          className="w-full h-60 object-top object-cover z-50 group-hover:scale-110 duration-500"
                         />
                       </div>
                       <div className="divv pt-2 bg-[#191919] ">
@@ -419,7 +403,7 @@ const ContentPage = (props) => {
               <div className="flex overflow-x-scroll space-x-4 pb-4 div">
                 {directors.map((director) => (
                   <Link key={director.id} to={`/person/${director.id}`}>
-                    <div className="flex-shrink-0 w-40 sm:w-48 divvv group overflow-hidden ">
+                    <div className="flex-shrink-0 w-40 sm:w-44 divvv group overflow-hidden ">
                       <div className="overflow-hidden w-full h-full">
                         <img
                           src={
@@ -428,7 +412,7 @@ const ContentPage = (props) => {
                               : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={director.name}
-                          className="w-full h-52 object-top object-cover z-50 group-hover:scale-105 duration-500"
+                          className="w-full h-60 object-top object-cover z-50 group-hover:scale-105 duration-500"
                         />
                       </div>
                       <div className="divv pt-2 bg-[#191919]">

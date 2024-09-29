@@ -11,9 +11,9 @@ export const footerLinks = [
   { label: "FAQ", href: "/faq" },
   { label: "Contact Us", href: "/contact-us" },
   { label: "Search", href: "/search" },
-  { label: "Random Actor", href: `/person/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
-  { label: "Random Movie", href: `/movie/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
-  { label: "Random Tv Show", href: `/series/${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}` },
+  { label: "Random Actor", href: `/person/${Math.floor(Math.random() * (10000)) + 1}` },
+  { label: "Random Movie", href: `/movie/${Math.floor(Math.random() * (10000)) + 1}` },
+  { label: "Random Tv Show", href: `/series/${Math.floor(Math.random() * (10000)) + 1}` },
 ];
 
 // Movie Genres
@@ -68,12 +68,10 @@ export function calculateAge(birthDate) {
   const monthDifference = today.getMonth() - birth.getMonth();
   const dayDifference = today.getDate() - birth.getDate();
 
-  // Adjust age if the birthday hasn't occurred yet this year
   if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
     age--;
   }
-
-  // Calculate precise months and days
+  
   let months = monthDifference >= 0 ? monthDifference : 12 + monthDifference;
   let days =
     dayDifference >= 0

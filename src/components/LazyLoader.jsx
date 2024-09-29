@@ -6,10 +6,7 @@ const LazyLoader = ({ src, alt, className, ...props }) => {
 
   return (
     <>
-      {/* Placeholder shown until the image is loaded */}
       {!loaded && <Loading isSmall={true} />}
-
-      {/* Actual image with lazy loading */}
       <img
         src={src}
         alt={alt}
@@ -21,5 +18,4 @@ const LazyLoader = ({ src, alt, className, ...props }) => {
     </>
   );
 };
-
 export default LazyLoader;

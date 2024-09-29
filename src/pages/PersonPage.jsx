@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { calculateAge } from "../constants";
+import { options } from "../utils/api";
 
 const PersonPage = (props) => {
-  const { options } = props;
+  const { setLoading } = props;
   const { id } = useParams();
   const [actor, setActor] = useState(null);
   const [movies, setActorMovies] = useState(null);
@@ -105,7 +105,7 @@ const PersonPage = (props) => {
   }
 
   if (!actor || !movies) {
-    return <Loading />;
+    setLoading(true);
   }
   const today = new Date();
   today.getFullYear;

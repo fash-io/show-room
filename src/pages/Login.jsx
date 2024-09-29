@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { login, signup } from "../utils/firebase";
 import { toast } from "react-toastify";
-import Loading from "../components/Loading";
 import { Link, useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Login = (props) => {
   const { setIsExploring } = props;
@@ -57,11 +57,6 @@ const Login = (props) => {
         if (!/[0-9]/.test(password)) {
           throw new Error("Password must contain at least one number");
         }
-        // if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        //   throw new Error(
-        //     "Password must contain at least one special character"
-        //   );
-        // }
         if (password !== c_password) {
           throw new Error("Passwords do not match");
         }
@@ -92,112 +87,124 @@ const Login = (props) => {
     navigator("/");
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
-    <div className="h-screen login py-5 lg:px-[8%] px-2 bg-gradient flex">
-      <Link to={"/"}>
-        <span
-          className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent absolute"
-          style={{
-            backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
-          }}
-        >
-          ShowRoom
-        </span>
-      </Link>
-      <div className="w-full max-w-md bg-black bg-opacity-75 rounded-xl shadow-lg py-16 px-10 sm:p-16 m-auto">
-        <h1 className="text-3xl font-medium mb-7">{signState}</h1>
-        <form onSubmit={user_auth}>
-          {signState === "Sign Up" && (
-            <input
-              value={name}
-              onChange={handleNameChange}
-              type="text"
-              placeholder="Your Name"
-              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
-            />
-          )}
-
-          <input
-            value={email}
-            onChange={handleEmailChange}
-            type="email"
-            placeholder="Email"
-            className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
-          />
-
-          <div className="relative w-full">
-            <input
-              value={password}
-              onChange={handlePasswordChange}
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50"
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
-          </div>
-
-          {signState === "Sign Up" && (
-            <input
-              value={c_password}
-              onChange={handleC_passwordChange}
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
-            />
-          )}
-
-          <button
-            className="w-full p-4 bg-[#e50914] rounded text font-medium mt-5 mb-2 cursor-pointer"
-            type="submit"
-            disabled={loading}
+    <>
+      {loading && (
+        <Loading transparent={true} />
+      )}
+      <div className="h-screen login py-5 lg:px-[8%] px-2 bg-gradient flex">
+        <Link to={"/"}>
+          <span
+            className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent absolute"
+            style={{
+              backgroundImage: "linear-gradient(to right, #ff7e5f, #1a2a6c)",
+            }}
           >
-            {loading ? "Loading..." : signState}
-          </button>
-        </form>
+            ShowRoom
+          </span>
+        </Link>
+        <div className="w-full max-w-md bg-black bg-opacity-75 rounded-xl shadow-lg py-16 px-10 sm:p-16 m-auto">
+          <h1 className="text-3xl font-medium mb-7">{signState}</h1>
+          <form onSubmit={user_auth}>
+            {signState === "Sign Up" && (
+              <input
+                value={name}
+                onChange={handleNameChange}
+                type="text"
+                placeholder="Your Name"
+                className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              />
+            )}
 
-        <div className="mt-10 text-[#737373]">
-          {signState === "Sign Up" ? (
-            <p>
-              Already have an account?{" "}
-              <span
-                onClick={handleSignState}
-                className="ml-1.5 text-white font-medium cursor-pointer"
+            <input
+              value={email}
+              onChange={handleEmailChange}
+              type="email"
+              placeholder="Email"
+              className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+            />
+
+            <div className="relative w-full">
+              <input
+                value={password}
+                onChange={handlePasswordChange}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50"
               >
-                Login
-              </span>
-            </p>
-          ) : (
-            <>
-              <p className="text-sm">
-                New to ShowRoom?{" "}
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+
+            {signState === "Sign Up" && (
+              <input
+                value={c_password}
+                onChange={handleC_passwordChange}
+                type="password"
+                placeholder="Confirm Password"
+                className="w-full h-12 bg-[#333]/90 text-white my-3 mx-0 rounded py-4 px-5 font-medium placeholder:font-medium placeholder:text"
+              />
+            )}
+
+            <button
+              className="w-full p-4 bg-[#e50914] rounded text font-medium mt-5 mb-2 cursor-pointer shadow shadow-white/30 duration-200 active:bg-[#e50914] hover:bg-[#f6121d]"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex justify-center">
+                  <p className="">Loading</p>
+                  <p className={`spans`}>
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                  </p>
+                </div>
+              ) : (
+                signState
+              )}
+            </button>
+          </form>
+
+          <div className="mt-10 text-[#737373]">
+            {signState === "Sign Up" ? (
+              <p>
+                Already have an account?{" "}
                 <span
                   onClick={handleSignState}
                   className="ml-1.5 text-white font-medium cursor-pointer"
                 >
-                  Sign Up Now
+                  Login
                 </span>
               </p>
-              <button
-                className="pt-2 font-semibold text-white"
-                onClick={handleExploring}
-              >
-                Just exploring?
-              </button>
-            </>
-          )}
+            ) : (
+              <>
+                <p className="text-sm">
+                  New to ShowRoom?{" "}
+                  <span
+                    onClick={handleSignState}
+                    className="ml-1.5 text-white font-medium cursor-pointer"
+                  >
+                    Sign Up Now
+                  </span>
+                </p>
+                <button
+                  className="pt-2 font-semibold text-white"
+                  onClick={handleExploring}
+                >
+                  Just exploring?
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

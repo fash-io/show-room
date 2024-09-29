@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ShowCard from "../components/ShowCard";
-import Loading from "../components/Loading";
 import Error from "../components/Error"
+import { options } from "../utils/api";
 
 const CollectionPage = (props) => {
-  const { options } = props;
+  const { setLoading } = props;
   const [collection, setCollection] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
 
@@ -33,14 +32,6 @@ const CollectionPage = (props) => {
     };
     fetchCollection();
   }, [id, options]);
-
-  if (loading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
 
   if (error) {
     return (

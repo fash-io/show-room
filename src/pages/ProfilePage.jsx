@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { db, auth, storage } from "../utils/firebase"; // Import Firebase configuration
+import { db, auth, storage } from "../utils/firebase"; 
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { handleLogout } from "../utils/firebaseHandlers";
 import GoBackButton from "../components/GoBackButton";
@@ -12,30 +11,27 @@ import { useNavigate } from "react-router-dom";
 const ProfilePage = () => {
   const navigator = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false); // New loading state for image uploads
 
   useEffect(() => {
     const fetchUserData = async (uid) => {
-      setIsLoading(true);
       try {
         const userDocRef = doc(db, "users", uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
           setUserData(userDocSnap.data());
-          setFormData(userDocSnap.data()); // Initialize form data
+          setFormData(userDocSnap.data());
         } else {
           setError("No user data found.");
         }
       } catch (error) {
         setError("Error fetching user data.");
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -43,7 +39,6 @@ const ProfilePage = () => {
         fetchUserData(user.uid);
       } else {
         setUserData(null);
-        setIsLoading(false);
       }
     });
 
@@ -65,46 +60,40 @@ const ProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
       let photoURL = userData.photoURL;
 
       if (file) {
+        setIsUploading(true); // Start uploading state
         const storageRef = ref(
           storage,
           `profileImages/${auth.currentUser.uid}/${file.name}`
         );
         await uploadBytes(storageRef, file);
         photoURL = await getDownloadURL(storageRef);
+        setIsUploading(false); // End uploading state
       }
 
       const userDocRef = doc(db, "users", auth.currentUser.uid);
-
       const updateData = {
         ...formData,
         ...(photoURL && { photoURL }),
       };
 
       await updateDoc(userDocRef, updateData);
-
       setUserData({ ...formData, photoURL });
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating user data:", error.message);
       setError(`Error updating user data: ${error.message}`);
-    } finally {
-      setIsLoading(false);
     }
   };
+
   const handle_Logout = () => {
     handleLogout();
     navigator("/");
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   if (error) {
     return <Error error={error} />;
@@ -220,41 +209,16 @@ const ProfilePage = () => {
               <button
                 type="submit"
                 className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+                disabled={isUploading} // Disable button if uploading
               >
-                Submit
+                {isUploading ? "Uploading..." : "Save Changes"}
               </button>
             </form>
           )}
 
-          {!isEditing && (
-            <div className="mt-6 space-y-4">
-              <div>
-                <p className="text-sm text-gray-400">Email:</p>
-                <p className="text-lg">{userData.email || "N/A"}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Phone:</p>
-                <p className="text-lg">{userData.phoneNumber || "N/A"}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Address:</p>
-                <p className="text-lg">{userData.address || "N/A"}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Bio:</p>
-                <p className="text-lg">{userData.bio || "N/A"}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Hobbies:</p>
-                <p className="text-lg">
-                  {userData.additionalInfo?.hobbies.join(", ") || "N/A"}
-                </p>
-              </div>
-            </div>
-          )}
           <button
             onClick={handle_Logout}
-            className=" float-right my-3  px-5 mx-auto py-2 bg-red-700 rounded"
+            className="mt-4 text-red-500 underline"
           >
             Logout
           </button>

@@ -1,26 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
 import Error from "../components/Error";
 import Pagination from "../components/Pagination";
+import { options } from "../utils/api";
+import ShowCard from "../components/ShowCard";
 
 const PopularPage = (props) => {
-  const { options } = props;
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { setLoading } = props;
+
   const [mediaType, setMediaType] = useState("all");
   const [timeWindow, setTimeWindow] = useState("day");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [popularMovies, setPopularMovies] = useState([]); // State to store fetched movies
+  const [totalPages, setTotalPages] = useState(1); // State for total pages
+  const [error, setError] = useState(null); // State to manage errors
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -33,135 +30,102 @@ const PopularPage = (props) => {
           throw new Error("Failed to fetch new releases.");
         }
         const data = await response.json();
-        setMovies(data.results);
-        setTotalPages(data.total_pages);
+        setPopularMovies(data.results); // Set the fetched movies
+        setTotalPages(data.total_pages); // Set the total pages
       } catch (err) {
-        console.error("Failed to fetch new releases:", err);
-        setError("Failed to load new releases.");
-        setMovies((m) => m.filter((movie) => movie.backdrop_path));
+        setError(err.message); // Set the error message
+      } finally {
+        setLoading(false); // Set loading state to false
       }
     };
     fetchNewReleases();
-  }, [options, mediaType, timeWindow, page]);
+  }, [mediaType, timeWindow, page]);
 
   useEffect(() => {
-    setPage(1);
+    setPage(1); // Reset page when media type or time window changes
   }, [mediaType, timeWindow]);
-  console.log(movies);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   if (error) {
-    return <Error error={error} />;
+    return <Error error={error} />; // Error component
   }
 
   return (
-    <>
-      <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
-        {/* Filter and Time Window Controls */}
-        <div className="flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20">
-          {/* Media Type Selector */}
-          <div className="flex flex-wrap items-center space-x-4">
-            {["all", "movie", "tv"].map((type) => (
-              <button
-                key={type}
-                onClick={() => setMediaType(type)}
-                className={`px-4 py-2 rounded-full ${
-                  mediaType === type
-                    ? `${
-                        type === "all"
-                          ? "bg-blue-500"
-                          : type === "movie"
-                          ? "bg-green-500"
-                          : "bg-purple-500"
-                      } text-white`
-                    : "bg-gray-700 text-gray-300"
-                } hover:bg-${
-                  type === "all"
-                    ? "blue"
-                    : type === "movie"
-                    ? "green"
-                    : "purple"
-                }-600 transition-colors`}
-              >
-                {type === "all"
-                  ? "All"
-                  : type === "movie"
-                  ? "Movies"
-                  : "TV Shows"}
-              </button>
-            ))}
-          </div>
-
-          {/* Time Window Selector */}
-          <div className="flex flex-wrap items-center space-x-4">
-            {["day", "week"].map((window) => (
-              <button
-                key={window}
-                onClick={() => setTimeWindow(window)}
-                className={`px-4 py-2 rounded-full  ${
-                  timeWindow === window
-                    ? `${
-                        window === "day" ? "bg-red-500" : "bg-orange-500"
-                      } text-white`
-                    : "bg-gray-700 text-gray-300"
-                } hover:bg-${
-                  window === "day" ? "red" : "orange"
-                }-600 transition-colors`}
-              >
-                {window === "day" ? "Daily" : "Weekly"}
-              </button>
-            ))}
-          </div>
+    <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
+      {/* Filter and Time Window Controls */}
+      <div className="flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20">
+        {/* Media Type Selector */}
+        <div className="flex flex-wrap items-center space-x-4">
+          {["all", "movie", "tv"].map((type) => (
+            <button
+              key={type}
+              onClick={() => setMediaType(type)}
+              className={`px-4 py-2 rounded-full ${
+                mediaType === type
+                  ? `${
+                      type === "all"
+                        ? "bg-blue-500"
+                        : type === "movie"
+                        ? "bg-green-500"
+                        : "bg-purple-500"
+                    } text-white`
+                  : "bg-gray-700 text-gray-300"
+              } hover:bg-${
+                type === "all" ? "blue" : type === "movie" ? "green" : "purple"
+              }-600 transition-colors`}
+            >
+              {type === "all"
+                ? "All"
+                : type === "movie"
+                ? "Movies"
+                : "TV Shows"}
+            </button>
+          ))}
         </div>
 
-        {/* Movies Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-5 sm:gap-y-8">
-          {movies
-            .filter((movie) => movie.poster_path) // Filter movies that have a poster_path
-            .map((movie) => (
-              <Link
-                key={movie.id}
-                to={`/${movie.media_type === "movie" ? "movie" : "series"}/${
-                  movie.id
-                }`}
-                className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
-              >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title || movie.name}
-                  className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
-                />
-                <div
-                  className="p-4"
-                  style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}
-                >
-                  {mediaType !== "all" ? (
-                    ""
-                  ) : (
-                    <p className="text-gray-100 text-sm float-right">
-                      {movie.media_type.toUpperCase()}
-                    </p>
-                  )}
-                  <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2">
-                    {movie.release_date || movie.first_air_date}
-                  </p>
-                </div>
-              </Link>
-            ))}
+        {/* Time Window Selector */}
+        <div className="flex flex-wrap items-center space-x-4">
+          {["day", "week"].map((window) => (
+            <button
+              key={window}
+              onClick={() => setTimeWindow(window)}
+              className={`px-4 py-2 rounded-full ${
+                timeWindow === window
+                  ? `${
+                      window === "day" ? "bg-red-500" : "bg-orange-500"
+                    } text-white`
+                  : "bg-gray-700 text-gray-300"
+              } hover:bg-${
+                window === "day" ? "red" : "orange"
+              }-600 transition-colors`}
+            >
+              {window === "day" ? "Daily" : "Weekly"}
+            </button>
+          ))}
         </div>
-
-        {/* Pagination */}
-        <Pagination
-          totalPages={totalPages}
-          page={page}
-          handlePageChange={handlePageChange}
-          loading={loading}
-        />
       </div>
-    </>
+
+      {/* Movies Grid */}
+      <div className="sm:px-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-5 sm:gap-y-8">
+        {popularMovies
+          .filter((movie) => movie.poster_path) // Filter movies that have a poster_path
+          .map((movie) => (
+            <ShowCard
+              key={movie.id}
+              show={movie}
+              type={3}
+              mediaType={mediaType}
+            />
+          ))}
+      </div>
+
+      {/* Pagination */}
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        handlePageChange={handlePageChange}
+      />
+    </div>
   );
 };
 

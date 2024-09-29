@@ -1,56 +1,72 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
+import { options } from "../utils/api";
 
-const SearchPage = (props) => {
-  const { options } = props;
-  const [query, setQuery] = useState("");
+const SearchPage = ({ setLoading }) => {
+  const { query: initialQuery } = useParams();
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState([]);
   const [filter, setFilter] = useState("multi");
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
   const [keywordSearch, setKeywordSearch] = useState(false);
   const [keywordId, setKeywordId] = useState(null);
 
-
   useEffect(() => {
     if (query.trim() !== "") {
-      searchMovies(page);
-      setKeywordSearch(false);
+      if (filter === "keyword" && keywordId !== null) {
+        fetchMoviesByKeyword(keywordId, page);
+      } else {
+        searchMovies(page);
+      }
     }
-  }, [filter, page]);
-  const handleFilterChange = (e) => {
+  }, [filter, page, keywordId, query]);
+
+  const handleFilterChange = useCallback((e) => {
     setFilter(e.target.value);
     setPage(1);
-    setKeywordId(null); // Reset the keyword ID when filter changes
-    setKeywordSearch(false); // Reset keyword search state
-  };
-
-  useEffect(() => {
-    if (filter === "keyword" && keywordId !== null) {
-      fetchMoviesByKeyword(keywordId, page);
-    } else if (query.trim() !== "") {
-      searchMovies(page);
-    }
-  }, [filter, keywordId, page]);
+    setKeywordId(null);
+    setKeywordSearch(false);
+  }, []);
 
   const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= (totalPages || 1)) {
+    if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
-      if (filter === "keyword" && keywordId !== null) {
-        fetchMoviesByKeyword(keywordId, newPage);
-      } else {
-        searchMovies(newPage);
-      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setQuery(e.target.value);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPage(1);
+    searchMovies(1);
+  };
+
+  const fetchMoviesByKeyword = async (keywordId, page = 1) => {
+    setLoading(true);
+    setError(null);
+    setKeywordSearch(true);
+
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/keyword/${keywordId}/movies?include_adult=false&language=en-US&page=${page}`,
+        options
+      );
+      const data = await response.json();
+      setResults(data.results || []);
+      setTotalPages(data.total_pages || 1);
+      setQuery("");
+    } catch (err) {
+      handleFetchError(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const searchMovies = async (page = 1) => {
@@ -60,64 +76,33 @@ const SearchPage = (props) => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(
-          query
-        )}&include_adult=false&page=${page}`,
+        `https://api.themoviedb.org/3/search/${filter}?query=${encodeURIComponent(query)}&include_adult=false&page=${page}`,
         options
       );
+
       if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
       setResults(data.results || []);
       setTotalPages(data.total_pages || 1);
     } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Something went wrong. Please try again.");
-      setResults([]);
-      setTotalPages(1);
+      handleFetchError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setPage(1);
-    searchMovies(1);
-  };
-
-  const fetchMoviesByKeyword = (keywordId, page = 1) => {
-    setLoading(true);
-    setError(null);
-    setKeywordSearch(true);
-
-    fetch(
-      `https://api.themoviedb.org/3/keyword/${keywordId}/movies?include_adult=false&language=en-US&page=${page}`,
-      options
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setResults(data.results || []);
-        setTotalPages(data.total_pages || 1);
-        setQuery("");
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to fetch movies");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const handleFetchError = (err) => {
+    console.error("Fetch error:", err);
+    setError("Something went wrong. Please try again.");
+    setResults([]);
+    setTotalPages(1);
   };
 
   const handleKeywordClick = (id) => {
     setKeywordId(id);
     setPage(1);
   };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="min-h-screen pt-20 text-white">
@@ -131,7 +116,7 @@ const SearchPage = (props) => {
             className="w-full p-2 border border-gray-700 rounded-md bg-gray-950 placeholder-gray-400"
             aria-label="Search"
           />
-          <div className="sm:flex justify-between mt-3 sm:mt-0 ">
+          <div className="sm:flex justify-between mt-3 sm:mt-0">
             <button
               type="submit"
               className="sm:ml-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 duration-200 rounded-md w-full sm:w-auto sm:m-0 my-1"
@@ -250,27 +235,21 @@ const SearchPage = (props) => {
                               </Link>
                             ))}
                           </div>
-                        ) : (
-                          ""
-                        )}
+                        ) : null}
                       </p>
                     </div>
                   </Link>
                 ))}
               </div>
             )}
+            <Pagination
+              totalPages={totalPages}
+              currentPage={page}
+              onPageChange={handlePageChange}
+            />
           </div>
         )}
       </main>
-
-      {totalPages > 1 && (
-        <Pagination
-          totalPages={totalPages}
-          page={page}
-          handlePageChange={handlePageChange}
-          loading={loading}
-        />
-      )}
     </div>
   );
 };

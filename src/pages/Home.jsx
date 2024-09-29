@@ -1,34 +1,66 @@
-import Navbar from "../components/Navbar";
-import Loading from "../components/Loading";
 import TitleCards from "../components/TitleCards";
 import Slider from "../components/Slider";
 import Error from "../components/Error";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Loading from "../components/Loading";
+import UserContext from "../UserContext";
 
-const Home = (props) => {
-  const { options, user } = props;
-  const [loading, setLoading] = useState(false);
+const Home = () => {
   const [error, setError] = useState("");
-
-  if (loading) {
-    return <Loading />;
-  }
+  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   if (error) {
     return <Error error={error} />;
   }
-
+  // if (loading) {
+  //   return <Loading transparent={true} />;
+  // }
   return (
     <>
-      <Slider height="max-h-[95vh] max-sm:min-h-[60vh]" type={"all"} options={options} setLoading={setLoading} setError={setError}/>
-      <div className="p-2 sm:px-10">
-        <TitleCards title="Popular Movies" category="popular" options={options} type={"movie"} user={user}/>
-        <TitleCards title="Top Rated Movies" category="top_rated" options={options} type={"movie"} user={user}/>
-        <TitleCards title="Upcoming Movies" category="upcoming" options={options} type={"movie"} user={user}/>
-        <TitleCards title="Popular Series" category="popular" options={options} type={"tv"} user={user}/>
-        <TitleCards title="Top Rated Series" category="top_rated" options={options} type={"tv"} user={user}/>
-        <TitleCards title="On The Air" category="on_the_air" options={options} type={"tv"} user={user}/>
-        {user && <TitleCards title="Your Watch List" userWatchlist={true} options={options} user={user}/>}
+      <Slider
+        height="max-h-[70vh]  max-sm:min-h-[60vh]"
+        type={"all"}
+        setLoading={setLoading}
+        setError={setError}
+      />
+      <div className="pl-3 pr-1 sm:pl-20 ">
+        <TitleCards
+          title="Popular Movies"
+          category="popular"
+          type="movie"
+        />
+        <TitleCards
+          title="Top Rated Movies"
+          category="top_rated"
+          type="movie"
+        />
+        <TitleCards
+          title="Upcoming Movies"
+          category="upcoming"
+          type="movie"
+        />
+        <TitleCards
+          title="Popular Series"
+          category="popular"
+          type="tv"
+        />
+        <TitleCards
+          title="Top Rated Series"
+          category="top_rated"
+          type="tv"
+        />
+        <TitleCards
+          title="On The Air"
+          category="on_the_air"
+          type="tv"
+        />
+        {user && (
+          <TitleCards
+            title="Your Watch List"
+            userWatchlist={true}
+          />
+        )}
       </div>
     </>
   );

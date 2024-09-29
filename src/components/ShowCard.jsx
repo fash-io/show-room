@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import LazyLoader from "./LazyLoader";
-import { FaCheck, FaHeart } from "react-icons/fa"; // Importing icon for favorites
-import { handleAddToWatched, handleAddToFavorites } from "../utils/firebaseHandlers";
 
 const ShowCard = (props) => {
-  const { show, type_, type , user } = props;
+  const { show, type_, type, mediaType } = props;
 
   if (type === 1) {
     return (
@@ -15,11 +13,7 @@ const ShowCard = (props) => {
         aria-label={show.name || show.title}
       >
         <LazyLoader
-          src={
-            show.backdrop_path
-              ? `https://image.tmdb.org/t/p/w500${show.backdrop_path}`
-              : "https://via.placeholder.com/150x140?text=No+Image"
-          }
+          src={`https://image.tmdb.org/t/p/w500${show.backdrop_path}`}
           alt={show.name || show.title}
           className="w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300"
         />
@@ -33,52 +27,57 @@ const ShowCard = (props) => {
               : show.overview}
           </p>
         </div>
-
-        {/* Add buttons for "Mark as Watched" and "Add to Favorites" */}
-        <div className="hidden sm:flex absolute top-3 right-3 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            className="p-3 rounded-full bg-gray-700 hover:bg-gray-600  duration-200 opacity-50 hover:opacity-100 transition-opacity"
-            title="Mark as Watched"
-            onClick={(e) => {
-              e.preventDefault(); // Prevent Link click
-              handleAddToWatched(show.id, type_, user);
-            }}
-          >
-            <FaCheck className="w-4 h-4 text-gray-200 hover:text-gray-100 transition-colors duration-200" />
-          </button>
-          <button
-            className="p-3 rounded-full bg-red-700 hover:bg-red-600  duration-200 opacity-50 hover:opacity-100 transition-opacity"
-            title="Add to Favorites"
-            onClick={(e) => {
-              e.preventDefault(); // Prevent Link click
-              handleAddToFavorites(show.id, type_, user);
-            }}
-          >
-            <FaHeart className="w-4 h-4 text-gray-200 hover:text-gray-100 transition-colors duration-200" />
-          </button>
-        </div>
+        
       </Link>
     );
   } else if (type === 2) {
     return (
       <Link
-      to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
-      key={show.id}
-      className="relative inline-block mr-3 w-40 overflow-hidden group duration-300 rounded-lg group"
-    >
-      {/* Poster Image */}
-      <img
-        src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-        alt={show.original_title || "Movie Poster"}
-        className="cursor-pointer object-cover w-full rounded-lg sm:group-hover:scale-110 sm:transition-transform duration-300"
-      />
+        to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
+        key={show.id}
+        className="relative inline-block mr-3 w-40 overflow-hidden group duration-300 rounded-lg group"
+      >
+        {/* Use the passed imageUrl for Poster Image */}
+        <img
+          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+          alt={show.title || show.name || "Movie Poster"}
+          className="cursor-pointer object-cover w-full rounded-lg sm:group-hover:scale-110 sm:transition-transform duration-300"
+        />
 
-      {/* Rating */}
-      <div className="absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg sm:group-hover:opacity-100">
-        {show.vote_average.toFixed(1)}
-      </div>
-
-    </Link>
+        {/* Rating */}
+        <div className="absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg sm:group-hover:opacity-100">
+          {show.vote_average > 1 ? show.vote_average.toFixed(1) : "N/A"}
+        </div>
+      </Link>
+    );
+  } else if (type === 3) {
+    return (
+      <Link
+        key={show.id}
+        to={`/${show.media_type === "movie" ? "movie" : "series"}/${show.id}`}
+        className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
+      >
+        <img
+          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+          alt={show.title || show.name}
+          className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
+        />
+        <div
+          className="p-4"
+          style={{ textShadow: "0px 0px 5px rgba(0, 0, 0, 1)" }}
+        >
+          {mediaType !== "all" ? (
+            ""
+          ) : (
+            <p className="text-gray-100 text-sm float-right">
+              {show.media_type.toUpperCase()}
+            </p>
+          )}
+          <p className=" text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2">
+            {show.release_date || show.first_air_date}
+          </p>
+        </div>
+      </Link>
     );
   }
 };

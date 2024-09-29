@@ -1,12 +1,43 @@
 import { toast } from "react-toastify";
-import {
-  db,
-  logout,
-  storeFavorite,
-  storeWatched,
-  storeWatchList,
-} from "./firebase";
+import { db, logout, storeItem } from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+
+const fetchUserData = async (user) => {
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        console.error("User document not found");
+        return null;
+      }
+
+      return userDoc.data(); 
+    } catch (error) {
+      console.error("Error fetching user document:", error);
+      toast.error(`Error fetching user data: ${error.message}`);
+    }
+  } else {
+    toast.error("You need to create an account");
+  }
+  return null;
+};
+
+const handleAddItem = async (showId, showType, user, type) => {
+  if (user) {
+    try {
+      await storeItem(user.uid, { id: showId, type: showType }, type);
+      toast.info(`Added to ${type}`);
+    } catch (error) {
+      console.error(`Error adding to ${type} shows:`, error.message);
+      toast.error(`Error adding to ${type} shows: ${error.message}`);
+    }
+  } else {
+    toast.error("You need to create an account");
+  }
+};
+
 const updateUserDocument = async (user, updateFn, type) => {
   if (user) {
     try {
@@ -37,157 +68,23 @@ const updateUserDocument = async (user, updateFn, type) => {
   }
 };
 
-const handleAddToWatchList = async (showId, showType, user) => {
-  if (user) {
-    try {
-      await storeWatchList(user.uid, { id: showId, type: showType });
-    } catch (error) {
-      console.error("Error adding to watch list:", error.message);
-      toast.error(`Error adding to watch list: ${error.message}`);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-const handleAddToFavorites = async (showId, showType, user) => {
-  if (user) {
-    try {
-      await storeFavorite(user.uid, { id: showId, type: showType });
-    } catch (error) {
-      console.error("Error adding to favorites:", error.message);
-      toast.error(`Error adding to favorites: ${error.message}`);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-const handleAddToWatched = async (showId, showType, user) => {
-  if (user) {
-    try {
-      await storeWatched(user.uid, { id: showId, type: showType });
-    } catch (error) {
-      console.error("Error adding to watched shows:", error.message);
-      toast.error(`Error adding to watched shows: ${error.message}`);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
+const handleRemoveItem = async (showId, showType, user, type) => {
+  await updateUserDocument(
+    user,
+    (items) =>
+      items.filter((item) => item.id !== showId || item.type !== showType),
+    type
+  );
 };
 
 const handleLogout = async () => {
   try {
     await logout();
+    toast.info("Logged out");
   } catch (error) {
     console.error("Error logging out:", error.message);
     toast.error(`Error logging out: ${error.message}`);
   }
 };
 
-const handleRemoveFavoriteItem = async (showId, showType, user) => {
-  if (user) {
-    await updateUserDocument(
-      user,
-      (items) =>
-        items.filter((item) => item.id !== showId || item.type !== showType),
-      "favorite"
-    );
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-const handleRemoveWatchListItem = async (showId, showType, user) => {
-  if (user) {
-    await updateUserDocument(
-      user,
-      (items) =>
-        items.filter((item) => item.id !== showId || item.type !== showType),
-      "watchList"
-    );
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-const handleRemoveWatchedItem = async (showId, showType, user) => {
-  if (user) {
-    await updateUserDocument(
-      user,
-      (items) =>
-        items.filter((item) => item.id !== showId || item.type !== showType),
-      "watched"
-    );
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-const fetchFavorites = async (user) => {
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-
-      if (!userDoc.exists()) {
-        console.error("User document not found");
-        return;
-      }
-      return userDoc.data().favorite;
-    } catch (error) {
-      console.error("Error fetching user document:", error);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-const fetchWatchList = async (user) => {
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-
-      if (!userDoc.exists()) {
-        console.error("User document not found");
-        return;
-      }
-      return userDoc.data().watchList;
-    } catch (error) {
-      console.error("Error fetching user document:", error);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-const fetchWatched = async (user) => {
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-
-      if (!userDoc.exists()) {
-        console.error("User document not found");
-        return;
-      }
-      return userDoc.data().watched;
-    } catch (error) {
-      console.error("Error fetching user document:", error);
-    }
-  } else {
-    toast.error("You need to create an account");
-  }
-};
-
-export {
-  handleAddToWatchList,
-  handleAddToFavorites,
-  handleAddToWatched,
-  handleLogout,
-  handleRemoveFavoriteItem,
-  handleRemoveWatchListItem,
-  handleRemoveWatchedItem,
-  fetchFavorites,
-  fetchWatchList,
-  fetchWatched,
-};
+export { handleAddItem, handleRemoveItem, fetchUserData, handleLogout };

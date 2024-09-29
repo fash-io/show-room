@@ -1,37 +1,31 @@
 import { navLinks } from "../constants";
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../utils/firebase";
+import UserContext from "../UserContext";
 
-const Navbar = (props) => {
-  const { user } = props;
+const Navbar = () => {
   const { pathname } = useLocation();
   const [photo, setPhoto] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const { userData } = useContext(UserContext);
+  const navigator = useNavigate();
+
 
   const navRef = useRef();
 
-  const fetchWatchlistData = async () => {
-    if (user) {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        setPhoto(userDocSnap.data().photoURL);
-      } catch (err) {
-        console.error(err);
-      }
+  useEffect(() => {
+    if (userData) {
+      setPhoto(userData?.photoURL);
     }
-  };
+  }, [userData]);
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "instant",
     });
-
-    fetchWatchlistData();
   }, [pathname]);
 
   useEffect(() => {
@@ -43,6 +37,19 @@ const Navbar = (props) => {
       }
     });
   }, []);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchValue) {
+      navigator(`/search/${searchValue}`);
+      setSearchValue("");
+    }
+  };
+
+  const handleBlur = () => {
+    setSearchValue(""); 
+  };
+
 
   return (
     <>
@@ -69,8 +76,8 @@ const Navbar = (props) => {
               .map((val, i) => (
                 <Link key={i} to={val.href}>
                   <li
-                    className={`cursor-pointer text-xs lg:text-base duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
-                      pathname === val.href ? "text-transparent" : ""
+                    className={`relative navLinks cursor-pointer text-xs lg:text-base duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
+                      pathname === val.href ? "text-transparent active" : ""
                     }`}
                   >
                     {val.label}
@@ -84,10 +91,24 @@ const Navbar = (props) => {
           <>
             <div className="flex gap-4 lg:gap-15 items-center">
               {/* Search icon */}
-              <Link to={"/search"}>
+              <form
+              onSubmit={handleSearchSubmit}
+              className="flex group duration-150 gap-1 items-center"
+            >
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onBlur={handleBlur}
+                className="outline-none border-none w-0 group-focus-within:w-[150px] focus:w-[150px] sm:group-focus-within:w-[250px] sm:focus:w-[250px] duration-150 rounded-lg bg-white/0 focus:bg-white/100 group-focus-within:bg-white/100 px-2 py-1 transition-all ease-in-out focus:placeholder:text-gray-500 group-focus-within:placeholder:text-gray-500 placeholder:text-transparent text-black"
+                placeholder="Search..."
+              />
+              <button type="submit">
                 <FaSearch className="cursor-pointer" size={20} />
-              </Link>
-              {user && Object.keys(user).length !== 0 ? (
+              </button>
+            </form>
+
+              {userData && Object.keys(userData).length !== 0 ? (
                 <Link
                   to={"/profile"}
                   className="flex items-center relative profile cursor-pointer"
