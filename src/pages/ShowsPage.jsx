@@ -7,6 +7,7 @@ import Pagination from "../components/Pagination";
 import { options } from "../utils/api";
 import { useLocation } from "react-router-dom";
 import { useWindowWidth } from "../utils/windowWidth";
+import Loading from "../components/Loading";
 
 const TVShowsPage = () => {
   const { pathname } = useLocation();
@@ -27,6 +28,7 @@ const TVShowsPage = () => {
 
   const fetchShows = useCallback(async () => {
     try {
+      setLoading(true);
       const yearParam = debouncedYear
         ? type_ === "movie"
           ? `primary_release_year=${debouncedYear}`
@@ -46,7 +48,6 @@ const TVShowsPage = () => {
       const data = await response.json();
       setShows(data.results);
       setFilteredShows(data.results); // Set initially filtered shows
-
     } catch (error) {
       setError("Error fetching data: " + error.message);
     } finally {
@@ -95,10 +96,11 @@ const TVShowsPage = () => {
   const handleGenreChange = (event) => setGenre(event.target.value);
   const handleYearChange = (event) => setYear(event.target.value);
 
-  const totalPages = Math.ceil(filteredShows.length / 20); // Assuming 20 shows per page
+  const totalPages = Math.ceil(filteredShows.length / 20);
 
   return (
     <>
+      {loading && <Loading transparent={true} />}
       <div>
         <Slider
           height="min-h-[50vh] sm:max-h-[70vh]"

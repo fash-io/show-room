@@ -85,6 +85,7 @@ const ContentPage = () => {
 
   return (
     <>
+    {loading && <Loading transparent={true} />}
       <div className="text-white min-h-screen">
         {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">

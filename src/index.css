@@ -94,7 +94,7 @@ html{
   }
 }
 
-.navLinks:after {
+/* .navLinks:after {
   content: '';
   position: absolute;
   width: 120%;
@@ -109,4 +109,4 @@ html{
 .navLinks:hover:after , .navLinks.active:after{
   transform: scaleX(1);
   transform-origin: left;
-}
+} */

@@ -1,9 +1,9 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase";
-import { fetchUserData } from "./utils/firebaseHandlers";
+import { fetchAndSetUserData } from "./utils/firebaseHandlers";
 import Loading from "./components/Loading";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -33,30 +33,19 @@ const App = () => {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
-  const fetchAndSetUserData = async (user_) => {
-    try {
-      const data = await fetchUserData(user_);
-      if (data) {
-        setUserData(data);
-      }
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    onAuthStateChanged(auth, (user_) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user_) => {
       if (user_) {
         setUser(user_);
-        fetchAndSetUserData(user_);
+        await fetchAndSetUserData(user_, setUserData);
       } else {
         setUser(null);
         setUserData(null);
       }
+      setLoading(false); // Set loading to false after fetching user data
     });
-    setLoading(false);
-  }, []);
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, []); // Only run on mount
 
   useEffect(() => {
     if (!loading) {
@@ -65,7 +54,6 @@ const App = () => {
       }
     }
   }, [isExploring, loading, user, navigate]);
-  console.log(isExploring);
 
   if (loading) {
     return <Loading />;
@@ -109,8 +97,12 @@ const App = () => {
             element={<ShowPage setLoading={setLoading} />}
           />
           <Route
-            path="/search/:query"
-            element={<SearchPage setLoading={setLoading} />}
+            path="/search/:searchQuery"
+            element={<SearchPage />}
+          />
+          <Route
+            path="/search"
+            element={<SearchPage />}
           />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/faq" element={<FAQ />} />

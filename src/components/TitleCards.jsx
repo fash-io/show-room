@@ -78,12 +78,4 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
   );
 };
 
-// Prop types for validation
-TitleCards.propTypes = {
-  title: PropTypes.string,
-  category: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  setLoading: PropTypes.func.isRequired,
-};
-
 export default TitleCards;

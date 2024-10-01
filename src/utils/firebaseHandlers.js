@@ -3,26 +3,28 @@ import { db, logout, storeItem } from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const fetchUserData = async (user) => {
-  if (user) {
+  if (user.uid) {
     try {
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
-        console.error("User document not found");
+        console.log("User document not found");
         return null;
       }
 
       return userDoc.data(); 
     } catch (error) {
       console.error("Error fetching user document:", error);
-      toast.error(`Error fetching user data: ${error.message}`);
+      toast.error("An error occurred while fetching user data.");
     }
   } else {
-    toast.error("You need to create an account");
+    console.error("You need to create an account");
   }
   return null;
 };
+
+
 
 const handleAddItem = async (showId, showType, user, type) => {
   if (user) {
@@ -86,5 +88,22 @@ const handleLogout = async () => {
     toast.error(`Error logging out: ${error.message}`);
   }
 };
+const fetchAndSetUserData = async (user_, setUserData) => {
+  try {
+    const data = await fetchUserData(user_);
+    if (data) {
+      setUserData(data);
+    }
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+  }
+};
 
-export { handleAddItem, handleRemoveItem, fetchUserData, handleLogout };
+
+export {
+  handleAddItem,
+  handleRemoveItem,
+  fetchUserData,
+  handleLogout,
+  fetchAndSetUserData,
+};
