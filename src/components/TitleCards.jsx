@@ -63,7 +63,7 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
       <h2 className="mb-3 text-lg font-semibold">
         {title || "Popular on Netflix"}
       </h2>
-      <div className="overflow-x-scroll whitespace-nowrap divv">
+      <div className="overflow-x-scroll whitespace-nowrap div inset-0 gradient">
         {dataToDisplay.length > 0 ? (
           dataToDisplay.map((card) => (
             <ShowCard key={card.id} type_={type} show={card} type={2} />
