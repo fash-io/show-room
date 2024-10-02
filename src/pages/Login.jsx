@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login, signup } from "../utils/firebase";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -87,11 +87,17 @@ const Login = (props) => {
     navigator("/");
   };
 
+  useEffect(() => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setC_password("");
+    setShowPassword(false);
+  }, [signState]);
+
   return (
     <>
-      {loading && (
-        <Loading transparent={true} />
-      )}
+      {loading && <Loading transparent={true} />}
       <div className="h-screen login py-5 lg:px-[8%] px-2 bg-gradient flex">
         <Link to={"/"}>
           <span
