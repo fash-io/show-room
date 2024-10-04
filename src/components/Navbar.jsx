@@ -244,7 +244,11 @@ const Navbar = () => {
                     : ""
                 }`}
               >
-                <i className={val.icon}></i>
+                <i
+                  className={`fa ${val.icon} ${
+                    pathname === val.href ? "skew-x-[25deg]" : ""
+                  }`}
+                ></i>
               </span>
               <li className="navLinks">{val.label}</li>
             </Link>
