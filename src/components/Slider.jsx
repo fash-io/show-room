@@ -21,7 +21,6 @@ const Slider = (props) => {
         );
         const data = await response.json();
         setShow(data.results || []); // Ensure data is in the correct format
-        
       } catch (err) {
         setError("Failed to load new releases.");
         console.error(err);
@@ -80,13 +79,12 @@ const Slider = (props) => {
         goToNextSlide();
       }
     };
-  
+
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-  
 
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
@@ -98,7 +96,8 @@ const Slider = (props) => {
       >
         <button
           aria-label="Previous slide"
-          className="md:left-10 left-2 bg-black/50 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          className="md:left-10 left-2 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          style={{ textShadow: "0px 2px 2px rgba(0, 0, 0, 0.9)" }}
         >
           ❮
         </button>
@@ -144,7 +143,9 @@ const Slider = (props) => {
                 </p>
                 <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-8 md:mb-12">
                   <Link
-                    to={`/${movie.media_type === "movie" ? "movie" : "series"}/${movie.id}`}
+                    to={`/${
+                      movie.media_type === "movie" ? "movie" : "series"
+                    }/${movie.id}`}
                     className="py-1 sm:py-2 flex px-3 sm:px-4 md:px-5 items-center gap-1 sm:gap-2 md:gap-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded cursor-pointer hover:bg-[#6d6d6e66] transition duration-200"
                   >
                     <img src={info_icon} width={20} alt="Info Icon" />
@@ -169,7 +170,8 @@ const Slider = (props) => {
       >
         <button
           aria-label="Next slide"
-          className="md:left-10 left-2 bg-black/50 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          className="md:left-10 left-2 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          style={{ textShadow: "0px 2px 2px rgba(0, 0, 0, 0.9)" }}
         >
           ❯
         </button>

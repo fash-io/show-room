@@ -22,7 +22,7 @@ const Home = () => {
         setLoading={setLoading}
         setError={setError}
       />
-      <div className="pl-3 pr-1 sm:pl-20 ">
+      <div className="pl-2 pr-1 sm:pl-10 ">
         <TitleCards title="Popular Movies" category="popular" type="movie" />
         <TitleCards
           title="Top Rated Movies"
