@@ -50,6 +50,9 @@ const Navbar = () => {
       top: 0,
       behavior: "instant",
     });
+    setSearchValue("");
+    setResults([]);
+    setSearchIcon(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -169,7 +172,9 @@ const Navbar = () => {
                       className="w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer"
                       key={i}
                       onClick={() => handleResultClick(val.media_type, val.id)}
-                      to={`/${val.media_type}/${val.id}`}
+                      to={`/${
+                        val.media_type === "tv" ? "series" : val.media_type
+                      }/${val.id}`}
                     >
                       <div className="flex flex-col mr-5">
                         <span className="font-semibold">
