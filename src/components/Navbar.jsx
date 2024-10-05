@@ -4,7 +4,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import UserContext from "../UserContext";
 import { options } from "../utils/api";
-import onClickOutside from "react-onclickoutside"; // Import the onClickOutside HOC
+import onClickOutside from "react-onclickoutside";
+import { useOnClickOutside } from "../useOnClickOutside";
 
 const Navbar = () => {
   const { userData } = useContext(UserContext);
@@ -50,9 +51,6 @@ const Navbar = () => {
       top: 0,
       behavior: "instant",
     });
-    setSearchValue("");
-    setResults([]);
-    setSearchIcon(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -68,7 +66,8 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleClickOutside = () => {
+  // Handle click outside
+  const handleClickOutside = function () {
     setSearchValue("");
     setResults([]);
     setSearchIcon(false);
@@ -91,6 +90,8 @@ const Navbar = () => {
     setSearchIcon(false);
   };
 
+  useOnClickOutside(searchRef, handleClickOutside);
+
   return (
     <>
       <nav
@@ -103,7 +104,7 @@ const Navbar = () => {
       >
         <div className="flex items-center gap-12">
           <Link to={"/"}>
-            <span className="text-lg sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
+            <span className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
               ShowRoom
             </span>
           </Link>
@@ -242,17 +243,12 @@ const Navbar = () => {
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-[20px] py-[6px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c]"
+                    ? "absolute px-[20px] py-[6px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c] text-black"
                     : ""
                 }`}
-              >
-                <i
-                  className={`fa ${val.icon} ${
-                    pathname === val.href ? "skew-x-[25deg]" : ""
-                  }`}
-                ></i>
-              </span>
-              <li className="navLinks">{val.label}</li>
+              ></span>
+              <i className={val.icon}></i>
+              <span>{val.label}</span>
             </Link>
           ))}
       </ul>
