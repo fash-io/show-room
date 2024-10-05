@@ -2,9 +2,9 @@ import { navLinks } from "../constants";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../UserContext";
 import { options } from "../utils/api";
+import onClickOutside from "react-onclickoutside"; // Import the onClickOutside HOC
 
 const Navbar = () => {
   const { userData } = useContext(UserContext);
@@ -20,6 +20,7 @@ const Navbar = () => {
   const navRef = useRef();
 
   const searchMovies = async () => {
+    if (!searchValue) return;
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
@@ -64,24 +65,11 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target) &&
-        resultRef.current &&
-        !resultRef.current.contains(event.target)
-      ) {
-        setSearchValue(""); // Clear search input
-        setResults([]); // Clear results
-        setSearchIcon(false); // Hide the search bar
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const handleClickOutside = () => {
+    setSearchValue("");
+    setResults([]);
+    setSearchIcon(false);
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -112,7 +100,7 @@ const Navbar = () => {
       >
         <div className="flex items-center gap-12">
           <Link to={"/"}>
-            <span className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
+            <span className="text-lg sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
               ShowRoom
             </span>
           </Link>
@@ -149,18 +137,27 @@ const Navbar = () => {
                 className={`outline-none border-none w-0 group-focus-within:w-[150px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-full bg-transparent focus:bg-white px-4 py-[6px] focus:ring-2 focus:ring-blue-400 text-black placeholder-transparent group-focus-within:placeholder-gray-500`}
                 placeholder="Search..."
                 ref={IconRef}
+                style={{ fontSize: "16px" }}
               />
 
               <button type="submit" className="relative">
-                {searchIcon ? (
+                {searchIcon || searchValue ? (
                   <i
                     className="fa-solid fa-xmark text-black cursor-pointer absolute top-[50%] translate-y-[-50%] right-3 duration-200 transform hover:scale-125"
-                    onClick={() => setSearchValue("")}
+                    onClick={() => {
+                      setSearchValue("");
+                      setResults([]);
+                      setSearchIcon(false);
+                    }}
                   ></i>
                 ) : (
                   <FaSearch
                     className="cursor-pointer absolute top-[50%] translate-y-[-50%] right-3 duration-200 transform hover:scale-125"
-                    onClick={() => IconRef.current.focus()}
+                    onClick={() => {
+                      searchRef.current.focus();
+                      IconRef.current.focus();
+                      setSearchIcon(true);
+                    }}
                   />
                 )}
               </button>
