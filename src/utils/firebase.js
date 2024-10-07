@@ -97,13 +97,4 @@ const storeItem = async (uid, newItem, listType) => {
   }
 };
 
-
-export {
-  auth,
-  db,
-  storage,
-  signup,
-  login,
-  logout,
-  storeItem,
-};
+export { auth, db, storage, signup, login, logout, storeItem };

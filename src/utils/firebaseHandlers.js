@@ -30,10 +30,8 @@ const handleAddItem = async (showId, showType, user, type) => {
   if (user) {
     try {
       await storeItem(user.uid, { id: showId, type: showType }, type);
-      toast.info(`Added to ${type}`);
     } catch (error) {
       console.error(`Error adding to ${type} shows:`, error.message);
-      toast.error(`Error adding to ${type} shows: ${error.message}`);
     }
   } else {
     toast.error("You need to create an account");

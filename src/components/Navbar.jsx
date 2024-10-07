@@ -21,7 +21,6 @@ const Navbar = () => {
   const navRef = useRef();
 
   const searchMovies = async () => {
-    if (!searchValue) return;
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
