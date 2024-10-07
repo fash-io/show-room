@@ -103,7 +103,11 @@ const Navbar = () => {
       >
         <div className="flex items-center gap-12">
           <Link to={"/"}>
-            <span className="text-xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c]">
+            <span
+              className={`sm:text-4xl font-bold bg-clip-text text-transparent duration-300 bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
+                searchIcon ? "text-xs" : "text-xl"
+              }`}
+            >
               ShowRoom
             </span>
           </Link>
@@ -137,7 +141,7 @@ const Navbar = () => {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onFocus={() => setSearchIcon(true)}
-                className={`outline-none border-none w-0 group-focus-within:w-[150px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-full bg-transparent focus:bg-white px-4 py-[6px] focus:ring-2 focus:ring-blue-400 text-black placeholder-transparent group-focus-within:placeholder-gray-500`}
+                className={`outline-none border-none w-0 group-focus-within:w-[210px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-full bg-transparent focus:bg-white px-4 py-[6px] focus:ring-2 focus:ring-blue-400 text-black placeholder-transparent group-focus-within:placeholder-gray-500`}
                 placeholder="Search..."
                 ref={IconRef}
                 style={{ fontSize: "16px" }}
@@ -230,24 +234,39 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <ul className="fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999]">
+      <ul
+        className={
+          "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999] "
+        }
+      >
         {navLinks
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
             <Link
               key={i}
               to={val.href}
-              className="flex flex-col items-center justify-center min-w-[20%] max-w-[20%]"
+              className={`flex flex-col items-center justify-center min-w-[20%] max-w-[20%]`}
             >
               <span
                 className={`${
                   pathname === val.href
-                    ? "absolute px-[20px] py-[6px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c] text-black"
+                    ? "absolute px-[20px] py-[3px] -skew-x-[25deg] bottom-[75%] shadow-lg gg rounded bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c]"
                     : ""
                 }`}
-              ></span>
-              <i className={`fa ${val.icon}`}></i>
-              <span>{val.label}</span>
+              >
+                <i
+                  className={`fa-solid ${val.icon} ${
+                    pathname === val.href
+                      ? "font-bold skew-x-[25deg] text-sm"
+                      : ""
+                  }`}
+                ></i>
+              </span>
+              <li
+                className={`cursor-pointer text-[7px] pt-[4px] whitespace-nowrap`}
+              >
+                {val.label}
+              </li>
             </Link>
           ))}
       </ul>
