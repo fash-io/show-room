@@ -72,38 +72,14 @@ const App = () => {
           />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/list" element={<MyList />} />
-          <Route
-            path="/movies"
-            element={<ShowsPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/series"
-            element={<ShowsPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/trending"
-            element={<PopularPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/person/:id"
-            element={<PersonPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/collection/:id"
-            element={<CollectionPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/:type/:id"
-            element={<ShowPage setLoading={setLoading} />}
-          />
-          <Route
-            path="/search/:searchQuery"
-            element={<SearchPage />}
-          />
-          <Route
-            path="/search"
-            element={<SearchPage />}
-          />
+          <Route path="/movies" element={<ShowsPage />} />
+          <Route path="/series" element={<ShowsPage />} />
+          <Route path="/trending" element={<PopularPage />} />
+          <Route path="/person/:id" element={<PersonPage />} />
+          <Route path="/collection/:id" element={<CollectionPage />} />
+          <Route path="/:type/:id" element={<ShowPage />} />
+          <Route path="/search/:searchQuery" element={<SearchPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="*" element={<Error />} />

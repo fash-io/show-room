@@ -130,7 +130,7 @@ const Navbar = () => {
         </div>
 
         {!(pathname === "/profile") && (
-          <div className="flex gap-4 lg:gap-15 items-center">
+          <div className=" flex gap-4 lg:gap-15 items-center">
             <form
               onSubmit={handleSearchSubmit}
               className="flex group duration-150 gap-1 items-center relative"
@@ -141,14 +141,14 @@ const Navbar = () => {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onFocus={() => setSearchIcon(true)}
-                className={`outline-none border-none w-0 group-focus-within:w-[210px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-full bg-transparent focus:bg-white px-4 py-[6px] focus:ring-2 focus:ring-blue-400 text-black placeholder-transparent group-focus-within:placeholder-gray-500`}
+                className={`outline-none border-none w-0 group-focus-within:w-[180px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-full bg-transparent focus:bg-white/80 px-2 py-[6px] focus:ring-2  text-black placeholder-transparent group-focus-within:placeholder-gray-500`}
                 placeholder="Search..."
                 ref={IconRef}
                 style={{ fontSize: "16px" }}
               />
 
               <button type="submit" className="relative">
-                {searchIcon || searchValue ? (
+                {searchIcon ? (
                   <i
                     className="fa-solid fa-xmark text-black cursor-pointer absolute top-[50%] translate-y-[-50%] right-3 duration-200 transform hover:scale-125"
                     onClick={() => {
@@ -170,7 +170,7 @@ const Navbar = () => {
               </button>
 
               {results.length > 0 && searchIcon && (
-                <div className="absolute top-10 min-w-[230px] -left-10 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg">
+                <div className="absolute top-10 min-w-[300px] -left-10 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg">
                   {results.map((val, i) => (
                     <Link
                       className="w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer"
@@ -212,7 +212,7 @@ const Navbar = () => {
             {userData && Object.keys(userData).length !== 0 ? (
               <Link
                 to={"/profile"}
-                className="flex items-center relative profile cursor-pointer"
+                className=" flex items-center profile cursor-pointer"
               >
                 {photo ? (
                   <img

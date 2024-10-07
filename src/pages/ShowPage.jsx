@@ -360,13 +360,11 @@ const ContentPage = () => {
             <>
               <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Cast</h2>
               <div
-                className={`flex overflow-x-scroll space-x-4 sm:space-x-7 pb-4 ${
-                  credits.cast.length < 11 ? "div" : "div"
-                }`}
+                className={`flex overflow-x-scroll space-x-4 sm:space-x-7 pb-4 div`}
               >
                 {credits.cast.map((actor) => (
                   <Link key={actor.id} to={`/person/${actor.id}`}>
-                    <div className="flex-shrink-0 w-40 sm:w-44 divvv group">
+                    <div className="flex-shrink-0 w-[9rem] sm:w-44 divvv group">
                       <div className="overflow-hidden w-full h-full">
                         <img
                           src={
@@ -375,7 +373,7 @@ const ContentPage = () => {
                               : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={actor.name}
-                          className="w-full h-60 object-top object-cover z-50 group-hover:scale-110 duration-500"
+                          className="w-full h-[11rem] object-top object-cover z-50 group-hover:scale-110 duration-500"
                         />
                       </div>
                       <div className="divv pt-2 bg-[#191919] ">
@@ -404,7 +402,7 @@ const ContentPage = () => {
               <div className="flex overflow-x-scroll space-x-4 pb-4 div">
                 {directors.map((director) => (
                   <Link key={director.id} to={`/person/${director.id}`}>
-                    <div className="flex-shrink-0 w-40 sm:w-44 divvv group overflow-hidden ">
+                    <div className="flex-shrink-0 w-[9rem] sm:w-44 divvv group overflow-hidden ">
                       <div className="overflow-hidden w-full h-full">
                         <img
                           src={
@@ -413,7 +411,7 @@ const ContentPage = () => {
                               : "https://via.placeholder.com/150x225?text=No+Image"
                           }
                           alt={director.name}
-                          className="w-full h-60 object-top object-cover z-50 group-hover:scale-105 duration-500"
+                          className="w-full h-[11rem] object-top object-cover z-50 group-hover:scale-105 duration-500"
                         />
                       </div>
                       <div className="divv pt-2 bg-[#191919]">

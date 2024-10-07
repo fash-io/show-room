@@ -1,49 +1,55 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Error from "../components/Error";
 import { calculateAge } from "../constants";
 import { options } from "../utils/api";
+import Loading from "../components/Loading";
 
-const PersonPage = (props) => {
-  const { setLoading } = props;
+const PersonPage = () => {
   const { id } = useParams();
   const [actor, setActor] = useState(null);
   const [movies, setActorMovies] = useState(null);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [sortType, setSort] = useState("popularity");
+  const [loading, setLoading] = useState(true);
+
+  const fetchActorDetails = useCallback(async () => {
+    console.log("Fetching actor details for ID:", id);
+    setLoading(true);
+    try {
+      const actorResponse = await fetch(
+        `https://api.themoviedb.org/3/person/${id}?language=en-US`,
+        options
+      );
+      const actorData = await actorResponse.json();
+      if (actorResponse.ok) {
+        setActor(actorData);
+      } else {
+        setError(actorData.status_message || "Error fetching actor data.");
+      }
+
+      const moviesResponse = await fetch(
+        `https://api.themoviedb.org/3/person/${id}/combined_credits?language=en-US`,
+        options
+      );
+      const movieData = await moviesResponse.json();
+      if (moviesResponse.ok) {
+        setActorMovies(movieData);
+      } else {
+        setError(movieData.status_message || "Error fetching movies.");
+      }
+    } catch (err) {
+      setError("Failed to load actor details.");
+      console.error("Fetch error:", err); 
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const fetchActorDetails = async () => {
-      try {
-        const actorResponse = await fetch(
-          `https://api.themoviedb.org/3/person/${id}?language=en-US`,
-          options
-        );
-        const actorData = await actorResponse.json();
-        if (actorResponse.ok) {
-          setActor(actorData);
-        } else {
-          setError(actorData.status_message || "Error fetching actor data.");
-        }
-
-        const moviesResponse = await fetch(
-          `https://api.themoviedb.org/3/person/${id}/combined_credits?language=en-US`,
-          options
-        );
-        const movieData = await moviesResponse.json();
-        if (moviesResponse.ok) {
-          setActorMovies(movieData);
-        } else {
-          setError(movieData.status_message || "Error fetching movies.");
-        }
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load actor details.");
-      }
-    };
     fetchActorDetails();
-  }, [id, options]);
+  }, [fetchActorDetails]);
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -52,13 +58,13 @@ const PersonPage = (props) => {
   const handleSortChange = (e) => {
     setSort(e.target.value);
   };
-  // Filter TV shows with more than 2 episodes or all movies if not a TV show
+
   const movies_ =
     movies?.cast?.filter((credit) => {
       if (credit.media_type === "tv") {
         return credit.episode_count > 5;
       }
-      return true; // Keep all movies (or if media_type isn't 'tv')
+      return true;
     }) || [];
 
   const filteredMovies = movies_?.length
@@ -67,7 +73,6 @@ const PersonPage = (props) => {
       : movies_.filter((credit) => credit.media_type === filter)
     : [];
 
-  // Filter and sort director jobs from the crew based on selected filter
   const filteredMoviesDir = movies?.crew?.length
     ? movies.crew.filter(
         (member) =>
@@ -76,16 +81,17 @@ const PersonPage = (props) => {
       )
     : [];
 
-  // Sort by the selected sortType
   const sortMovies = (moviesToSort) => {
     return moviesToSort.sort((a, b) => {
       switch (sortType) {
         case "name":
           return (a.title || a.name).localeCompare(b.title || b.name);
         case "release_date":
-          return (a.release_date || a.first_air_date || "").localeCompare(
-            b.release_date || b.first_air_date || ""
+          return (
+            new Date(b.release_date || b.first_air_date) -
+            new Date(a.release_date || a.first_air_date)
           );
+
         case "popularity":
           return b.popularity - a.popularity;
         case "rating":
@@ -96,7 +102,6 @@ const PersonPage = (props) => {
     });
   };
 
-  // Sort both the filtered movie lists
   const sortedMovies = sortMovies(filteredMovies);
   const sortedMoviesDir = sortMovies(filteredMoviesDir);
 
@@ -104,16 +109,17 @@ const PersonPage = (props) => {
     return <Error error={error} />;
   }
 
-  if (!actor || !movies) {
-    setLoading(true);
+  if (loading || !actor || !movies) {
+    return <Loading transparent={true}/>;
   }
+
   const today = new Date();
-  today.getFullYear;
+  today.getFullYear();
+
   return (
     <>
       <div className="relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20">
         <div className="flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 sm:p-8 p-2">
-          {/* Actor Profile Image */}
           <div className="lg:w-1/3 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:sticky lg:top-32 max-sm:w-full">
             <img
               src={
@@ -231,9 +237,9 @@ const PersonPage = (props) => {
               ).map((credit, index) => (
                 <Link
                   key={credit.credit_id + index}
-                  to={`/${credit.media_type === "movie" ? "movie" : "series"}/${
-                    credit.id
-                  }`}
+                  to={`/${
+                    credit.media_type === "movie" ? "movie" : "series"
+                  }/${credit.id}`}
                   className="group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg  transform  sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end group"
                 >
                   <img
