@@ -4,8 +4,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import UserContext from "../UserContext";
 import { options } from "../utils/api";
-import onClickOutside from "react-onclickoutside";
 import { useOnClickOutside } from "../useOnClickOutside";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
   const { userData } = useContext(UserContext);
@@ -247,7 +247,7 @@ const Navbar = () => {
                     : ""
                 }`}
               ></span>
-              <i className={val.icon}></i>
+              <i className={`fa ${val.icon}`}></i>
               <span>{val.label}</span>
             </Link>
           ))}
