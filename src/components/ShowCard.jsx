@@ -17,7 +17,7 @@ const ShowCard = (props) => {
           alt={show.name || show.title}
           className="w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300"
         />
-        <div className="p-4">
+        <div className="p-4 flex-1">
           <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">
             {show.name || show.title}
           </h3>

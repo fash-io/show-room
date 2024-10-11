@@ -10,9 +10,9 @@ const PopularPage = (props) => {
   const [mediaType, setMediaType] = useState("all");
   const [timeWindow, setTimeWindow] = useState("day");
   const [page, setPage] = useState(1);
-  const [popularMovies, setPopularMovies] = useState([]); // State to store fetched movies
-  const [totalPages, setTotalPages] = useState(1); // State for total pages
-  const [error, setError] = useState(null); // State to manage errors
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(null);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -30,21 +30,20 @@ const PopularPage = (props) => {
           throw new Error("Failed to fetch new releases.");
         }
         const data = await response.json();
-        setPopularMovies(data.results); // Set the fetched movies
-        setTotalPages(data.total_pages); // Set the total pages
+        setPopularMovies(data.results);
+        setTotalPages(data.total_pages);
       } catch (err) {
-        setError(err.message); // Set the error message
+        setError(err.message);
       } finally {
-        setLoading(false); // Set loading state to false
+        setLoading(false);
       }
     };
     fetchNewReleases();
   }, [mediaType, timeWindow, page]);
 
   useEffect(() => {
-    setPage(1); // Reset page when media type or time window changes
+    setPage(1);
   }, [mediaType, timeWindow]);
-
 
   if (error) {
     return <Error error={error} />; // Error component
@@ -119,7 +118,6 @@ const PopularPage = (props) => {
           ))}
       </div>
 
-      {/* Pagination */}
       <Pagination
         totalPages={totalPages}
         page={page}

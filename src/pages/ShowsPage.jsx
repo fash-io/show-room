@@ -7,13 +7,13 @@ import Pagination from "../components/Pagination";
 import { options } from "../utils/api";
 import { useLocation } from "react-router-dom";
 import { useWindowWidth } from "../utils/windowWidth";
-import Loading from "../components/Loading";
 
 const TVShowsPage = () => {
   const { pathname } = useLocation();
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState("popularity");
   const [year, setYear] = useState("");
   const [genre, setGenre] = useState("");
@@ -35,7 +35,7 @@ const TVShowsPage = () => {
           : `first_air_date_year=${debouncedYear}`
         : "";
       const response = await fetch(
-        `https://api.themoviedb.org/3/discover/${type_}?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sort}.desc&${yearParam}&vote_count.gte=${
+        `https://api.themoviedb.org/3/discover/${type_}?page=${page}&sort_by=${sort}.desc&${yearParam}&vote_count.gte=${
           sort === "popularity" ? 500 : sort === "vote_average" ? 1000 : 0
         }&with_genres=${genre}`,
         options
@@ -46,8 +46,9 @@ const TVShowsPage = () => {
       }
 
       const data = await response.json();
+      setTotalPages(data.total_pages);
       setShows(data.results);
-      setFilteredShows(data.results); // Set initially filtered shows
+      setFilteredShows(data.results);
     } catch (error) {
       setError("Error fetching data: " + error.message);
     } finally {
@@ -82,6 +83,10 @@ const TVShowsPage = () => {
     filterShows();
   }, [shows, genre, year, type_]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [sort, type, year, genre]);
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1) {
       setPage(newPage);
@@ -96,11 +101,8 @@ const TVShowsPage = () => {
   const handleGenreChange = (event) => setGenre(event.target.value);
   const handleYearChange = (event) => setYear(event.target.value);
 
-  const totalPages = Math.ceil(filteredShows.length / 20);
-
   return (
     <>
-      {loading && <Loading transparent={true} />}
       <div>
         <Slider
           height="min-h-[50vh] sm:max-h-[70vh]"
@@ -218,7 +220,7 @@ const TVShowsPage = () => {
               <Pagination
                 totalPages={totalPages}
                 page={page}
-                onPageChange={handlePageChange}
+                handlePageChange={handlePageChange}
               />
             </div>
           </>
