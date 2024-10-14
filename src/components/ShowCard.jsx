@@ -27,7 +27,6 @@ const ShowCard = (props) => {
               : show.overview}
           </p>
         </div>
-        
       </Link>
     );
   } else if (type === 2) {
@@ -35,7 +34,7 @@ const ShowCard = (props) => {
       <Link
         to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
         key={show.id}
-        className="relative inline-block mr-3 w-[9rem] overflow-hidden group duration-300 rounded-lg group"
+        className="relative inline-block mr-3 w-[8rem] overflow-hidden group duration-300 rounded-lg group"
       >
         <img
           src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
