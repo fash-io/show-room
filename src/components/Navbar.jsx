@@ -65,7 +65,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Handle click outside
   const handleClickOutside = function () {
     setSearchValue("");
     setResults([]);
@@ -233,7 +232,6 @@ const Navbar = () => {
         )}
       </nav>
 
-      {/* Mobile Navigation */}
       <ul
         className={
           "fixed bottom-0 right-0 left-0 bg-[#191919] flex text-[8px] gap-4 items-center justify-center p-3 px-12 md:hidden z-[999] "
@@ -245,7 +243,7 @@ const Navbar = () => {
             <Link
               key={i}
               to={val.href}
-              className={`flex flex-col items-center justify-center min-w-[20%] max-w-[20%]`}
+              className={`flex flex-col items-center justify-center min-w-[21%] max-w-[21%] duration-300`}
             >
               <span
                 className={`${
@@ -263,7 +261,7 @@ const Navbar = () => {
                 ></i>
               </span>
               <li
-                className={`cursor-pointer text-[7px] pt-[4px] whitespace-nowrap`}
+                className={`cursor-pointer text-[8px] pt-[4px] whitespace-nowrap`}
               >
                 {val.label}
               </li>

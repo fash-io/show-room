@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className={"text-white py-10 px-6 sm:px-[4%] max-w-[1200px] mx-auto "}>
-      {/* Social Media Icons */}
       <div className="flex justify-center sm:justify-start gap-4 mb-8">
         <a
           href="#"
@@ -40,7 +39,6 @@ const Footer = () => {
         </a>
       </div>
 
-      {/* Footer Links */}
       <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center sm:text-left">
         {footerLinks.map((val, index) => (
           <li key={index} className="text-sm sm:text-base">
@@ -55,7 +53,6 @@ const Footer = () => {
         ))}
       </ul>
 
-      {/* Footer Text */}
       <div className="border-t border-gray-700 pt-6">
         <p className="text-stone-400 text-xs sm:text-sm text-center sm:text-left">
           © 2024 ShowRoom, Inc. All rights reserved.

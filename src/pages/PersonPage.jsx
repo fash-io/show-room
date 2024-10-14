@@ -132,7 +132,6 @@ const PersonPage = () => {
             />
           </div>
 
-          {/* Actor Information */}
           <div className="lg:w-2/3 space-y-4 lg:p-0">
             <h1
               className="text-3xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent inline-block"
@@ -146,7 +145,6 @@ const PersonPage = () => {
               {actor.biography}
             </p>
 
-            {/* Additional Details */}
             <div className="mt-6 space-y-2">
               <p>
                 <span className="font-semibold text-slate-500">Known For:</span>{" "}
@@ -199,7 +197,6 @@ const PersonPage = () => {
           </div>
         </div>
 
-        {/* Filter and Movie/Series Display */}
         {(actor.known_for_department === "Acting"
           ? sortedMovies.length
           : sortedMoviesDir.length) > 0 && (

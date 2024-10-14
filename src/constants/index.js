@@ -1,4 +1,3 @@
-// Navigation Links
 export const navLinks = [
   { label: "Home", href: "/", icon: "fa-house", order: 3, index: 1 },
   { label: "TV Shows", href: "/series", icon: "fa-tv", order: 1, index: 2 },
@@ -25,7 +24,6 @@ export const footerLinks = [
   },
 ];
 
-// Movie Genres
 export const movieGenre = [
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
@@ -48,7 +46,6 @@ export const movieGenre = [
   { id: 37, name: "Western" },
 ];
 
-// TV Genres
 export const tvGenre = [
   { id: 10759, name: "Action & Adventure" },
   { id: 16, name: "Animation" },
@@ -68,7 +65,6 @@ export const tvGenre = [
   { id: 37, name: "Western" },
 ];
 
-// Calculate Age Function
 export function calculateAge(birthDate) {
   const today = new Date();
   const birth = new Date(birthDate);

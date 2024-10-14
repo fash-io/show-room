@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaStar, FaStarHalfAlt, FaHeart, FaCheck } from "react-icons/fa";
-import Loading from "../components/Loading"; // Import the Loading component
+import Loading from "../components/Loading";
 import Error from "../components/Error";
 import ShowCard from "../components/ShowCard";
 import { handleAddItem } from "../utils/firebaseHandlers";
@@ -87,7 +87,6 @@ const ContentPage = () => {
     <>
     {loading && <Loading transparent={true} />}
       <div className="text-white min-h-screen">
-        {/* Hero Image Section */}
         <div className="relative w-full h-96 sm:h-[600px] max-h-[75vh]">
           <img
             src={`https://image.tmdb.org/t/p/original${
@@ -105,9 +104,7 @@ const ContentPage = () => {
           </div>
         </div>
 
-        {/* Content Details Section */}
         <div className="p-4 sm:p-6 md:p-10 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-          {/* Content Poster */}
           <div className="flex justify-center md:justify-start">
             <img
               src={`https://image.tmdb.org/t/p/original${content.poster_path}`}
@@ -116,7 +113,6 @@ const ContentPage = () => {
             />
           </div>
 
-          {/* Content Info */}
           <div className="col-span-2 space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold ">Overview</h2>
             <p className="text-sm sm:text-lg">{content.overview}</p>
@@ -158,21 +154,17 @@ const ContentPage = () => {
                   <span className="font-semibold text-slate-500">Rating:</span>{" "}
                   <span className="flex items-center ml-2">
                     {Array.from({ length: 5 }, (_, i) => {
-                      // Convert the rating to a scale of 0-5
                       const starRating = (content.vote_average / 2).toFixed(1);
                       const fullStars = Math.floor(starRating);
                       const hasHalfStar = starRating - fullStars >= 0.5;
 
                       if (i < fullStars) {
-                        // Full star
                         return <FaStar key={i} className="text-yellow-400" />;
                       } else if (i === fullStars && hasHalfStar) {
-                        // Half star
                         return (
                           <FaStarHalfAlt key={i} className="text-yellow-400" />
                         );
                       } else {
-                        // Empty star
                         return <FaStar key={i} className="text-gray-500" />;
                       }
                     })}
@@ -353,9 +345,7 @@ const ContentPage = () => {
           </div>
         )}
 
-        {/* Cast and Crew Section */}
         <div className="p-4 sm:p-6 md:p-10 lg:p-20">
-          {/* Cast */}
           {credits.cast.length > 0 && (
             <>
               <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Cast</h2>
@@ -393,7 +383,6 @@ const ContentPage = () => {
             </>
           )}
 
-          {/* Director */}
           {directors.length > 0 ? (
             <>
               <h2 className="text-2xl sm:text-3xl font-semibold mt-8 mb-4">
@@ -431,7 +420,6 @@ const ContentPage = () => {
           )}
         </div>
 
-        {/* Seasons Section (Only for TV Series) */}
         {type === "series" && (
           <div className="p-4 sm:p-6 md:p-10 lg:p-20">
             <h2 className="text-2xl sm:text-3xl font-semibold mb-6">Seasons</h2>
@@ -494,7 +482,6 @@ const ContentPage = () => {
             </div>
           </>
         )}
-        {/* Recommendations */}
         {recommendations.length > 0 && (
           <div className="p-4 sm:p-6 md:p-10">
             <h2 className="text-2xl sm:text-3xl font-semibold mb-4">

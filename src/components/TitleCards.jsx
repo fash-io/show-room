@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState, useMemo } from "react";
-import PropTypes from "prop-types"; // Import PropTypes for validation
 import Loading from "./Loading";
 import Error from "./Error";
 import ShowCard from "./ShowCard";
@@ -22,7 +21,7 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
           options
         );
         const jsonData = await response.json();
-        setData(jsonData.results || []); // Ensure to set the correct structure
+        setData(jsonData.results || []);
       } catch (err) {
         setError("Failed to load API data. Please try again later.");
         console.error(err);
@@ -45,21 +44,19 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
       fetchApiData();
     }
 
-    // Cleanup
     return () => {
       setError(null);
       setWatchlistData([]);
     };
   }, [category, type, userWatchlist, userData, setLoading]);
 
-  // Handle loading and error states
   if (loading) return <Loading isSmall={true} />;
   if (error) return <Error message={error} isSmall={true} />;
 
   const dataToDisplay = userWatchlist ? watchlistData : data;
 
   return (
-    <div className="mt-12 mb-8">
+    <div className="mt-3 mb-3 sm:mt-7 md:mt-12 sm:mb-5 md:mb-8">
       <h2 className="mb-3 text-lg font-semibold">
         {title || "Popular on Netflix"}
       </h2>

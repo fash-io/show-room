@@ -93,20 +93,3 @@ html{
     transform: translateX(-100%);
   }
 }
-
-/* .navLinks:after {
-  content: '';
-  position: absolute;
-  width: 120%;
-  height: .05rem;
-  bottom: -.2rem;
-  left: -10%;
-  transform: scaleX(0);
-  background: linear-gradient(to right, #ff7e5f, #1a2a6c 100%);
-  transform-origin: right;
-  transition: transform 0.2s ease-out;
-}
-.navLinks:hover:after , .navLinks.active:after{
-  transform: scaleX(1);
-  transform-origin: left;
-} */

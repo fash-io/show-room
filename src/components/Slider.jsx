@@ -3,6 +3,7 @@ import { useSwipeable } from "react-swipeable";
 import { Link } from "react-router-dom";
 import info_icon from "../assets/info_icon.png";
 import { options } from "../utils/api";
+import Loading from "./Loading";
 
 const Slider = (props) => {
   const { height, type, setError, setLoading } = props;
@@ -20,7 +21,7 @@ const Slider = (props) => {
           options
         );
         const data = await response.json();
-        setShow(data.results || []); // Ensure data is in the correct format
+        setShow(data.results || []);
       } catch (err) {
         setError("Failed to load new releases.");
         console.error(err);
@@ -39,7 +40,6 @@ const Slider = (props) => {
     }
   }, [show]);
 
-  // Auto slide logic
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       goToNextSlide();
@@ -88,7 +88,6 @@ const Slider = (props) => {
 
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
-      {/* Left button for manual navigation */}
       <div
         onClick={goToPreviousSlide}
         className="hidden sm:flex justify-center items-center w-32 absolute h-full z-10 cursor-pointer text-white"
@@ -103,7 +102,6 @@ const Slider = (props) => {
         </button>
       </div>
 
-      {/* Slider container */}
       <div
         ref={sliderRef}
         {...swipeHandlers}
@@ -157,12 +155,11 @@ const Slider = (props) => {
           ))
         ) : (
           <div className="w-full h-full flex justify-center items-center text-white">
-            <p>Loading...</p> {/* Placeholder while loading */}
+            <Loading isSmall={true}/>
           </div>
         )}
       </div>
 
-      {/* Right button for manual navigation */}
       <div
         onClick={goToNextSlide}
         className="hidden sm:flex justify-center items-center w-32 absolute right-0 top-0 h-full z-10 cursor-pointer text-white"

@@ -121,9 +121,7 @@ const MyListPage = () => {
         </div>
       )}
       <div className="min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8">
-        {/* Small Navigation Bar */}
         <div className="flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20">
-          {/* Media Type Selector */}
           <div className="flex flex-wrap items-center space-x-4">
             {["all", "movie", "tv"].map((type) => (
               <button
@@ -156,7 +154,6 @@ const MyListPage = () => {
             ))}
           </div>
 
-          {/* Data Set Selector */}
           <div className="flex flex-wrap items-center space-x-2">
             {["watchList", "favorite", "watched"].map((set) => (
               <button
@@ -190,7 +187,6 @@ const MyListPage = () => {
           </div>
         </div>
 
-        {/* Shows Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
           <h2 className="text-center text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#1a2a6c] via-pink-500 to-[#ff7e5f] mb-12 mx-auto w-min whitespace-nowrap flex items-center">
             {dataSet === "favorite"

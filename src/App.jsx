@@ -42,10 +42,10 @@ const App = () => {
         setUser(null);
         setUserData(null);
       }
-      setLoading(false); // Set loading to false after fetching user data
+      setLoading(false); 
     });
-    return () => unsubscribe(); // Cleanup subscription on unmount
-  }, []); // Only run on mount
+    return () => unsubscribe(); 
+  }, []);
 
   useEffect(() => {
     if (!loading) {

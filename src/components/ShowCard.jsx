@@ -37,14 +37,12 @@ const ShowCard = (props) => {
         key={show.id}
         className="relative inline-block mr-3 w-[9rem] overflow-hidden group duration-300 rounded-lg group"
       >
-        {/* Use the passed imageUrl for Poster Image */}
         <img
           src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
           alt={show.title || show.name || "Movie Poster"}
           className="cursor-pointer object-cover w-full rounded-lg group-hover:scale-110 transition-transform duration-300"
         />
 
-        {/* Rating */}
         <div className="absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg group-hover:opacity-100">
           {show.vote_average > 1 ? show.vote_average.toFixed(1) : "N/A"}
         </div>

@@ -3,7 +3,6 @@ const Pagination = (props) => {
 
   return (
     <>
-      {/* Pagination */}
       <div className="mt-8 flex justify-center items-center ">
         <button
           onClick={() => handlePageChange(1)}

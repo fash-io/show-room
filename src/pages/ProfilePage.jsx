@@ -15,7 +15,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // New loading state for image uploads
+  const [isUploading, setIsUploading] = useState(false); 
 
   useEffect(() => {
     const fetchUserData = async (uid) => {
@@ -65,14 +65,14 @@ const ProfilePage = () => {
       let photoURL = userData.photoURL;
 
       if (file) {
-        setIsUploading(true); // Start uploading state
+        setIsUploading(true); 
         const storageRef = ref(
           storage,
           `profileImages/${auth.currentUser.uid}/${file.name}`
         );
         await uploadBytes(storageRef, file);
         photoURL = await getDownloadURL(storageRef);
-        setIsUploading(false); // End uploading state
+        setIsUploading(false); 
       }
 
       const userDocRef = doc(db, "users", auth.currentUser.uid);
@@ -209,7 +209,7 @@ const ProfilePage = () => {
               <button
                 type="submit"
                 className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
-                disabled={isUploading} // Disable button if uploading
+                disabled={isUploading}
               >
                 {isUploading ? "Uploading..." : "Save Changes"}
               </button>
