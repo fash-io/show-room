@@ -34,7 +34,7 @@ const ShowCard = (props) => {
       <Link
         to={`/${type_ === "movie" ? "movie" : "series"}/${show.id}`}
         key={show.id}
-        className="relative inline-block mr-3 w-[8rem] overflow-hidden group duration-300 rounded-lg group"
+        className="relative inline-block mr-3 w-[8rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg group"
       >
         <img
           src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
@@ -52,12 +52,12 @@ const ShowCard = (props) => {
       <Link
         key={show.id}
         to={`/${show.media_type === "movie" ? "movie" : "series"}/${show.id}`}
-        className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96"
+        className="group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-[16rem] sm:h-80 lg:h-96"
       >
         <img
           src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
           alt={show.title || show.name}
-          className="w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
+          className="w-full h-[16rem] sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300"
         />
         <div
           className="p-4"
