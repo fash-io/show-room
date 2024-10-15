@@ -1,5 +1,16 @@
+import { useEffect, useState } from "react";
+
 const Pagination = (props) => {
   const { totalPages, page, handlePageChange, loading } = props;
+
+  const [displayPage, setDisplayPage] = useState(page);
+
+  const handleDisplayPageChange = (e) => {
+    setDisplayPage(e.target.value);
+  };
+  useEffect(() => {
+    handlePageChange(displayPage);
+  }, [displayPage]);
 
   return (
     <>
@@ -28,7 +39,14 @@ const Pagination = (props) => {
         >
           ‹
         </button>
-        <span className="text-white mx-4">{page}</span>
+        <input
+          type="text"
+          className="text-white max-w-[40px] bg-black/0 border-none outline- text-center p-[5px] m-1"
+          onChange={(e) => {
+            handleDisplayPageChange(e);
+          }}
+          value={displayPage}
+        />
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || loading}

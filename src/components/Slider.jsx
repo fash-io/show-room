@@ -90,12 +90,12 @@ const Slider = (props) => {
     <div className={`relative overflow-hidden z-40 ${height}`}>
       <div
         onClick={goToPreviousSlide}
-        className="hidden sm:flex justify-center items-center w-32 absolute h-full z-10 cursor-pointer text-white"
+        className="hidden sm:flex justify-center items-center w-32 absolute h-full z-10 cursor-pointer text-white hover:bg-black/20 duration-200 group"
         title="Previous slide"
       >
         <button
           aria-label="Previous slide"
-          className="md:left-10 left-2 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          className="md:left-10 left-2 p-2 md:p-3 rounded-full group-hover:scale-150 transition duration-200"
           style={{ textShadow: "0px 2px 2px rgba(0, 0, 0, 0.9)" }}
         >
           ❮
@@ -118,7 +118,7 @@ const Slider = (props) => {
                 alt={movie.title || movie.name}
                 className={`w-full object-cover object-top ${height}`}
               />
-              <div className="absolute w-full px-4 sm:px-6 md:px-[6%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6">
+              <div className="absolute w-full px-4 sm:px-6 md:px-[9%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6">
                 <h1
                   className="text-lg sm:text-3xl md:text-4xl mb-4 md:mb-10 font-bold"
                   style={{ textShadow: "2px 2px 4px #000000" }}
@@ -162,12 +162,12 @@ const Slider = (props) => {
 
       <div
         onClick={goToNextSlide}
-        className="hidden sm:flex justify-center items-center w-32 absolute right-0 top-0 h-full z-10 cursor-pointer text-white"
+        className="hidden sm:flex justify-center items-center w-32 absolute right-0 top-0 h-full z-10 cursor-pointer text-white hover:bg-black/20 duration-500 group"
         title="Next slide"
       >
         <button
           aria-label="Next slide"
-          className="md:left-10 left-2 p-2 md:p-3 rounded-full hover:bg-black/70 transition duration-200"
+          className="md:left-10 left-2 p-2 md:p-3 rounded-full group-hover:scale-150 transition duration-200"
           style={{ textShadow: "0px 2px 2px rgba(0, 0, 0, 0.9)" }}
         >
           ❯
