@@ -7,8 +7,8 @@ import Pagination from "../components/Pagination";
 import { options } from "../utils/api";
 import { useLocation } from "react-router-dom";
 import { useWindowWidth } from "../utils/windowWidth";
-import LoadingSpinner from "../components/LoadingSpinner"; 
-import { CSSTransition, TransitionGroup } from "react-transition-group"; 
+import LoadingSpinner from "../components/LoadingSpinner";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const TVShowsPage = () => {
   const { pathname } = useLocation();
@@ -81,7 +81,7 @@ const TVShowsPage = () => {
 
   useEffect(() => {
     if (genre && !genres.includes(genre)) {
-      setGenres([...genres, genre]);
+      setGenres([genre, ...genres]);
     }
   }, [genre]);
 
@@ -130,7 +130,7 @@ const TVShowsPage = () => {
                 </label>
                 <select
                   id="genre"
-                  value={genre}
+                  value=""
                   onChange={handleGenreChange}
                   className="p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto"
                 >
@@ -183,12 +183,12 @@ const TVShowsPage = () => {
           </div>
 
           {genres.length > 0 && (
-            <div className="my-6 flex items-center justify-end duration-200">
+            <div className="my-6 md:flex items-center justify-end duration-200 overflow-x-scroll div">
               <TransitionGroup className="flex">
                 {genres.map((genre, i) => (
                   <CSSTransition key={genre} timeout={300} classNames="fade">
-                    <div className="bg-gray-900 text-white border-blue-900/50 border rounded-full flex justify-between items-center p-2 gap-2 py-0 duration-200 ml-2">
-                      <span className="font-light">
+                    <div className="bg-gray-900 text-white border-blue-900/50 border rounded-full flex justify-between items-center p-2 gap-2 py-0 duration-200 ml-2 ">
+                      <span className="font-light whitespace-nowrap">
                         {genre_.find((g) => g.id === parseInt(genre))?.name}
                       </span>
                       <i
