@@ -7,8 +7,8 @@ import Pagination from "../components/Pagination";
 import { options } from "../utils/api";
 import { useLocation } from "react-router-dom";
 import { useWindowWidth } from "../utils/windowWidth";
-import LoadingSpinner from "../components/LoadingSpinner"; // Spinner Component
-import { CSSTransition, TransitionGroup } from "react-transition-group"; // Animation import
+import LoadingSpinner from "../components/LoadingSpinner"; 
+import { CSSTransition, TransitionGroup } from "react-transition-group"; 
 
 const TVShowsPage = () => {
   const { pathname } = useLocation();
@@ -182,7 +182,6 @@ const TVShowsPage = () => {
             </div>
           </div>
 
-          {/* Genres Display */}
           {genres.length > 0 && (
             <div className="my-6 flex items-center justify-end duration-200">
               <TransitionGroup className="flex">
@@ -204,7 +203,6 @@ const TVShowsPage = () => {
           )}
         </div>
 
-        {/* Shows and Pagination */}
         <div>
           <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-300 mb-10">
             {type_ === "movie" ? "Movies" : "Series"}
