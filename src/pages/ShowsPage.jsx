@@ -102,7 +102,7 @@ const TVShowsPage = () => {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white">
+      <div className="container min-h-screen mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white">
         <div className="mb-8">
           <div
             className="p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 ring-gray-700"
