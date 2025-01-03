@@ -66,12 +66,10 @@ const ShowCard = props => {
     )
   } else if (type === 3) {
     return (
-      <Link
+      <div
         key={show.id}
-        to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
         className='group relative rounded-lg overflow-hidden shadow-lg w-full h-[16rem] sm:h-80 perspective'
       >
-        {/* Card container with hover rotation */}
         <div className='absolute top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg]'>
           <img
             src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
@@ -81,12 +79,13 @@ const ShowCard = props => {
           />
         </div>
 
-        {/* Show title (displayed on hover) */}
-        <div className='absolute top-[53%] left-[31%] whitespace-pre-wrap text-white font-semibold text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline'>
+        <Link
+          className='absolute top-[53%] left-[31%] whitespace-pre-wrap text-white font-semibold text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline'
+          to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
+        >
           {show.title || show.name} ↗
-        </div>
+        </Link>
 
-        {/* Show details at bottom-right */}
         <div className='absolute bottom-0 text-white text-sm p-2 rounded-lg transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
           <p className='font-medium'>
             Rating:{' '}
@@ -102,7 +101,7 @@ const ShowCard = props => {
             </p>
           )}
         </div>
-      </Link>
+      </div>
     )
   }
 }
