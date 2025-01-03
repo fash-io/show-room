@@ -1,7 +1,7 @@
 const Loader_ = () => (
-  <div className='flex justify-center items-center py-6'>
+  <div className='flex justify-center items-center'>
     <div
-      className='spinner-border border-l-0 border-white animate-spin inline-block w-8 h-8 border-4 rounded-full'
+      className='border-l-transparent border-white animate-spin inline-block w-6 aspect-square border-2 rounded-full'
       role='status'
     >
       <span className='visually-hidden' />

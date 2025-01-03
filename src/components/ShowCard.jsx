@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import LazyLoader from './LazyLoader'
-
+import { RxChevronRight } from 'react-icons/rx'
 const ShowCard = props => {
   const { show, type_, type, mediaType } = props
   const [isLoading, setIsLoading] = useState(true) // To track if the image is loading
@@ -70,7 +70,7 @@ const ShowCard = props => {
         key={show.id}
         className='group relative rounded-lg overflow-hidden shadow-lg w-full h-[16rem] sm:h-80 perspective'
       >
-        <div className='absolute top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg]'>
+        <div className='absolute top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg] z-[1]'>
           <img
             src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
             alt={show.title || show.name}
@@ -80,10 +80,10 @@ const ShowCard = props => {
         </div>
 
         <Link
-          className='absolute top-[53%] left-[31%] whitespace-pre-wrap text-white font-semibold text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline'
+          className='absolute z-0 top-[44%] left-[29%] sm:top-[53%] sm:left-[31%] whitespace-pre-wrap text-white text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline text-sm'
           to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
         >
-          {show.title || show.name} ↗
+          {show.title || show.name} <i className='fa fa-arrow-right    '></i>
         </Link>
 
         <div className='absolute bottom-0 text-white text-sm p-2 rounded-lg transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
