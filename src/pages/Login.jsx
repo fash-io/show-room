@@ -2,102 +2,86 @@ import { useEffect, useState } from 'react'
 import { login, signup } from '../utils/firebase'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
-import { RxEyeOpen, RxEyeClosed, RxExit, RxCrossCircled } from 'react-icons/rx'
-import Loading from '../components/Loading'
+import { RxEyeOpen, RxEyeClosed, RxCrossCircled } from 'react-icons/rx'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import Loader_ from '../components/Loader_'
-import PosterBackground from '../components/PosterBackground'
-
+import PosterBackground from '../components/poster-background/PosterBackground'
 const Login = props => {
   const { setIsExploring } = props
   const [signState, setSignState] = useState('Login')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [c_password, setC_password] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [selectedShow, setSelectedShow] = useState({})
+  const [nextPath, setNextPath] = useState('/')
   const navigator = useNavigate()
-
-  const handleNameChange = e => setName(e.target.value)
-  const handleEmailChange = e => setEmail(e.target.value)
-  const handlePasswordChange = e => setPassword(e.target.value)
-  const handleC_passwordChange = e => setC_password(e.target.value)
-
   const handleSignState = () => {
     setSignState(prevState => (prevState === 'Sign Up' ? 'Login' : 'Sign Up'))
+    formik.resetForm()
   }
-
-  const user_auth = async event => {
-    event.preventDefault()
-    setLoading(true)
-
-    try {
-      if (signState === 'Sign Up') {
-        if (name.trim().length < 1) {
-          throw new Error('Please enter your name')
+  const validationSchema = Yup.object({
+    name:
+      signState === 'Sign Up'
+        ? Yup.string().required('Please enter your name')
+        : Yup.string(),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Please enter your email'),
+    password: Yup.string()
+      .min(8, 'Password must be at least 8 characters long')
+      .max(20, 'Password must be less than 20 characters long')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one number')
+      .required('Please enter your password'),
+    c_password:
+      signState === 'Sign Up'
+        ? Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+            .required('Please confirm your password')
+        : Yup.string()
+  })
+  const formik = useFormik({
+    initialValues: { name: '', email: '', password: '', c_password: '' },
+    validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true)
+      try {
+        if (signState === 'Sign Up') {
+          await signup(values.name, values.email, values.password)
+          toast.success('Sign up successful.')
+          navigator(nextPath)
+        } else {
+          await login(values.email, values.password)
+          toast.success('Login successful.')
+          nextPath ? navigator(nextPath) : navigator(-1)
         }
-        if (email.trim().length < 1) {
-          throw new Error('Please enter your email')
-        }
-        if (password.trim().length < 8) {
-          throw new Error('Password must be at least 8 characters long')
-        }
-        if (password.trim().length > 20) {
-          throw new Error('Password must be less than 20 characters long')
-        }
-        if (!/[A-Z]/.test(password)) {
-          throw new Error('Password must contain at least one uppercase letter')
-        }
-        if (!/[a-z]/.test(password)) {
-          throw new Error('Password must contain at least one lowercase letter')
-        }
-        if (!/[0-9]/.test(password)) {
-          throw new Error('Password must contain at least one number')
-        }
-        if (password !== c_password) {
-          throw new Error('Passwords do not match')
-        }
-        await signup(name, email, password)
-        toast.success('Sign up successful.')
-        navigator('/login')
-      } else {
-        if (email.trim().length < 1) {
-          setError('Please enter your email')
-          return
-        }
-        if (password.trim().length < 1) {
-          setError('Please enter your password')
-          return
-        }
-        await login(email, password)
-        toast.success('Login successful.')
-        navigator('/')
+        resetForm()
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading
       }
-    } catch (error) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
     }
-  }
+  })
   const handleExploring = () => {
     setIsExploring(true)
-    navigator('/')
+    navigator(nextPath || '/')
   }
 
-  useEffect(() => {
-    setName('')
-    setEmail('')
-    setPassword('')
-    setC_password('')
-    setError('')
-    setShowPassword(false)
-  }, [signState])
+  const handleShowSelect = movie => {
+    setSelectedShow(movie)
+    setNextPath(`/${movie.media_type}/${movie.id}`)
+  }
+  console.log(nextPath)
 
   return (
     <>
-      <PosterBackground />
-      <div className='h-screen login py-5 lg:px-[8%] px-2 bg-gradient flex'>
+      <PosterBackground
+        className='fixed top-0 bottom-0 w-screen h-screen overflow-hidden'
+        handleShowSelect={handleShowSelect}
+      />
+      <div className='h-screen py-5 lg:px-[8%] px-2 bg-gradient flex'>
         <Link to={'/'}>
           <span
             className='text-xl sm:text-4xl font-bold bg-clip-text text-transparent absolute'
@@ -114,7 +98,14 @@ const Login = props => {
               signState === 'Login' ? 'translate-x-0' : '-translate-x-[150%]'
             }`}
           >
-            <h1 className='text-3xl font-medium mb-7'>Login</h1>
+            <div className='flex items-center justify-between mb-7'>
+              <h1 className='text-3xl font-medium '>Login</h1>
+              {(selectedShow.name || selectedShow.title) && (
+                <p className='text-xs text-slate-500 w-[60%]'>
+                  Redirect: {selectedShow.name || selectedShow.title}
+                </p>
+              )}
+            </div>
             <form onSubmit={user_auth} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
@@ -199,7 +190,14 @@ const Login = props => {
               signState === 'Sign Up' ? 'translate-x-0' : 'translate-x-[150%]'
             }`}
           >
-            <h1 className='text-3xl font-medium mb-7'>Sign Up</h1>
+            <div className='flex items-center justify-between mb-7'>
+              <h1 className='text-3xl font-medium '>Sign Up</h1>
+              {(selectedShow.name || selectedShow.title) && (
+                <p className='text-xs text-slate-500 w-[60%]'>
+                  Redirect: {selectedShow.name || selectedShow.title}
+                </p>
+              )}
+            </div>
             <form onSubmit={user_auth} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input

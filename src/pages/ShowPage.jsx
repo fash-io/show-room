@@ -120,7 +120,7 @@ const ContentPage = () => {
                   {content.title || content.name}
                 </h1> */}
                 <img
-                  src={`https://image.tmdb.org/t/p/original${logo}`}
+                  src={`https://image.tmdb.org/t/p/w500${logo}`}
                   alt={content.title || content.name}
                   className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto mb-4'
                 />

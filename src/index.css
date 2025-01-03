@@ -27,21 +27,6 @@ body {
     display: none;
   }
 }
-.login {
-  background: transparent;
-}
-.login::before {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-image: linear-gradient(#0000007e, #000000c5),
-    url(/background_banner.jpg);
-  background-size: cover;
-}
 
 @keyframes blink {
   from {
