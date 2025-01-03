@@ -1,8 +1,21 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import LazyLoader from './LazyLoader'
 
 const ShowCard = props => {
   const { show, type_, type, mediaType } = props
+  const [isLoading, setIsLoading] = useState(true) // To track if the image is loading
+
+  const handleImageLoad = () => {
+    setIsLoading(false)
+  }
+
+  const Loader = () => (
+    <div
+      className='absolute top-0 bottom-0 -z-10 left-0 right-0 bg-[rgba(20,20,20,0.9)] animate-pulse  rounded-lg flex justify-center items-center'
+      style={{ animationDuration: '1.4s' }}
+    ></div>
+  )
 
   if (type === 1) {
     return (
@@ -34,12 +47,16 @@ const ShowCard = props => {
       <Link
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
         key={show.id}
-        className='relative inline-block mr-3 w-[8rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg group'
+        className='relative inline-block h-60 mr-3 w-[8rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg group'
       >
+        <Loader />
         <img
-          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+          src={`https://image.tmdb.org/t/p/w500${
+            show.poster_path
+          }?t=${new Date().getTime()}`}
           alt={show.title || show.name || 'Movie Poster'}
-          className='cursor-pointer object-cover w-full rounded-lg group-hover:scale-110 transition-transform duration-300'
+          className='cursor-pointer object-cover h-full w-full rounded-lg group-hover:scale-110 transition-transform duration-300'
+          onLoad={handleImageLoad}
         />
 
         <div className='absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg group-hover:opacity-100'>
@@ -52,27 +69,38 @@ const ShowCard = props => {
       <Link
         key={show.id}
         to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
-        className='group bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform transform group sm:hover:shadow-2xl w-full h-[16rem] sm:h-80'
+        className='group relative rounded-lg overflow-hidden shadow-lg w-full h-[16rem] sm:h-80 perspective'
       >
-        <img
-          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-          alt={show.title || show.name}
-          className='w-full h-[16rem] sm:h-80 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 sm:transition-transform sm:duration-300'
-        />
-        <div
-          className='p-4'
-          style={{ textShadow: '0px 0px 5px rgba(0, 0, 0, 1)' }}
-        >
-          {mediaType !== 'all' ? (
-            ''
-          ) : (
-            <p className='text-gray-100 text-sm float-right'>
-              {show.media_type.toUpperCase()}
+        {/* Card container with hover rotation */}
+        <div className='absolute top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg]'>
+          <img
+            src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+            alt={show.title || show.name}
+            className='w-full h-full object-cover rounded-lg'
+            onLoad={handleImageLoad}
+          />
+        </div>
+
+        {/* Show title (displayed on hover) */}
+        <div className='absolute top-[53%] left-[31%] whitespace-pre-wrap text-white font-semibold text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline'>
+          {show.title || show.name} ↗
+        </div>
+
+        {/* Show details at bottom-right */}
+        <div className='absolute bottom-0 text-white text-sm p-2 rounded-lg transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
+          <p className='font-medium'>
+            Rating:{' '}
+            <span className='text-pink-600'>
+              {show.vote_average > 1 ? show.vote_average.toFixed(1) : 'N/A'}
+            </span>
+          </p>
+          {show.overview && (
+            <p className='mt-1 text-xs'>
+              {show.overview.length > 60
+                ? `${show.overview.slice(0, 60)}...`
+                : show.overview}
             </p>
           )}
-          <p className=' text-gray-100 text-sm absolute bottom-0 left-0 w-full inset-10 bg-gradient-to-t from-[rgba(0,0,0,0.3)] to-transparent flex items-end p-2'>
-            {show.release_date || show.first_air_date}
-          </p>
         </div>
       </Link>
     )

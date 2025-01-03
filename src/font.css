@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel&family=Creepster&family=Playfair+Display&family=Roboto+Condensed&family=Lobster&family=Dancing+Script&family=Courier+Prime&family=Abril+Fatface&family=Oswald&family=Source+Serif+Pro&family=Pacifico&family=Fjalla+One&family=Permanent+Marker&family=Shadows+Into+Light&family=Nabla&family=Special+Elite&family=Love+Light&family=Lora&display=swap');
+
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
+}
+.action-style {
+  color: #e53935;
+  position: relative;
+  display: inline-block;
+  animation: bloodEffect 1.5s infinite alternate;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.action-style:hover {
+  transform: scale(1.2) rotate(-8deg);
+  color: #d32f2f;
+}
+.action-style::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to bottom, #e53935, transparent);
+  opacity: 0.5;
+  animation: bloodDrip 1s infinite alternate;
+}
+@keyframes bloodDrip {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+@keyframes bloodEffect {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 1);
+  }
+}
+.fantasy-style {
+  color: #ffeb3b;
+  animation: glowPulse 2s infinite alternate;
+  transition: transform 0.3s ease;
+}
+.fantasy-style:hover {
+  transform: scale(1.1);
+  text-shadow: 0 0 20px rgba(255, 235, 59, 1), 0 0 30px rgba(255, 235, 59, 0.7);
+}
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 235, 59, 1);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8);
+  }
+}
+.horror-style {
+  color: #ff0000;
+  animation: glitchEffect 1.5s infinite;
+  transition: transform 0.3s ease;
+  letter-spacing: 5px;
+  transform: scaleY(1.2);
+}
+@keyframes glitchEffect {
+  0% {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5),
+      -3px -3px 5px rgba(255, 0, 0, 0.7);
+  }
+  50% {
+    text-shadow: 3px 3px 8px rgba(255, 0, 0, 0.7),
+      -3px -3px 8px rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5),
+      -3px -3px 5px rgba(255, 0, 0, 0.7);
+  }
+}
+.romance-style {
+  font-family: 'Love Light', serif;
+  color: #f06292;
+  text-decoration: underline;
+  animation: curveAnimation 1.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+@keyframes curveAnimation {
+  0% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+.sci-fi-style {
+  font-family: 'Nabla', cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: 'EDPT' 100, 'EHLT' 12;
+  text-transform: uppercase;
+  /* animation: sciFiClip 1s infinite alternate; */
+  position: relative;
+  overflow: hidden;
+}
+@keyframes sciFiClip {
+  0% {
+    letter-spacing: -2px;
+  }
+  100% {
+    letter-spacing: 1px;
+  }
+}
+
+.kids-style {
+  font-family: 'Permanent Marker', cursive;
+  color: #ff4081;
+  font-style: italic;
+  animation: bounceFun 1s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.kids-style:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+@keyframes bounceFun {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.mystery-style {
+  font-family: 'Oswald', sans-serif;
+  color: #673ab7;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  animation: mysteryPulse 2s infinite alternate;
+  transition: transform 0.3s ease;
+  transform: scale(1.1) rotate(-3deg);
+}
+@keyframes mysteryPulse {
+  0% {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
+  }
+  100% {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  }
+}
+.family-style {
+  font-family: 'Pacifico', cursive;
+  color: #2196f3;
+  letter-spacing: 1px;
+  animation: waveEffect 2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.family-style:hover {
+  transform: scale(1.1) rotate(2deg);
+}
+@keyframes waveEffect {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+/* Typewriter Effect for Documentary-Style */
+.documentary-style {
+  font-family: 'Special Elite', monospace;
+  display: inline;
+  color: #5b5858;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.09em solid black;
+  padding-right: 10px;
+  animation: typing 4s linear forwards, blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: black;
+  }
+}
+
+/* Western Genre: Old Swing with Hover */
+.western-style {
+  font-family: 'Abril Fatface', serif;
+  color: #8d6e63;
+  font-style: italic;
+  animation: westernSwingEffect 1.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.western-style:hover {
+  transform: scale(1.1) rotate(-8deg);
+}
+@keyframes westernSwingEffect {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+} /* Soap Genre: Soft Flow with Hover */
+.soap-style {
+  font-family: 'Lora', serif;
+  color: #9c27b0;
+  font-style: italic;
+  font-size: 1.2em;
+  animation: softFlow 1.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.soap-style:hover {
+  transform: scale(1.1);
+}
+@keyframes softFlow {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+} /* War Genre: Strong Pulse with Hover */
+.war-style {
+  font-family: 'Source Serif Pro', serif;
+  color: #4caf50;
+  font-weight: bold;
+  animation: pulseStrong 1s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.war-style:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+@keyframes pulseStrong {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* Universal Anime-Style Animation */
+.anime-style {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6), 0 0 10px rgba(255, 0, 255, 0.8),
+    0 0 20px rgba(255, 0, 255, 1);
+  animation: animeEffect 1.5s infinite alternate,
+    glowPulse 1s infinite alternate;
+}
+
+/* Keyframes for the dynamic glowing effect */
+@keyframes animeEffect {
+  0% {
+    transform: scale(1) rotate(0deg);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
+      0 0 15px rgba(255, 0, 255, 0.8), 0 0 30px rgba(255, 0, 255, 1);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+      0 0 25px rgba(255, 0, 255, 1), 0 0 35px rgba(255, 0, 255, 1);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
+      0 0 15px rgba(255, 0, 255, 0.8), 0 0 30px rgba(255, 0, 255, 1);
+  }
+}
+
+/* Keyframes for the pulse glow */
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.7), 0 0 20px rgba(255, 0, 255, 1);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 0, 255, 1), 0 0 30px rgba(255, 0, 255, 1);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.7), 0 0 20px rgba(255, 0, 255, 1);
+  }
+}
+
+/* Hover effects */
+.anime-style:hover {
+  transform: scale(1.2) rotate(-5deg);
+  color: #f50057;
+  animation: animeEffect 1.5s infinite alternate,
+    glowPulse 1s infinite alternate;
+}

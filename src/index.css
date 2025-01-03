@@ -2,31 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
+html {
   scroll-behavior: smooth;
 }
-*{
-  font-family: "Poppins", sans-serif;
+
+* {
+  font-family: 'Poppins', sans-serif;
 }
-.banner-img{
+body {
+  font-family: 'Bebas Neue', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.banner-img {
   mask-image: linear-gradient(to right, transparent, black 75%);
   --webkit-mask-image: linear-gradient(to right, transparent, black 75%);
 }
-.div::-webkit-scrollbar{
+.div::-webkit-scrollbar {
   display: none;
 }
 @media screen and (max-width: 768px) {
-  .div1::-webkit-scrollbar{
+  .div1::-webkit-scrollbar {
     display: none;
   }
 }
 .login {
-  background-image: linear-gradient(#0000007e, #000000c5), url(/background_banner.jpg);
+  background-image: linear-gradient(#0000007e, #000000c5),
+    url(/background_banner.jpg);
   background-size: cover;
 }
 @keyframes blink {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 .spans span:nth-child(1) {
   animation: blink 600ms linear -600ms infinite alternate;
@@ -37,29 +49,29 @@ html{
 .spans span:nth-child(3) {
   animation: blink 600ms linear -200ms infinite alternate;
 }
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 5px;
 }
 ::-webkit-scrollbar-thumb {
   background: #4a4a4a;
-  border-radius: 10px; 
+  border-radius: 10px;
 }
-.divvv{
+.divvv {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: min-content;
 }
-.divv{
+.divv {
   height: 100%;
   position: relative;
   min-height: 180px;
-  overflow-y: hidden ;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
-.divv::after{
-  content: "";
+.divv::after {
+  content: '';
   background: #1a2a6c;
   width: 100%;
   height: 102%;
@@ -67,12 +79,12 @@ html{
   top: -100%;
   transition: 300ms;
 }
-.divvv:hover .divv::after{ 
-  top: 0; 
+.divvv:hover .divv::after {
+  top: 0;
   z-index: 40;
 }
-.divv::before{
-  content: "";
+.divv::before {
+  content: '';
   background-color: #000;
   width: 50px;
   height: 40px;

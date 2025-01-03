@@ -93,7 +93,7 @@ const TVShowsPage = () => {
     <>
       <div>
         <Slider
-          height='min-h-[50vh] sm:max-h-[70vh]'
+          height='min-h-[50vh] sm:max-h-[80vh]'
           movies={shows}
           options={options}
           type={type_}
@@ -105,7 +105,7 @@ const TVShowsPage = () => {
       <div className='container min-h-screen mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white'>
         <div className='mb-8'>
           <div
-            className='p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 ring-gray-700'
+            className='p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 '
             ref={showsRef}
           >
             <div className='flex flex-col sm:flex-row sm:space-x-6 w-full ml-auto justify-end'>

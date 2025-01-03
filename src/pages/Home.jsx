@@ -18,7 +18,7 @@ const Home = () => {
     <>
       {loading && <Loading transparent={true} />}
       <Slider
-        height='max-h-[70vh]  max-sm:min-h-[60vh]'
+        height='max-h-[80vh] max-sm:min-h-[60vh]'
         type={'all'}
         setLoading={setLoading}
         setError={setError}

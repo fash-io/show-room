@@ -116,6 +116,7 @@ export const faqs = [
 ]
 
 export const featured = [
+  { title: 'Now Playing', category: 'now_playing', type: 'movie' },
   { title: 'Popular Movies', category: 'popular', type: 'movie' },
   { title: 'Top Rated Movies', category: 'top_rated', type: 'movie' },
   { title: 'Upcoming Movies', category: 'upcoming', type: 'movie' },
