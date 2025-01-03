@@ -171,14 +171,3 @@ body {
     opacity: 1;
   }
 }
-.txt_field input:focus ~ label,
-.txt_field input:active ~ label {
-  transform: translate(-1rem, -1.5rem);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: underline;
-  font-weight: lighter;
-}
-.txt_field label {
-  transition-delay: 150ms;
-}

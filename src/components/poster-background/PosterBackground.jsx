@@ -7,7 +7,6 @@ const PosterBackground = ({ className, handleShowSelect }) => {
   const [error, setError] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
-
   const [tooltip, setTooltip] = useState({
     visible: false,
     content: '',
@@ -18,17 +17,21 @@ const PosterBackground = ({ className, handleShowSelect }) => {
   useEffect(() => {
     const fetchApiData = async () => {
       try {
-        let data = []
-        for (let i = 1; i <= 14; i++) {
-          const response = await fetch(
-            `https://api.themoviedb.org/3/trending/all/week?language=en-US&page=${i}`,
+        const fetchPromises = Array.from({ length: 14 }, (_, i) =>
+          fetch(
+            `https://api.themoviedb.org/3/trending/all/week?language=en-US&page=${
+              i + 1
+            }`,
             options
           )
-          const jsonData = await response.json()
-          data = data.concat(jsonData.results)
-        }
+            .then(response => response.json())
+            .then(jsonData => jsonData.results)
+        )
 
-        setData(randomizeArray(data))
+        const resultArrays = await Promise.all(fetchPromises)
+
+        const allMovies = randomizeArray([].concat(...resultArrays))
+        setData(allMovies)
       } catch (err) {
         setError('Failed to load API data. Please try again later.')
         console.error(err)
@@ -39,10 +42,12 @@ const PosterBackground = ({ className, handleShowSelect }) => {
 
     fetchApiData()
   }, [])
+  console.log(loading)
 
-  const handleMouseEnter = (e, movie) => {
+  const handleMouseEnter = (e, movie, i) => {
     setTooltip({
       visible: true,
+      index: i,
       content: `${movie.title || movie.name} (${
         movie.media_type === 'movie' ? 'Movie' : 'Series'
       })`,
@@ -52,7 +57,7 @@ const PosterBackground = ({ className, handleShowSelect }) => {
   }
 
   const handleMouseLeave = () => {
-    setTooltip({ visible: false, content: '', x: 0, y: 0 })
+    setTooltip({ visible: false, i: undefined, content: '', x: 0, y: 0 })
   }
 
   const handleMouseMove = e => {
@@ -65,22 +70,28 @@ const PosterBackground = ({ className, handleShowSelect }) => {
     }
   }
 
+  if (loading || error) {
+    return <div className='login'></div>
+  }
   return (
     <>
-      {loading || (error && <div className='login'></div>)}
       <div
-        className={`poster-grid login_2 ${className}`}
+        className={`poster-grid login_2 z-50 bg-black ${className}`}
         onMouseMove={handleMouseMove}
       >
         {data.map((movie, i) => (
           <div
             key={i}
-            className='poster-wrapper cursor-pointer'
-            onMouseEnter={e => handleMouseEnter(e, movie)}
+            className={`poster-wrapper cursor-pointer duration-200 ${
+              i === tooltip.index
+                ? 'brightness-100 z-50'
+                : tooltip.visible
+                ? 'brightness-50'
+                : 'brightness-100'
+            }`}
+            onMouseEnter={e => handleMouseEnter(e, movie, i)}
             onMouseLeave={handleMouseLeave}
-            onClick={() => {
-              handleShowSelect(movie)
-            }}
+            onClick={() => handleShowSelect(movie)}
           >
             <img
               src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}

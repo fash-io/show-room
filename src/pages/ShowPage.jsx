@@ -7,17 +7,17 @@ import ShowCard from '../components/ShowCard'
 import { handleAddItem } from '../utils/firebaseHandlers'
 import { options } from '../utils/api'
 import UserContext from '../UserContext'
-import { fetchLogos } from '../utils/logo-util'
-
+import { BsYoutube } from 'react-icons/bs'
 const ContentPage = () => {
   const { id, type } = useParams()
   const [content, setContent] = useState(null)
   const [logo, setLogo] = useState('')
-  const [fallBackLogo, setFallBackLogo] = useState('')
   const [credits, setCredits] = useState({ cast: [], crew: [] })
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isTrailerPlaying, setIsTrailerPlaying] = useState(false)
+  const [trailerUrl, setTrailerUrl] = useState('')
   const { user } = useContext(UserContext)
 
   useEffect(() => {
@@ -51,7 +51,9 @@ const ContentPage = () => {
         }
 
         const LogoData = await fetch(
-          `https://api.themoviedb.org/3/${type}/${id}/images`,
+          `https://api.themoviedb.org/3/${
+            type === 'series' ? 'tv' : type
+          }/${id}/images`,
           options
         )
         const logoData = await LogoData.json()
@@ -62,7 +64,7 @@ const ContentPage = () => {
           if (filteredLogos.length > 0) {
             setLogo(filteredLogos[0].file_path)
           } else {
-            setFallBackLogo(logoData.logos[0].file_path)
+            setLogo(logoData.logos[0].file_path)
           }
         }
 
@@ -88,7 +90,33 @@ const ContentPage = () => {
 
     fetchContentDetails()
   }, [id, type])
-  console.log(logo)
+
+  const handlePlayTrailer = () => {
+    const playTrailer = async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/${type === 'series' ? 'tv' : type}/${
+            content.id
+          }/videos?language=en-US`,
+          options
+        )
+        const data = await response.json()
+        const trailer = data.results.find(
+          video => video.type === 'Trailer' && video.site === 'YouTube'
+        )
+        if (trailer) {
+          setTrailerUrl(`https://www.youtube.com/embed/${trailer.key}`)
+          setIsTrailerPlaying(true)
+        } else {
+          alert('Trailer not available')
+        }
+      } catch (error) {
+        console.error('Error fetching trailer:', error)
+      }
+    }
+    playTrailer()
+  }
+
   if (error) {
     return <Error />
   }
@@ -96,6 +124,8 @@ const ContentPage = () => {
   if (loading || !content) {
     return <Loading />
   }
+
+  console.log(trailerUrl, isTrailerPlaying)
 
   const directors =
     type === 'series'
@@ -107,7 +137,18 @@ const ContentPage = () => {
       {loading && <Loading transparent={true} />}
       <div className='text-white min-h-screen'>
         <div className='relative'>
-          {content.backdrop_path ? (
+          {isTrailerPlaying && trailerUrl ? (
+            <>
+              <iframe
+                src={`${trailerUrl}?autoplay=1`}
+                title='Trailer'
+                width='100%'
+                height='300'
+                className='object-cover h-[400px] sm:h-[600px] max-h-[75vh] w-full object-top z-[9999]'
+                aria-controls='none'
+              />
+            </>
+          ) : content.backdrop_path ? (
             <>
               <img
                 src={`https://image.tmdb.org/t/p/original${content.backdrop_path}`}
@@ -115,16 +156,19 @@ const ContentPage = () => {
                 className='object-cover h-[400px] sm:h-[600px] max-h-[75vh] w-full object-top'
               />
               <div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
-              <div className='absolute bottom-10 left-5 sm:left-10 p-4 sm:p-8'>
-                {/* <h1 className='text-2xl sm:text-4xl md:text-5xl font-bold mb-2'>
-                  {content.title || content.name}
-                </h1> */}
+              <div className='absolute bottom-10 left-5 sm:left-10 p-4 sm:p-8 space-y-4'>
                 <img
-                  src={`https://image.tmdb.org/t/p/w500${logo}`}
+                  src={`https://image.tmdb.org/t/p/original${logo}`}
                   alt={content.title || content.name}
-                  className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto mb-4'
+                  className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto '
                 />
                 <p className='text-sm sm:text-xl italic'>{content.tagline}</p>
+                <span className='p-3 bg-black/70 cursor-pointer rounded-lg py-2 inline-block'>
+                  <span>
+                    <BsYoutube />
+                  </span>
+                  <span>Play Trailer</span>
+                </span>
               </div>
             </>
           ) : (

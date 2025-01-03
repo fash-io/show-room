@@ -60,7 +60,7 @@ const Login = props => {
       } catch (error) {
         setError(error.message)
       } finally {
-        setLoading
+        setLoading(false)
       }
     }
   })
@@ -68,13 +68,14 @@ const Login = props => {
     setIsExploring(true)
     navigator(nextPath || '/')
   }
-
   const handleShowSelect = movie => {
     setSelectedShow(movie)
     setNextPath(`/${movie.media_type}/${movie.id}`)
   }
-  console.log(nextPath)
-
+  useEffect(() => {
+    formik.resetForm()
+    setError('')
+  }, [signState])
   return (
     <>
       <PosterBackground
@@ -82,68 +83,62 @@ const Login = props => {
         handleShowSelect={handleShowSelect}
       />
       <div className='h-screen py-5 lg:px-[8%] px-2 bg-gradient flex'>
-        <Link to={'/'}>
-          <span
-            className='text-xl sm:text-4xl font-bold bg-clip-text text-transparent absolute'
-            style={{
-              backgroundImage: 'linear-gradient(to right, #ff7e5f, #1a2a6c)'
-            }}
-          >
-            ShowRoom
-          </span>
-        </Link>
-        <div className='w-full  relative max-w-md transition-all duration-500 overflow-hidden bg-black bg-opacity-75 rounded-2xl shadow-white/10 shadow-lg py-16 px-10 sm:p-16 m-auto backdrop-blur-sm'>
+        <div className='w-full relative max-w-md transition-all duration-500 overflow-hidden bg-black bg-opacity-75 rounded-2xl shadow-white/10 shadow-lg py-16 px-10 sm:p-16 m-auto backdrop-blur-sm flex'>
           <div
-            className={`max-w-md w-[20rem] flex flex-col justify-center translate-y-[10%] transition-transform duration-500 absolute ${
+            className={`max-w-md md:w-[20rem] flex flex-col justify-center translate-y-[10%] transition-transform duration-500 absolute ${
               signState === 'Login' ? 'translate-x-0' : '-translate-x-[150%]'
             }`}
           >
             <div className='flex items-center justify-between mb-7'>
-              <h1 className='text-3xl font-medium '>Login</h1>
+              <h1 className='text-3xl font-medium'>Login</h1>
               {(selectedShow.name || selectedShow.title) && (
-                <p className='text-xs text-slate-500 w-[60%]'>
+                <p className='text-xs text-slate-500 max-w-[60%]'>
                   Redirect: {selectedShow.name || selectedShow.title}
                 </p>
               )}
             </div>
-            <form onSubmit={user_auth} className='space-y-5'>
+            <form onSubmit={formik.handleSubmit} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
                   id='email'
-                  value={email}
-                  onChange={handleEmailChange}
+                  name='email'
                   type='email'
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='johndoe@gmail.com'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 text-white/50'
-                  htmlFor='email'
-                >
-                  Email
-                </label>
+                {formik.touched.email && formik.errors.email && (
+                  <div className='text-red-500'>{formik.errors.email}</div>
+                )}
               </div>
-
-              <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
+              <div className='relative w-full backdrop-blur-sm text-white font-medium'>
                 <input
-                  value={password}
-                  onChange={handlePasswordChange}
-                  type={showPassword ? 'text' : 'password'}
                   id='password'
+                  name='password'
+                  type={formik.values.showPassword ? 'text' : 'password'}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='******'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 3 text-white/50'
-                  htmlFor='password'
-                >
-                  Password
-                </label>
                 <button
                   type='button'
-                  onClick={() => setShowPassword(prev => !prev)}
+                  onClick={() =>
+                    formik.setFieldValue(
+                      'showPassword',
+                      !formik.values.showPassword
+                    )
+                  }
                   className='absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50'
                 >
-                  {showPassword ? <RxEyeOpen /> : <RxEyeClosed />}
+                  {formik.values.showPassword ? <RxEyeOpen /> : <RxEyeClosed />}
                 </button>
+                {formik.touched.password && formik.errors.password && (
+                  <div className='text-red-500'>{formik.errors.password}</div>
+                )}
               </div>
               {error && (
                 <div className='p-3 rounded-md flex item-center text-xs bg-red-600/50 text-white justify-between'>
@@ -164,10 +159,9 @@ const Login = props => {
                 {loading ? <Loader_ /> : 'Login'}
               </button>
             </form>
-
             <div className='mt-10 text-[#737373]'>
               <div className='flex w-full justify-between items-center'>
-                <p className='text-sm '>
+                <p className='text-sm'>
                   <span
                     onClick={handleSignState}
                     className='ml-1.5 text-white/50 font-medium cursor-pointer'
@@ -191,83 +185,86 @@ const Login = props => {
             }`}
           >
             <div className='flex items-center justify-between mb-7'>
-              <h1 className='text-3xl font-medium '>Sign Up</h1>
+              <h1 className='md:text-3xl font-medium'>Sign Up</h1>
               {(selectedShow.name || selectedShow.title) && (
-                <p className='text-xs text-slate-500 w-[60%]'>
+                <p className='text-xs text-slate-500 max-w-[60%]'>
                   Redirect: {selectedShow.name || selectedShow.title}
                 </p>
               )}
             </div>
-            <form onSubmit={user_auth} className='space-y-5'>
+            <form onSubmit={formik.handleSubmit} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
-                  value={name}
                   id='name'
-                  onChange={handleNameChange}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.name}
                   type='text'
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='John Doe'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 text-white/50'
-                  htmlFor='name'
-                >
-                  Username
-                </label>
+                {formik.touched.name && formik.errors.name && (
+                  <div className='text-red-500'>{formik.errors.name}</div>
+                )}
               </div>
 
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
-                  id='email_'
-                  value={email}
-                  onChange={handleEmailChange}
+                  id='email'
+                  name='email'
                   type='email'
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='Johndoe@gmail.com'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 text-white/50'
-                  htmlFor='email_'
-                >
-                  Email
-                </label>
+                {formik.touched.email && formik.errors.email && (
+                  <div className='text-red-500'>{formik.errors.email}</div>
+                )}
               </div>
 
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
-                  value={password}
-                  onChange={handlePasswordChange}
-                  type={showPassword ? 'text' : 'password'}
-                  id='password_'
+                  id='password'
+                  name='password'
+                  type={formik.values.showPassword ? 'text' : 'password'}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='******'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 3 text-white/50'
-                  htmlFor='password_'
-                >
-                  Password
-                </label>
                 <button
                   type='button'
-                  onClick={() => setShowPassword(prev => !prev)}
+                  onClick={() =>
+                    formik.setFieldValue(
+                      'showPassword',
+                      !formik.values.showPassword
+                    )
+                  }
                   className='absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50'
                 >
-                  {showPassword ? <RxEyeOpen /> : <RxEyeClosed />}
+                  {formik.values.showPassword ? <RxEyeOpen /> : <RxEyeClosed />}
                 </button>
+                {formik.touched.password && formik.errors.password && (
+                  <div className='text-red-500'>{formik.errors.password}</div>
+                )}
               </div>
 
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
                 <input
-                  value={c_password}
-                  onChange={handleC_passwordChange}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.c_password}
                   type='password'
                   id='c_password'
                   className='w-full h-full py-4 px-5 rounded bg-white/15'
+                  placeholder='******'
                 />
-                <label
-                  className='absolute bottom-[25%] left-5 duration-200 3 text-white/50'
-                  htmlFor='c_password'
-                >
-                  Confirm password
-                </label>
+                {formik.touched.c_password && formik.errors.c_password && (
+                  <div className='text-red-500'>{formik.errors.c_password}</div>
+                )}
               </div>
               {error && (
                 <div className='p-3 rounded-md flex item-center text-xs bg-red-600/50 text-white justify-between'>
@@ -296,7 +293,7 @@ const Login = props => {
                   onClick={handleSignState}
                   className='ml-1.5 text-white font-medium cursor-pointer'
                 >
-                  Already have an account?{' '}
+                  Already have an account?
                 </span>
               </p>
             </div>

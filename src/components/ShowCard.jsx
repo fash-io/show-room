@@ -26,7 +26,7 @@ const ShowCard = props => {
         aria-label={show.name || show.title}
       >
         <LazyLoader
-          src={`https://image.tmdb.org/t/p/w500${show.backdrop_path}`}
+          src={`https://image.tmdb.org/t/p/w300${show.backdrop_path}`}
           alt={show.name || show.title}
           className='w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300'
         />
@@ -51,7 +51,7 @@ const ShowCard = props => {
       >
         <Loader />
         <img
-          src={`https://image.tmdb.org/t/p/w500${
+          src={`https://image.tmdb.org/t/p/w300${
             show.poster_path
           }?t=${new Date().getTime()}`}
           alt={show.title || show.name || 'Movie Poster'}
