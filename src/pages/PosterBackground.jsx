@@ -1,15 +1,16 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import randomizeArray from 'randomize-array'
 import { featured } from '../constants/index'
 import '../components/poster-background/index.css'
 import { options } from '../utils/api'
-import { Link, useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading'
 import Error from '../components/Error'
+import randomizeArray from 'randomize-array'
+import { Link, useNavigate } from 'react-router-dom'
 import { HiSwitchHorizontal } from 'react-icons/hi'
-import { BsEyeFill, BsEyeSlash } from 'react-icons/bs'
+import { BsEyeFill, BsEyeSlash, BsMouse } from 'react-icons/bs'
 import { FaRandom } from 'react-icons/fa'
 import { BiHomeAlt2 } from 'react-icons/bi'
+import { LuMouseOff } from 'react-icons/lu'
 
 const PosterBackground = () => {
   const [data, setData] = useState([])
@@ -20,6 +21,8 @@ const PosterBackground = () => {
   const [selectedFeatured, setSelectedFeatured] = useState('default')
   const [isButtonVisible, setIsButtonVisible] = useState(true)
   const [orientation, setOrientation] = useState('slant')
+  const [allowHover, setAllowHover] = useState(true)
+  const [deviceType, setDeviceType] = useState('')
   const navigator = useNavigate()
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -27,6 +30,7 @@ const PosterBackground = () => {
     x: 0,
     y: 0
   })
+
   const fetchMovies = useCallback(async () => {
     setLoading(true)
     let endpoint
@@ -61,23 +65,30 @@ const PosterBackground = () => {
     } finally {
       setLoading(false)
     }
-  }, [selectedFeatured, resolution])
+  }, [selectedFeatured])
 
   useEffect(() => {
     fetchMovies()
   }, [fetchMovies])
 
-  const handleMouseEnter = useCallback((e, movie, i) => {
-    setTooltip({
-      visible: true,
-      index: i,
-      content: `${movie.title || movie.name} (${
-        movie.media_type === 'movie' ? 'Movie' : 'Series'
-      })`,
-      x: e.clientX + 15,
-      y: e.clientY + 15
-    })
-  }, [])
+  const handleMouseEnter = useCallback(
+    (e, movie, i) => {
+      if (allowHover) {
+        setTooltip({
+          visible: true,
+          index: i,
+          content: `${movie.title || movie.name} (${
+            movie.media_type === 'movie' ? 'Movie' : 'Series'
+          })`,
+          x: e.clientX + 15,
+          y: e.clientY + 15
+        })
+      } else {
+        setTooltip({ visible: false, i: undefined, content: '', x: 0, y: 0 })
+      }
+    },
+    [allowHover]
+  )
 
   const handleMouseLeave = useCallback(() => {
     setTooltip({ visible: false, i: undefined, content: '', x: 0, y: 0 })
@@ -107,14 +118,24 @@ const PosterBackground = () => {
     setSelectedMovie(movie)
   }
 
+  useEffect(() => {
+    const detectDeviceType = () => {
+      return /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
+        ? 'Mobile'
+        : 'Desktop'
+    }
+    setDeviceType(detectDeviceType())
+    setOrientation(deviceType === 'Mobile' ? 'straight' : 'slant')
+  }, [])
+
   const posterElements = useMemo(
     () =>
       data.map((movie, i) => (
         <div
           key={i}
-          className={`poster-wrapper cursor-pointer duration-200 ${
+          className={`poster-wrapper cursor-pointer  duration-200 ${
             i === tooltip.index
-              ? 'z-40 brightness-110 scale-[1.7] skew-x-[0deg]'
+              ? 'z-40 brightness-110 scale-[1.8]  skew-x-[0deg] '
               : tooltip.visible
               ? `brightness-[0.4] ${
                   orientation === 'slant' ? 'skew-x-[10deg]' : ''
@@ -195,10 +216,7 @@ const PosterBackground = () => {
           </select>
 
           {isButtonVisible && (
-            <span
-              className='action-button flex items-center justify-center'
-              onClick={() => navigator('/')}
-            >
+            <span className='action-button py-2' onClick={() => navigator('/')}>
               <BiHomeAlt2 />
             </span>
           )}
@@ -234,6 +252,14 @@ const PosterBackground = () => {
           >
             {isButtonVisible ? <BsEyeFill /> : <BsEyeSlash />}
           </button>
+          {isButtonVisible && (
+            <button
+              className='md:block hidden action-button duration-200 py-2'
+              onClick={() => setAllowHover(prev => !prev)}
+            >
+              {allowHover ? <BsMouse /> : <LuMouseOff />}
+            </button>
+          )}
         </div>
       </div>
       <div className={`poster-grid bg-black`} onMouseMove={handleMouseMove}>
