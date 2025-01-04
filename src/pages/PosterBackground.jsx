@@ -126,7 +126,7 @@ const PosterBackground = () => {
           onClick={() => handleMovieClick(movie)}
         >
           <img
-            src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
+            src={`https://image.tmdb.org/t/p/${resolution}/${movie.poster_path}`}
             alt={movie.title || movie.name}
             className='poster-image object-cover'
           />
@@ -138,7 +138,8 @@ const PosterBackground = () => {
       handleMouseLeave,
       tooltip.index,
       tooltip.visible,
-      orientation
+      orientation,
+      resolution
     ]
   )
 
@@ -193,7 +194,6 @@ const PosterBackground = () => {
             <option value='w500'>Ultra Quality</option>
           </select>
 
-          {/* Randomize Button */}
           {isButtonVisible && (
             <span
               className='action-button flex items-center justify-center'
@@ -261,7 +261,7 @@ const PosterBackground = () => {
               {selectedMovie.poster_path ? (
                 <div className='w-[100px] h-[150px] mx-auto relative'>
                   <img
-                    src={`https://image.tmdb.org/t/p/w342${selectedMovie.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/${resolution}/${selectedMovie.poster_path}`}
                     alt={selectedMovie.title || selectedMovie.name}
                     className='modal-image mx-auto z-40 absolute top-0'
                   />
