@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { login, signup } from '../utils/firebase'
 import { toast } from 'react-toastify'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { RxEyeOpen, RxEyeClosed, RxCrossCircled } from 'react-icons/rx'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Loader_ from '../components/Loader_'
 import PosterBackground from '../components/poster-background/PosterBackground'
+
 const Login = props => {
   const { setIsExploring } = props
   const [signState, setSignState] = useState('Login')
@@ -15,10 +16,12 @@ const Login = props => {
   const [selectedShow, setSelectedShow] = useState({})
   const [nextPath, setNextPath] = useState('/')
   const navigator = useNavigate()
+
   const handleSignState = () => {
     setSignState(prevState => (prevState === 'Sign Up' ? 'Login' : 'Sign Up'))
     formik.resetForm()
   }
+
   const validationSchema = Yup.object({
     name:
       signState === 'Sign Up'
@@ -41,8 +44,14 @@ const Login = props => {
             .required('Please confirm your password')
         : Yup.string()
   })
+
   const formik = useFormik({
-    initialValues: { name: '', email: '', password: '', c_password: '' },
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      c_password: ''
+    },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       setLoading(true)
@@ -64,23 +73,42 @@ const Login = props => {
       }
     }
   })
+
   const handleExploring = () => {
     setIsExploring(true)
     navigator(nextPath || '/')
   }
+
   const handleShowSelect = movie => {
-    setSelectedShow(movie)
-    setNextPath(`/${movie.media_type}/${movie.id}`)
+    if (movie === undefined) {
+      setSelectedShow({})
+      setNextPath('/')
+    } else {
+      setSelectedShow(prev => {
+        if (prev.id === movie.id) {
+          return {}
+        }
+        return movie
+      })
+      setNextPath(
+        `/${movie.media_type === 'tv' ? 'series' : movie.media_type}/${
+          movie.id
+        }`
+      )
+    }
   }
+
   useEffect(() => {
     formik.resetForm()
     setError('')
   }, [signState])
+
   return (
     <>
       <PosterBackground
         className='fixed top-0 bottom-0 w-screen h-screen overflow-hidden'
         handleShowSelect={handleShowSelect}
+        selectedShow={selectedShow}
       />
       <div className='h-screen py-5 lg:px-[8%] px-2 bg-gradient flex'>
         <div className='w-full relative max-w-md transition-all duration-500 overflow-hidden bg-black bg-opacity-75 rounded-2xl shadow-white/10 shadow-lg py-16 px-10 sm:p-16 m-auto backdrop-blur-sm flex'>
@@ -91,11 +119,6 @@ const Login = props => {
           >
             <div className='flex items-center justify-between mb-7'>
               <h1 className='text-3xl font-medium'>Login</h1>
-              {(selectedShow.name || selectedShow.title) && (
-                <p className='text-xs text-slate-500 max-w-[60%]'>
-                  Redirect: {selectedShow.name || selectedShow.title}
-                </p>
-              )}
             </div>
             <form onSubmit={formik.handleSubmit} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
@@ -178,6 +201,12 @@ const Login = props => {
               </div>
             </div>
           </div>
+          {selectedShow.name || selectedShow.title ? (
+            <div className='absolute bottom-5 left-0 right-0 text-center  transform text-sm text-red-400'>
+              <span className='text-white'>Redirect:</span>{' '}
+              {selectedShow.name || selectedShow.title}
+            </div>
+          ) : null}
 
           <div
             className={`w-full transition-transform duration-500 h-full  ${
@@ -186,11 +215,6 @@ const Login = props => {
           >
             <div className='flex items-center justify-between mb-7'>
               <h1 className='md:text-3xl font-medium'>Sign Up</h1>
-              {(selectedShow.name || selectedShow.title) && (
-                <p className='text-xs text-slate-500 max-w-[60%]'>
-                  Redirect: {selectedShow.name || selectedShow.title}
-                </p>
-              )}
             </div>
             <form onSubmit={formik.handleSubmit} className='space-y-5'>
               <div className='relative w-full txt_field backdrop-blur-sm text-white font-medium'>
@@ -291,7 +315,7 @@ const Login = props => {
               <p>
                 <span
                   onClick={handleSignState}
-                  className='ml-1.5 text-white font-medium cursor-pointer'
+                  className='ml-1.5 text-white/50 font-sm cursor-pointer'
                 >
                   Already have an account?
                 </span>

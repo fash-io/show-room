@@ -91,13 +91,13 @@ const ContentPage = () => {
     fetchContentDetails()
   }, [id, type])
 
-  const handlePlayTrailer = () => {
+  useEffect(() => {
     const playTrailer = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/${type === 'series' ? 'tv' : type}/${
-            content.id
-          }/videos?language=en-US`,
+          `https://api.themoviedb.org/3/${
+            type === 'series' ? 'tv' : type
+          }/${id}/videos?language=en-US`,
           options
         )
         const data = await response.json()
@@ -105,8 +105,7 @@ const ContentPage = () => {
           video => video.type === 'Trailer' && video.site === 'YouTube'
         )
         if (trailer) {
-          setTrailerUrl(`https://www.youtube.com/embed/${trailer.key}`)
-          setIsTrailerPlaying(true)
+          setTrailerUrl(trailer.key)
         } else {
           alert('Trailer not available')
         }
@@ -115,7 +114,7 @@ const ContentPage = () => {
       }
     }
     playTrailer()
-  }
+  }, [])
 
   if (error) {
     return <Error />
@@ -137,17 +136,26 @@ const ContentPage = () => {
       {loading && <Loading transparent={true} />}
       <div className='text-white min-h-screen'>
         <div className='relative'>
-          {isTrailerPlaying && trailerUrl ? (
-            <>
+          {isTrailerPlaying ? (
+            <div className='relative pt-20'>
               <iframe
-                src={`${trailerUrl}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${trailerUrl}?autoplay=1`}
                 title='Trailer'
                 width='100%'
                 height='300'
-                className='object-cover h-[400px] sm:h-[600px] max-h-[75vh] w-full object-top z-[9999]'
+                className='object-cover h-[400px] sm:h-[600px] max-h-[75vh] w-full object-top'
                 aria-controls='none'
+                allow='autoplay; encrypted-media'
+                allowFullScreen
               />
-            </>
+              <span
+                className='absolute right-4 top-20 xl:w-40 xl:h-20 bg-black sm:right-6 cursor-pointer flex items-center justify-center    text-white text-xl font-bold rounded-full shadow-md transition duration-300 ease-in-out'
+                title='Close'
+                onClick={() => setIsTrailerPlaying(false)}
+              >
+                &times;
+              </span>
+            </div>
           ) : content.backdrop_path ? (
             <>
               <img
@@ -163,12 +171,17 @@ const ContentPage = () => {
                   className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto '
                 />
                 <p className='text-sm sm:text-xl italic'>{content.tagline}</p>
-                <span className='p-3 bg-black/70 cursor-pointer rounded-lg py-2 inline-block'>
-                  <span>
-                    <BsYoutube />
+                {trailerUrl && (
+                  <span
+                    className='p-3 bg-black/70 cursor-pointer rounded-lg py-2 inline-block space-x-5 transform duration-200 hover:scale-x-110'
+                    onClick={() => setIsTrailerPlaying(true)}
+                  >
+                    <span>
+                      <BsYoutube className='text-red-700 inline' />
+                    </span>
+                    <span>Play Trailer</span>
                   </span>
-                  <span>Play Trailer</span>
-                </span>
+                )}
               </div>
             </>
           ) : (

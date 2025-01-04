@@ -140,9 +140,7 @@ const Slider = props => {
                 {logos[movie.id] ? (
                   // If there's an English logo, display it
                   <img
-                    src={`https://image.tmdb.org/t/p/original${
-                      logos[movie.id]
-                    }`}
+                    src={`https://image.tmdb.org/t/p/w500${logos[movie.id]}`}
                     alt={movie.title || movie.name}
                     className='max-w-[200px] sm:max-w-[200px] md:max-w-[200px] min-w-[200px] me-auto mb-4'
                   />

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { options } from '../../utils/api'
 import randomizeArray from 'randomize-array'
 import './index.css'
 
-const PosterBackground = ({ className, handleShowSelect }) => {
+const PosterBackground = ({ className, handleShowSelect, selectedShow }) => {
   const [error, setError] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
@@ -42,9 +42,8 @@ const PosterBackground = ({ className, handleShowSelect }) => {
 
     fetchApiData()
   }, [])
-  console.log(loading)
 
-  const handleMouseEnter = (e, movie, i) => {
+  const handleMouseEnter = useCallback((e, movie, i) => {
     setTooltip({
       visible: true,
       index: i,
@@ -54,21 +53,67 @@ const PosterBackground = ({ className, handleShowSelect }) => {
       x: e.clientX + 15,
       y: e.clientY + 15
     })
-  }
+  }, [])
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     setTooltip({ visible: false, i: undefined, content: '', x: 0, y: 0 })
-  }
+  }, [])
 
-  const handleMouseMove = e => {
-    if (tooltip.visible) {
-      setTooltip(prev => ({
-        ...prev,
-        x: e.clientX + 15,
-        y: e.clientY + 15
-      }))
-    }
-  }
+  const handleMouseMove = useCallback(
+    e => {
+      if (tooltip.visible) {
+        setTooltip(prev => ({
+          ...prev,
+          x: e.clientX + 15,
+          y: e.clientY + 15
+        }))
+      }
+    },
+    [tooltip.visible]
+  )
+
+  const posterElements = useMemo(
+    () =>
+      data.map((movie, i) => (
+        <div
+          key={i}
+          className={`poster-wrapper cursor-pointer duration-200 ${
+            i === tooltip.index || selectedShow.id === movie.id
+              ? 'z-50 brightness-110 scale-[1.7] skew-x-[0deg]'
+              : tooltip.visible
+              ? 'brightness-[0.4] -skew-x-[10deg]'
+              : selectedShow.id
+              ? 'brightness-[0.4] -skew-x-[10deg]'
+              : 'brightness-[0.6] -skew-x-[10deg]'
+          }`}
+          onMouseEnter={e => handleMouseEnter(e, movie, i)}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => {
+            if (selectedShow.id === movie.id) {
+              handleShowSelect()
+            } else {
+              handleShowSelect(movie)
+            }
+          }}
+        >
+          <img
+            src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
+            alt={movie.title || movie.name}
+            className='poster-image'
+          />
+        </div>
+      )),
+    [
+      data,
+      handleMouseEnter,
+      handleMouseLeave,
+      handleShowSelect,
+      selectedShow.id,
+      tooltip.index,
+      tooltip.visible
+    ]
+  )
+  console.log('hi')
 
   if (loading || error) {
     return <div className='login'></div>
@@ -76,30 +121,10 @@ const PosterBackground = ({ className, handleShowSelect }) => {
   return (
     <>
       <div
-        className={`poster-grid login_2 z-50 bg-black ${className}`}
+        className={`poster-grid login_2 bg-black ${className}`}
         onMouseMove={handleMouseMove}
       >
-        {data.map((movie, i) => (
-          <div
-            key={i}
-            className={`poster-wrapper cursor-pointer duration-200 ${
-              i === tooltip.index
-                ? 'brightness-100 z-50'
-                : tooltip.visible
-                ? 'brightness-50'
-                : 'brightness-100'
-            }`}
-            onMouseEnter={e => handleMouseEnter(e, movie, i)}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => handleShowSelect(movie)}
-          >
-            <img
-              src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
-              alt={movie.title || movie.name}
-              className='poster-image'
-            />
-          </div>
-        ))}
+        {posterElements}
         {tooltip.visible && (
           <div
             className='tooltip'

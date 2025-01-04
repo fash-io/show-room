@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "https://image.tmdb.org",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,9 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dom-to-image-more": "^3.5.0",
     "dotenv": "^16.4.5",
     "firebase": "^10.13.1",
     "formik": "^2.4.6",
+    "html2canvas": "^1.4.1",
     "lodash.debounce": "^4.0.8",
     "randomize-array": "^1.2.0",
     "react": "^18.3.1",
