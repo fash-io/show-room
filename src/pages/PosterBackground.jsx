@@ -61,11 +61,19 @@ const PosterBackground = () => {
     const gridElement = document.querySelector('.poster-grid')
     const images = gridElement.querySelectorAll('img')
 
-    // Wait for all images to load before rendering the canvas
+    // Use CORS proxy for images to avoid CORS issues
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+
+    // Preload images and ensure they are ready
     await Promise.all(
       Array.from(images).map(
         img =>
           new Promise(resolve => {
+            // Change image src to go through the CORS proxy
+            img.src = `${proxyUrl}https://image.tmdb.org/t/p/${resolution}${
+              img.src.split('/t/p/')[1]
+            }`
+
             if (img.complete) {
               resolve()
             } else {
@@ -76,8 +84,9 @@ const PosterBackground = () => {
       )
     )
 
+    // Wait for all images to load
     const canvas = await html2canvas(gridElement, {
-      useCORS: true, // Enable CORS to allow external images
+      useCORS: true, // Allow CORS for images
       scale: 2,
       backgroundColor: null,
       allowTaint: true,
