@@ -113,7 +113,6 @@ const PosterBackground = ({ className, handleShowSelect, selectedShow }) => {
       tooltip.visible
     ]
   )
-  console.log('hi')
 
   if (loading || error) {
     return <div className='login'></div>

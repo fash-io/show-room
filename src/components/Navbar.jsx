@@ -17,7 +17,6 @@ const Navbar = () => {
   const navigate = useNavigate()
   const searchRef = useRef()
   const IconRef = useRef()
-  const resultRef = useRef()
   const navRef = useRef()
 
   const searchMovies = async () => {
@@ -31,7 +30,7 @@ const Navbar = () => {
       const data = await response.json()
       setResults(data.results || [])
     } catch (err) {
-      console.log('Error fetching search results:', err)
+      console.error('Error fetching search results:', err)
     }
   }
 
@@ -238,6 +237,7 @@ const Navbar = () => {
         }
       >
         {navLinks
+          .filter(movie => movie.order > 0)
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
             <Link
@@ -265,6 +265,17 @@ const Navbar = () => {
               >
                 {val.label}
               </li>
+            </Link>
+          ))}
+        {navLinks
+          .filter(val => val.order === 0)
+          .map((val, i) => (
+            <Link
+              key={i}
+              to={val.href}
+              className='fixed bottom-[8%] right-[2%] z-50 p-3 py-2 aspect-square rounded-full bg-gradient-to-r from-[#ff7e5f] to-[#1a2a6c]'
+            >
+              <i className={`fa-solid ${val.icon} text-lg`}></i>
             </Link>
           ))}
       </ul>

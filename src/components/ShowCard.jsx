@@ -1,14 +1,7 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import LazyLoader from './LazyLoader'
-import { RxChevronRight } from 'react-icons/rx'
 const ShowCard = props => {
   const { show, type_, type, mediaType } = props
-  const [isLoading, setIsLoading] = useState(true) // To track if the image is loading
-
-  const handleImageLoad = () => {
-    setIsLoading(false)
-  }
 
   const Loader = () => (
     <div
@@ -51,12 +44,9 @@ const ShowCard = props => {
       >
         <Loader />
         <img
-          src={`https://image.tmdb.org/t/p/w300${
-            show.poster_path
-          }?t=${new Date().getTime()}`}
+          src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
           alt={show.title || show.name || 'Movie Poster'}
           className='cursor-pointer object-cover h-full w-full rounded-lg group-hover:scale-110 transition-transform duration-300'
-          onLoad={handleImageLoad}
         />
 
         <div className='absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg group-hover:opacity-100'>
@@ -75,7 +65,6 @@ const ShowCard = props => {
             src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
             alt={show.title || show.name}
             className='w-full h-full object-cover rounded-lg'
-            onLoad={handleImageLoad}
           />
         </div>
 

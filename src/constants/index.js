@@ -3,7 +3,8 @@ export const navLinks = [
   { label: 'TV Shows', href: '/series', icon: 'fa-tv', order: 1, index: 2 },
   { label: 'Movies', href: '/movies', icon: 'fa-film', order: 2, index: 3 },
   { label: 'Trending', href: '/trending', icon: 'fa-fire', order: 4, index: 4 },
-  { label: 'My List', href: '/list', icon: 'fa-list', order: 5, index: 5 }
+  { label: 'My List', href: '/list', icon: 'fa-list', order: 5, index: 5 },
+  { label: 'Poster', href: '/poster', icon: 'fa-images', order: 0, index: 6 }
 ]
 
 export const footerLinks = [

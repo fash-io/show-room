@@ -9,7 +9,7 @@
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1025px) {
   .poster-grid {
     grid-template-columns: repeat(15, 1fr);
   }
@@ -23,7 +23,7 @@
 
 @media (max-width: 576px) {
   .poster-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -79,18 +79,22 @@
   bottom: 10px;
   left: 10px;
 }
-.action-button {
-  padding: 10px 20px;
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
+.action-button,
+.action-select {
+  border-radius: 500px;
+  /* font-size: 13px; */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 5px 10px;
+  background-color: transparent;
+  transition: 200ms;
 }
-.action-button:hover {
-  background-color: #b71c1c;
+.action-button:hover,
+.action-select:hover,
+.action-select:focus {
+  background-color: #fff;
+  color: black;
+  /* transform: scale(1.1); */
+  outline: none;
 }
 
 .movie-modal {
@@ -104,10 +108,11 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fade_in 0.5s forwards;
 }
 
 .modal-content {
-  background: #fff;
+  background: rgba(0, 0, 0, 0.8);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
@@ -115,6 +120,24 @@
   text-align: center;
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: scale_in 0.2s ease-out forwards;
+}
+
+@keyframes scale_in {
+  from {
+    transform: scale(0.3);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes fade_in {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .close-button {
@@ -149,29 +172,31 @@
 .modal-details h2 {
   margin-top: 10px;
   font-size: 22px;
-  color: #333;
+  color: #fff;
 }
 
 .modal-details p {
   margin: 5px 0;
-  color: #666;
+  color: #fff;
 }
 
 .modal-link {
   display: inline-block;
   margin-top: 10px;
   padding: 10px 15px;
-  background: #1976d2;
+  border: 1px solid white;
   color: #fff;
   text-decoration: none;
-  border-radius: 4px;
-  transition: background 0.3s ease;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  transform: scale(0.8);
 }
 
 .modal-link:hover {
-  background: #0d47a1;
+  background: #fff;
+  color: black;
+  transform: scale(0.85);
 }
-
 .loading,
 .error {
   color: #bbb;
@@ -195,21 +220,3 @@
   z-index: 50;
 }
 /* Dropdown Menu */
-.action-select {
-  padding: 10px 15px;
-  background-color: #1e1e1e;
-  color: white;
-  border: 1px solid #444;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.action-select:focus {
-  outline: none;
-  border-color: #e53935;
-}
-
-.action-select + .action-button {
-  margin-left: 10px;
-}

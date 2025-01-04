@@ -101,8 +101,6 @@ const Slider = props => {
     }
   }, [])
 
-  console.log(logos)
-
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
       <div

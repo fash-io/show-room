@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import Error from '../components/Error'
-import Loader_ from '../components/Loader_' // A loader_ component
+import Loader_ from '../components/Loader_'
 import { options } from '../utils/api'
 import ShowCard from '../components/ShowCard'
 import { FaFilter, FaTimes } from 'react-icons/fa'
@@ -15,7 +15,7 @@ const PopularPage = () => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isPrefetching, setIsPrefetching] = useState(false)
-  const [showFilters, setShowFilters] = useState(false) // State to manage filter visibility
+  const [showFilters, setShowFilters] = useState(false)
   const observerRef = useRef()
 
   const fetchMovies = useCallback(async () => {
@@ -102,7 +102,7 @@ const PopularPage = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
+      if (window.scrollY > 10) {
         filterRef.current.classList.add('scrolled')
       } else {
         filterRef.current.classList.remove('scrolled')
@@ -120,7 +120,7 @@ const PopularPage = () => {
   return (
     <div className='min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8'>
       <button
-        className='fixed md:hidden bottom-14 right-4 bg-blue-500 text-white p-4 rounded-full z-50 mobile-filter-btn'
+        className='fixed md:hidden bottom-[7%] left-[2%] z-50 p-3 py-2 aspect-square rounded-full bg-blue-500 text-white mobile-filter-btn'
         onClick={() => setShowFilters(!showFilters)}
       >
         <FaFilter />
@@ -128,7 +128,7 @@ const PopularPage = () => {
       <div
         ref={filterRef}
         className={`mobile-filter-popup md:visible  ${
-          showFilters ? 'visible' : 'hidden'
+          showFilters ? 'max-md:visible' : 'max-md:hidden'
         } md:visible`}
       >
         <button
@@ -204,7 +204,7 @@ const PopularPage = () => {
             />
           ))}
       </div>
-      {loading && <Loader_ />} {/* Show loader when fetching new data */}
+      {loading && <Loader_ />}
       <div ref={observerRef} className='h-10'></div>
     </div>
   )

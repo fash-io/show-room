@@ -64,7 +64,9 @@ const App = () => {
     <>
       <UserContext.Provider value={{ user: user, userData: userData }}>
         <ToastContainer className={'toast-container z-[1000]'} />
-        {(location.pathname !== '/login' || location.pathname !== 'poster') && (
+        {location.pathname === '/login' || location.pathname === '/poster' ? (
+          <></>
+        ) : (
           <Navbar />
         )}
         <Routes>
@@ -88,7 +90,9 @@ const App = () => {
           <Route path='/faq' element={<FAQ />} />
           <Route path='*' element={<Error />} />
         </Routes>
-        {location.pathname !== '/login' && location.pathname !== 'poster' && (
+        {location.pathname === '/login' || location.pathname === '/poster' ? (
+          <></>
+        ) : (
           <Footer />
         )}
       </UserContext.Provider>

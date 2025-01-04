@@ -124,8 +124,6 @@ const ContentPage = () => {
     return <Loading />
   }
 
-  console.log(trailerUrl, isTrailerPlaying)
-
   const directors =
     type === 'series'
       ? content.created_by
