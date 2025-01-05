@@ -181,12 +181,20 @@ const PosterBackground = () => {
 
   return (
     <div className='poster-page'>
-      <div className='flex fixed bottom-5 z-50 left-0 right-0 justify-center'>
+      <div className='flex fixed bottom-5 z-50 left-0 right-0 justify-center pointer-events-none'>
         <div
-          className={`flex gap-[2px] sm:gap-2 md:pag-4 bg-black/80 lg:p-5 lg:py-3 rounded-full p-2 duration-200 hover:opacity-100 text-xs sm:text-[13px] backdrop-blur-sm ${
+          className={`flex gap-[2px] sm:gap-2 md:pag-4 bg-black/80 lg:p-5 lg:py-3 rounded-full p-2 duration-200 hover:opacity-100 text-xs sm:text-[13px] backdrop-blur-sm pointer-events-auto ${
             !isButtonVisible && 'px-3 py-3 lg:px-3 lg:py-3 opacity-70'
           }`}
         >
+          {isButtonVisible && (
+            <button
+              className='md:block hidden action-button duration-200 py-2'
+              onClick={() => setAllowHover(prev => !prev)}
+            >
+              {allowHover ? <BsMouse /> : <LuMouseOff />}
+            </button>
+          )}
           <select
             className={`action-select transition-all duration-200 sm:text-xs text-[9px] ${
               !isButtonVisible && 'hidden'
@@ -252,14 +260,6 @@ const PosterBackground = () => {
           >
             {isButtonVisible ? <BsEyeFill /> : <BsEyeSlash />}
           </button>
-          {isButtonVisible && (
-            <button
-              className='md:block hidden action-button duration-200 py-2'
-              onClick={() => setAllowHover(prev => !prev)}
-            >
-              {allowHover ? <BsMouse /> : <LuMouseOff />}
-            </button>
-          )}
         </div>
       </div>
       <div className={`poster-grid bg-black`} onMouseMove={handleMouseMove}>

@@ -1,276 +1,327 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import Error from '../components/Error'
-import { calculateAge } from '../constants'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Carousel } from 'react-responsive-carousel'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { FaImdb, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa'
+import 'animate.css'
 import { options } from '../utils/api'
-import Loading from '../components/Loading'
+import { BiLinkExternal } from 'react-icons/bi'
+import { LuLink } from 'react-icons/lu'
 
-const PersonPage = () => {
-  const { id } = useParams()
-  const [actor, setActor] = useState(null)
-  const [movies, setActorMovies] = useState(null)
-  const [error, setError] = useState(null)
+const Profile = () => {
+  const [profile, setProfile] = useState(null)
+  const [credits, setCredits] = useState([])
+  const [taggedImages, setTaggedImages] = useState([])
+  const [externalIds, setExternalIds] = useState({})
+  const [tvCredits, setTvCredits] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCredit, setSelectedCredit] = useState(null)
   const [filter, setFilter] = useState('all')
-  const [sortType, setSort] = useState('popularity')
-  const [loading, setLoading] = useState(true)
 
-  const fetchActorDetails = useCallback(async () => {
-    'Fetching actor details for ID:', id
-    setLoading(true)
-    try {
-      const actorResponse = await fetch(
-        `https://api.themoviedb.org/3/person/${id}?language=en-US`,
-        options
-      )
-      const actorData = await actorResponse.json()
-      if (actorResponse.ok) {
-        setActor(actorData)
-      } else {
-        setError(actorData.status_message || 'Error fetching actor data.')
-      }
-
-      const moviesResponse = await fetch(
-        `https://api.themoviedb.org/3/person/${id}/combined_credits?language=en-US`,
-        options
-      )
-      const movieData = await moviesResponse.json()
-      if (moviesResponse.ok) {
-        setActorMovies(movieData)
-      } else {
-        setError(movieData.status_message || 'Error fetching movies.')
-      }
-    } catch (err) {
-      setError('Failed to load actor details.')
-      console.error('Fetch error:', err)
-    } finally {
-      setLoading(false)
-    }
-  }, [id])
+  const personId = 226001 // Replace with the actual person ID
 
   useEffect(() => {
-    fetchActorDetails()
-  }, [fetchActorDetails])
+    const fetchData = async () => {
+      try {
+        const profileRes = await axios.get(
+          `https://api.themoviedb.org/3/person/${personId}`,
+          options
+        )
+        const creditsRes = await axios.get(
+          `https://api.themoviedb.org/3/person/${personId}/movie_credits`,
+          options
+        )
+        const tvCreditsRes = await axios.get(
+          `https://api.themoviedb.org/3/person/${personId}/tv_credits`,
+          options
+        )
+        const taggedImagesRes = await axios.get(
+          `https://api.themoviedb.org/3/person/${personId}/tagged_images`,
+          options
+        )
+        const externalIdsRes = await axios.get(
+          `https://api.themoviedb.org/3/person/${personId}/external_ids`,
+          options
+        )
 
-  const handleFilterChange = e => {
-    setFilter(e.target.value)
-  }
-
-  const handleSortChange = e => {
-    setSort(e.target.value)
-  }
-
-  const movies_ =
-    movies?.cast?.filter(credit => {
-      if (credit.media_type === 'tv') {
-        return credit.episode_count > 5
+        setProfile(profileRes.data)
+        setCredits(creditsRes.data.cast)
+        setTvCredits(tvCreditsRes.data.cast)
+        setTaggedImages(taggedImagesRes.data.results)
+        setExternalIds(externalIdsRes.data)
+      } catch (error) {
+        console.error(error)
       }
-      return true
-    }) || []
+    }
 
-  const filteredMovies = movies_?.length
-    ? filter === 'all'
-      ? movies_
-      : movies_.filter(credit => credit.media_type === filter)
-    : []
+    fetchData()
+  }, [personId])
 
-  const filteredMoviesDir = movies?.crew?.length
-    ? movies.crew.filter(
-        member =>
-          member.job === 'Director' &&
-          (filter === 'all' || member.media_type === filter)
-      )
-    : []
-
-  const sortMovies = moviesToSort => {
-    return moviesToSort.sort((a, b) => {
-      switch (sortType) {
-        case 'name':
-          return (a.title || a.name).localeCompare(b.title || b.name)
-        case 'release_date':
-          return (
-            new Date(b.release_date || b.first_air_date) -
-            new Date(a.release_date || a.first_air_date)
-          )
-
-        case 'popularity':
-          return b.popularity - a.popularity
-        case 'rating':
-          return b.vote_average - a.vote_average
-        default:
-          return 0
-      }
-    })
+  const formatDate = dateStr => {
+    if (!dateStr) return 'N/A'
+    const date = new Date(dateStr)
+    const options = { day: 'numeric', month: 'long', year: 'numeric' }
+    return date.toLocaleDateString(undefined, options)
+  }
+  const calculateAge = dateStr => {
+    if (!dateStr) return 'N/A'
+    const birthDate = new Date(dateStr)
+    const ageDiffMs = Date.now() - birthDate.getTime()
+    const ageDate = new Date(ageDiffMs)
+    return Math.abs(ageDate.getUTCFullYear() - 1970)
   }
 
-  const sortedMovies = sortMovies(filteredMovies)
-  const sortedMoviesDir = sortMovies(filteredMoviesDir)
-
-  if (error) {
-    return <Error error={error} />
+  const handleOpenModal = credit => {
+    setSelectedCredit(credit)
+    setIsModalOpen(true)
   }
 
-  if (loading || !actor || !movies) {
-    return <Loading transparent={true} />
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedCredit(null)
   }
 
-  const today = new Date()
-  today.getFullYear()
+  const filteredCredits = credits.concat(tvCredits).filter(credit => {
+    if (filter === 'all') return true
+    if (filter === 'acting' && credit.character) return true
+    if (filter === 'directing' && credit.job === 'Director') return true
+    return false
+  })
+
+  if (!profile) return <div>Loading...</div>
 
   return (
-    <>
-      <div className='relative min-h-screen bg-black text-white p-4 md:p-8 lg:p-20'>
-        <div className='flex flex-col lg:flex-row items-start lg:space-x-12 mt-8 lg:mt-0 sm:p-8 p-2'>
-          <div className='lg:w-1/3 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:sticky lg:top-32 max-sm:w-full'>
-            <img
-              src={
-                actor.profile_path
-                  ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-                  : 'https://via.placeholder.com/300x450?text=No+Image'
-              }
-              alt={actor.name}
-              className='rounded-lg shadow-xl border border-gray-700 w-48 h-auto lg:w-full lg:max-w-xs'
-            />
-          </div>
-
-          <div className='lg:w-2/3 space-y-4 lg:p-0'>
-            <h1
-              className='text-3xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent inline-block'
-              style={{
-                backgroundImage: 'linear-gradient(to right, #ff7e5f, #1a2a6c)'
-              }}
-            >
-              {actor.name}
-            </h1>
-            <p className='text-base lg:text-lg leading-relaxed'>
-              {actor.biography}
-            </p>
-
-            <div className='mt-6 space-y-2'>
+    <div className='bg-gray-900 text-white p-4 min-h-screen'>
+      <div className='max-w-7xl mx-auto pt-20'>
+        <div className='grid grid-cols-1 md:grid-cols-8 gap-8'>
+          <div className='md:col-span-2 space-y-8'>
+            <div className='space-y-4'>
+              <img
+                className='w-full object-cover rounded-lg'
+                src={`https://image.tmdb.org/t/p/w500${profile.profile_path}`}
+                alt={profile.name}
+              />
+              <div className='flex gap-10'>
+                <div className=' flex gap-3 w-3/4 text-2xl'>
+                  <a
+                    className='transition-transform'
+                    href={`https://www.imdb.com/name/${externalIds.imdb_id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaImdb />
+                  </a>
+                  <a
+                    className='transition-transform'
+                    href={`https://www.facebook.com/${externalIds.facebook_id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaFacebook />
+                  </a>
+                  <a
+                    className='transition-transform'
+                    href={`https://www.instagram.com/${externalIds.instagram_id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaInstagram />
+                  </a>
+                  <a
+                    className='transition-transform'
+                    href={`https://twitter.com/${externalIds.twitter_id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaTwitter />
+                  </a>
+                </div>
+                <a href={profile.homepage}>
+                  <LuLink />
+                </a>
+              </div>
+            </div>
+            <div className='bg-black/80 p-4 rounded-lg space-y-3'>
+              <h2 className='text-2xl font-bold mb-2'>Personal Info</h2>
               <p>
-                <span className='font-semibold text-slate-500'>Known For:</span>{' '}
-                {actor.known_for_department}
-              </p>
-              <p>
-                <span className='font-semibold text-slate-500'>Birthday:</span>{' '}
-                {actor.birthday}{' '}
-                <span className='text-sm'>
-                  ({calculateAge(actor.birthday).years} years old)
+                <strong>Known For:</strong>
+                <span className='block text-sm text-white/70'>
+                  {profile.known_for_department}
                 </span>
               </p>
               <p>
-                <span className='font-semibold text-slate-500'>
-                  Place of Birth:
-                </span>{' '}
-                {actor.place_of_birth}
+                <strong>Known Credits:</strong>
+                <span className='block text-sm text-white/70'>
+                  {credits.length + tvCredits.length}
+                </span>
               </p>
-              {actor.homepage && (
-                <p>
-                  <span className='font-semibold text-slate-500'>
-                    Official Website:
-                  </span>{' '}
-                  <a
-                    href={actor.homepage}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-blue-400 hover:underline'
-                  >
-                    {actor.homepage}
-                  </a>
-                </p>
-              )}
-              {actor.imdb_id && (
-                <p>
-                  <span className='font-semibold text-slate-500'>
-                    IMDb Profile:
-                  </span>{' '}
-                  <a
-                    href={`https://www.imdb.com/name/${actor.imdb_id}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-blue-400 hover:underline'
-                  >
-                    IMDb
-                  </a>
-                </p>
-              )}
+              <p>
+                <strong>Gender:</strong>
+                <span className='block text-sm text-white/70'>
+                  {profile.gender === 1 ? 'Female' : 'Male'}
+                </span>
+              </p>
+              <p>
+                <strong>Birthdate:</strong>
+                <span className='block text-sm text-white/70'>
+                  {formatDate(profile.birthday)} (
+                  {calculateAge(profile.birthday)} years old)
+                </span>
+              </p>
+              <p>
+                <strong>Place of Birth:</strong>
+                <span className='block text-sm text-white/70'>
+                  {profile.place_of_birth}
+                </span>
+              </p>
+              <p>
+                <strong>Also known as</strong>
+                <span className='block text-sm text-white/70'>
+                  {profile.also_known_as}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className='md:col-span-6 space-y-8'>
+            <div className='bg-gray-800 p-6 rounded-lg'>
+              <h1 className='text-4xl font-bold mb-4'>{profile.name}</h1>
+              <p>{profile.biography}</p>
+            </div>
+
+            <div className='bg-gray-800 p-6 rounded-lg'>
+              <h2 className='text-3xl font-semibold mb-4'>Known For</h2>
+              <Carousel showThumbs={false} showStatus={false} useKeyboardArrows>
+                {credits
+                  .concat(tvCredits)
+                  .slice(0, 10)
+                  .map(credit => (
+                    <div key={credit.id}>
+                      <img
+                        className='w-32 object-cover h-40 rounded-lg'
+                        src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
+                        alt={credit.title || credit.name}
+                      />
+                      <p className='legend'>{credit.title || credit.name}</p>
+                    </div>
+                  ))}
+              </Carousel>
+            </div>
+
+            <div className='bg-gray-800 p-6 rounded-lg'>
+              <h2 className='text-3xl font-semibold mb-4'>Filmography</h2>
+              <div className='space-y-4'>
+                <div className='flex justify-between items-center'>
+                  <h3 className='text-2xl font-bold'>Credits</h3>
+                  <div>
+                    <button
+                      className='text-blue-500 hover:underline mr-4'
+                      onClick={() => setFilter('acting')}
+                    >
+                      Acting
+                    </button>
+                    <button
+                      className='text-blue-500 hover:underline'
+                      onClick={() => setFilter('directing')}
+                    >
+                      Directing
+                    </button>
+                  </div>
+                </div>
+                <ul className='space-y-2'>
+                  {filteredCredits.map(credit => (
+                    <li
+                      key={credit.id}
+                      className='border-b border-gray-700 pb-2'
+                    >
+                      <button
+                        onClick={() => handleOpenModal(credit)}
+                        className='text-left w-full hover:bg-gray-700 p-2 rounded'
+                      >
+                        <div className='flex items-center space-x-4'>
+                          <img
+                            className='w-16 h-auto rounded-lg'
+                            src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
+                            alt={credit.title || credit.name}
+                          />
+                          <div>
+                            <strong>{credit.title || credit.name}</strong> (
+                            {credit.release_date
+                              ? credit.release_date.split('-')[0]
+                              : 'N/A'}
+                            ) <br />
+                            <span className='text-sm text-gray-400'>
+                              {credit.character}
+                            </span>
+                          </div>
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className='bg-gray-800 p-6 rounded-lg'>
+              <h2 className='text-3xl font-semibold mb-4'>Tagged Images</h2>
+              <Carousel showThumbs={false} showStatus={false} useKeyboardArrows>
+                {taggedImages.map(image => (
+                  <div key={image.id}>
+                    <img
+                      className='w-32 h-auto rounded-lg mx-auto'
+                      src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
+                      alt='Tagged'
+                    />
+                  </div>
+                ))}
+              </Carousel>
             </div>
           </div>
         </div>
-
-        {(actor.known_for_department === 'Acting'
-          ? sortedMovies.length
-          : sortedMoviesDir.length) > 0 && (
-          <div className='mt-12'>
-            <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4'>
-              <h2 className='text-2xl md:text-4xl font-semibold'>
-                Filmography
-              </h2>
-              <div className='flex gap-4'>
-                <select
-                  value={filter}
-                  onChange={handleFilterChange}
-                  className='bg-gray-800 text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-700 transition'
-                >
-                  <option value='all'>All</option>
-                  <option value='movie'>Movies</option>
-                  <option value='tv'>Series</option>
-                </select>
-                <select
-                  value={sortType}
-                  onChange={handleSortChange}
-                  className='bg-gray-800 text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-700 transition'
-                >
-                  <option value='popularity'>Popular</option>
-                  <option value='rating'>Rating</option>
-                  <option value='name'>Name</option>
-                  <option value='release_date'>Release Date</option>
-                </select>
-              </div>
-            </div>
-            <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6'>
-              {(actor.known_for_department === 'Acting'
-                ? sortedMovies
-                : sortedMoviesDir
-              ).map((credit, index) => (
-                <Link
-                  key={credit.credit_id + index}
-                  to={`/${credit.media_type === 'movie' ? 'movie' : 'series'}/${
-                    credit.id
-                  }`}
-                  className='group bg-gray-800 rounded-t-lg overflow-hidden shadow-lg  transform  sm:hover:shadow-2xl w-full h-72 sm:h-80 lg:h-96 flex items-end group'
-                >
-                  <img
-                    src={
-                      credit.poster_path
-                        ? `https://image.tmdb.org/t/p/w400${credit.poster_path}`
-                        : 'https://via.placeholder.com/200x300?text=No+Image'
-                    }
-                    alt={credit.title || credit.name}
-                    className='w-full h-72 sm:h-80 lg:h-96 object-cover rounded-t-lg absolute -z-10 sm:group-hover:scale-110 duration-200'
-                  />
-                  <div
-                    className='pb-0 sm:p-4 w-full inset-10 bg-gradient-to-t from-black to-transparent'
-                    style={{ textShadow: '0px 0px 5px rgba(0, 0, 0, 1)' }}
-                  >
-                    {credit.character ? (
-                      <h3 className='hidden sm:block text-gray-100 text-sm'>
-                        AS: {credit.character}
-                      </h3>
-                    ) : (
-                      <p className='text-gray-400'>{credit.job}</p>
-                    )}
-                    <p className='text-gray-400 text-xs'>
-                      {credit.release_date || credit.first_air_date}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
-    </>
+
+      {isModalOpen && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-gray-800 p-6 rounded-lg relative'>
+            {selectedCredit && (
+              <div>
+                <button
+                  className='absolute top-2 right-2 text-white'
+                  onClick={handleCloseModal}
+                >
+                  X
+                </button>
+                <h2 className='text-2xl font-bold mb-4'>
+                  {selectedCredit.title || selectedCredit.name}
+                </h2>
+                <p>
+                  <strong>Release Date:</strong>{' '}
+                  {selectedCredit.release_date || 'N/A'}
+                </p>
+                <p>
+                  <strong>CharacterCharacter:</strong>{' '}
+                  {selectedCredit.character || 'N/A'}
+                </p>
+                <p>
+                  <strong>Overview:</strong> {selectedCredit.overview || 'N/A'}
+                </p>
+                <img
+                  className='w-full h-auto rounded-lg mt-4'
+                  src={`https://image.tmdb.org/t/p/w500${selectedCredit.poster_path}`}
+                  alt={selectedCredit.title || selectedCredit.name}
+                />
+                <button
+                  className='mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded'
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
-export default PersonPage
+export default Profile
