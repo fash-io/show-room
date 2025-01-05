@@ -27,7 +27,9 @@ import {
 import PosterBackground from './pages/PosterBackground'
 
 const App = () => {
-  const [isExploring, setIsExploring] = useState(false)
+  const [isExploring, setIsExploring] = useState(
+    localStorage.getItem('exploring')
+  )
   const [loading, setLoading] = useState(true)
   const location = useLocation()
   const [user, setUser] = useState(null)
@@ -55,6 +57,10 @@ const App = () => {
       }
     }
   }, [isExploring, loading, user, navigate])
+
+  useEffect(() => {
+    localStorage.setItem('exploring', true)
+  }, [isExploring])
 
   if (loading) {
     return <Loading />

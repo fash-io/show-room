@@ -1,6 +1,5 @@
 import { movieGenre, tvGenre } from '../constants'
 
-// Fonts array with genres and priorities
 export const fonts = [
   {
     name: 'Bebas Neue',
@@ -84,7 +83,7 @@ export const fonts = [
   },
   {
     name: 'Anime Ace',
-    className: 'font-anime anime-style', // New anime-style font
+    className: 'font-anime anime-style', 
     genres: ['Animation', 'Anime']
   }
 ]
@@ -113,7 +112,6 @@ export const getFontForGenres = (genreIds, type) => {
     }
   }
 
-  // If no matching font is found, use the second genre from the movie genre list
   const fallbackGenre = getGenreNameById(genreIds[1], genreList)
   const fallbackFont = fonts.find(font => font.genres.includes(fallbackGenre))
 

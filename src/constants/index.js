@@ -126,3 +126,44 @@ export const featured = [
   { title: 'On The Air', category: 'on_the_air', type: 'tv' },
   { title: 'Your Watch List', userWatchlist: true }
 ]
+export const actorLinks = [
+  { name: 'imdb_id', href: 'https://www.imdb.com/name/' },
+  { name: 'tiktok_id', href: 'https://tiktok.com/@' },
+  {
+    name: 'youtube_id',
+    href: 'https://www.youtube.com/'
+  },
+  {
+    name: 'facebook_id',
+    href: 'https://www.facebook.com/'
+  },
+  {
+    name: 'instagram_id',
+    href: 'https://www.instagram.com/'
+  },
+  {
+    name: 'twitter_id',
+    href: 'https://twitter.com/'
+  }
+]
+
+export const actorDetails = [
+  { label: 'Known For', path: 'known_for_department' },
+  { label: 'Known Credits', detail: 'length' },
+  {
+    label: 'Gender',
+    path: 'gender'
+  },
+  {
+    label: 'Birthdate',
+    path: 'birthday'
+  },
+  {
+    label: 'Place of Birth',
+    path: 'place_of_birth'
+  },
+  {
+    label: 'Also known as',
+    path: 'also_known_as'
+  }
+]

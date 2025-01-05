@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Carousel } from 'react-responsive-carousel'
-import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { FaImdb, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa'
-import 'animate.css'
 import { options } from '../utils/api'
-import { BiLinkExternal } from 'react-icons/bi'
 import { LuLink } from 'react-icons/lu'
+import { actorDetails, actorLinks } from '../constants'
+import {
+  FaFacebook,
+  FaImdb,
+  FaInstagram,
+  FaTiktok,
+  FaTwitter,
+  FaYoutube
+} from 'react-icons/fa'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
@@ -87,7 +91,15 @@ const Profile = () => {
     if (filter === 'directing' && credit.job === 'Director') return true
     return false
   })
-
+  const linkIcons = {
+    imdb_id: <FaImdb />,
+    tiktok_id: <FaTiktok />,
+    youtube_id: <FaYoutube />,
+    facebook_id: <FaFacebook />,
+    instagram_id: <FaInstagram />,
+    twitter_id: <FaTwitter />
+  }
+  console.log(externalIds)
   if (!profile) return <div>Loading...</div>
 
   return (
@@ -101,85 +113,47 @@ const Profile = () => {
                 src={`https://image.tmdb.org/t/p/w500${profile.profile_path}`}
                 alt={profile.name}
               />
-              <div className='flex gap-10'>
-                <div className=' flex gap-3 w-3/4 text-2xl'>
-                  <a
-                    className='transition-transform'
-                    href={`https://www.imdb.com/name/${externalIds.imdb_id}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <FaImdb />
-                  </a>
-                  <a
-                    className='transition-transform'
-                    href={`https://www.facebook.com/${externalIds.facebook_id}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <FaFacebook />
-                  </a>
-                  <a
-                    className='transition-transform'
-                    href={`https://www.instagram.com/${externalIds.instagram_id}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <FaInstagram />
-                  </a>
-                  <a
-                    className='transition-transform'
-                    href={`https://twitter.com/${externalIds.twitter_id}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <FaTwitter />
-                  </a>
+              <div className='flex gap-5'>
+                <div className=' flex gap-3 text-2xl'>
+                  {actorLinks.map(
+                    link =>
+                      externalIds[link.name] && (
+                        <a
+                          key={link.name}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='transition-transform'
+                          href={`${link.href}${externalIds[link.name]}`}
+                        >
+                          {linkIcons[link.name]}
+                        </a>
+                      )
+                  )}
                 </div>
-                <a href={profile.homepage}>
+                <a
+                  href={profile.homepage}
+                  className='border-l-2 flex items-center pl-4'
+                >
                   <LuLink />
                 </a>
               </div>
             </div>
             <div className='bg-black/80 p-4 rounded-lg space-y-3'>
               <h2 className='text-2xl font-bold mb-2'>Personal Info</h2>
-              <p>
-                <strong>Known For:</strong>
-                <span className='block text-sm text-white/70'>
-                  {profile.known_for_department}
-                </span>
-              </p>
-              <p>
-                <strong>Known Credits:</strong>
-                <span className='block text-sm text-white/70'>
-                  {credits.length + tvCredits.length}
-                </span>
-              </p>
-              <p>
-                <strong>Gender:</strong>
-                <span className='block text-sm text-white/70'>
-                  {profile.gender === 1 ? 'Female' : 'Male'}
-                </span>
-              </p>
-              <p>
-                <strong>Birthdate:</strong>
-                <span className='block text-sm text-white/70'>
-                  {formatDate(profile.birthday)} (
-                  {calculateAge(profile.birthday)} years old)
-                </span>
-              </p>
-              <p>
-                <strong>Place of Birth:</strong>
-                <span className='block text-sm text-white/70'>
-                  {profile.place_of_birth}
-                </span>
-              </p>
-              <p>
-                <strong>Also known as</strong>
-                <span className='block text-sm text-white/70'>
-                  {profile.also_known_as}
-                </span>
-              </p>
+              {actorDetails.map(detail => (
+                <p key={detail.path || detail.detail}>
+                  <strong>{detail.label}</strong>
+                  <span className='block text-sm text-white/70'>
+                    {detail.path
+                      ? detail.path === 'birthday'
+                        ? `${formatDate(profile)} (${calculateAge(
+                            profile.birthday
+                          )} years old)`
+                        : profile[detail.path]
+                      : credits[detail.detail]}
+                  </span>
+                </p>
+              ))}
             </div>
           </div>
           <div className='md:col-span-6 space-y-8'>
@@ -190,21 +164,19 @@ const Profile = () => {
 
             <div className='bg-gray-800 p-6 rounded-lg'>
               <h2 className='text-3xl font-semibold mb-4'>Known For</h2>
-              <Carousel showThumbs={false} showStatus={false} useKeyboardArrows>
-                {credits
-                  .concat(tvCredits)
-                  .slice(0, 10)
-                  .map(credit => (
-                    <div key={credit.id}>
-                      <img
-                        className='w-32 object-cover h-40 rounded-lg'
-                        src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
-                        alt={credit.title || credit.name}
-                      />
-                      <p className='legend'>{credit.title || credit.name}</p>
-                    </div>
-                  ))}
-              </Carousel>
+              {credits
+                .concat(tvCredits)
+                .slice(0, 10)
+                .map(credit => (
+                  <div key={credit.id}>
+                    <img
+                      className='w-32 object-cover h-40 rounded-lg'
+                      src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
+                      alt={credit.title || credit.name}
+                    />
+                    <p className='legend'>{credit.title || credit.name}</p>
+                  </div>
+                ))}
             </div>
 
             <div className='bg-gray-800 p-6 rounded-lg'>
@@ -263,17 +235,15 @@ const Profile = () => {
 
             <div className='bg-gray-800 p-6 rounded-lg'>
               <h2 className='text-3xl font-semibold mb-4'>Tagged Images</h2>
-              <Carousel showThumbs={false} showStatus={false} useKeyboardArrows>
-                {taggedImages.map(image => (
-                  <div key={image.id}>
-                    <img
-                      className='w-32 h-auto rounded-lg mx-auto'
-                      src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
-                      alt='Tagged'
-                    />
-                  </div>
-                ))}
-              </Carousel>
+              {taggedImages.map(image => (
+                <div key={image.id}>
+                  <img
+                    className='w-32 h-auto rounded-lg mx-auto'
+                    src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
+                    alt='Tagged'
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-const Pagination = (props) => {
-  const { totalPages, page, handlePageChange, loading } = props;
+const Pagination = props => {
+  const { totalPages, page, handlePageChange, loading } = props
 
-  const [displayPage, setDisplayPage] = useState(page);
+  const [displayPage, setDisplayPage] = useState(page)
 
-  const handleDisplayPageChange = (e) => {
-    setDisplayPage(e.target.value);
-  };
+  const handleDisplayPageChange = e => {
+    setDisplayPage(e.target.value)
+  }
   useEffect(() => {
-    handlePageChange(displayPage);
-  }, [displayPage]);
+    handlePageChange(displayPage)
+  }, [displayPage, handlePageChange])
 
   return (
     <>
-      <div className="mt-8 flex justify-center items-center ">
+      <div className='mt-8 flex justify-center items-center '>
         <button
           onClick={() => handlePageChange(1)}
           disabled={page === 1 || loading}
           className={`py-2 px-4 rounded-l ${
             page === 1 || loading
-              ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-              : "bg-gray-800 text-white hover:bg-gray-700"
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-800 text-white hover:bg-gray-700'
           }`}
-          title="Go to First Page"
+          title='Go to First Page'
         >
           «
         </button>
@@ -32,18 +32,18 @@ const Pagination = (props) => {
           disabled={page === 1 || loading}
           className={`py-2 px-4  ${
             page === 1 || loading
-              ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-              : "bg-gray-800 text-white hover:bg-gray-700"
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-800 text-white hover:bg-gray-700'
           }`}
-          title="Go to Previous Page"
+          title='Go to Previous Page'
         >
           ‹
         </button>
         <input
-          type="text"
-          className="text-white max-w-[40px] bg-black/0 border-none outline- text-center p-[5px] m-1"
-          onChange={(e) => {
-            handleDisplayPageChange(e);
+          type='text'
+          className='text-white max-w-[40px] bg-black/0 border-none outline- text-center p-[5px] m-1'
+          onChange={e => {
+            handleDisplayPageChange(e)
           }}
           value={displayPage}
         />
@@ -52,10 +52,10 @@ const Pagination = (props) => {
           disabled={page === totalPages || loading}
           className={`py-2 px-4  ${
             page === totalPages || loading
-              ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-              : "bg-gray-800 text-white hover:bg-gray-700"
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-800 text-white hover:bg-gray-700'
           }`}
-          title="Go to Next Page"
+          title='Go to Next Page'
         >
           ›
         </button>
@@ -64,8 +64,8 @@ const Pagination = (props) => {
           disabled={page === totalPages || loading}
           className={`py-2 px-4 rounded-r ${
             page === totalPages || loading
-              ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-              : "bg-gray-800 text-white hover:bg-gray-700"
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-800 text-white hover:bg-gray-700'
           }`}
           title={`Go to Last Page (${totalPages})`}
         >
@@ -73,7 +73,7 @@ const Pagination = (props) => {
         </button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

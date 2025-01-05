@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const options = {
   method: 'GET',
   headers: {
@@ -9,13 +11,13 @@ export const options = {
 
 export const fetchDetails = async (id, type) => {
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `https://api.themoviedb.org/3/${
         type === 'movie' ? 'movie' : 'tv'
       }/${id}?language=en-US`,
       options
     )
-    const data = await response.json()
+    const data = response.data
     return { ...data, type }
   } catch (error) {
     console.error(`Error fetching details for ${type} with ID ${id}:`, error)

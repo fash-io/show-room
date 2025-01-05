@@ -6,12 +6,13 @@ import { options } from '../utils/api'
 import Loading from './Loading'
 import { fetchLogos } from '../utils/logo-util'
 import { getFontForGenres } from '../utils/get-font'
+import axios from 'axios'
 
 const Slider = props => {
   const { height, type, setError, setLoading } = props
   const [currentIndex, setCurrentIndex] = useState(0)
   const [show, setShow] = useState([])
-  const [logos, setLogos] = useState({}) // To store logos for each movie
+  const [logos, setLogos] = useState({})
   const sliderRef = useRef()
   const intervalRef = useRef()
 
@@ -19,12 +20,11 @@ const Slider = props => {
     const fetchNewReleases = async () => {
       try {
         setLoading(true)
-        const response = await fetch(
+        const response = await axios.get(
           `https://api.themoviedb.org/3/trending/${type}/day`,
           options
         )
-        const data = await response.json()
-        setShow(data.results || [])
+        setShow(response.data.results || [])
       } catch (err) {
         setError('Failed to load new releases.')
         console.error(err)
@@ -37,7 +37,6 @@ const Slider = props => {
   }, [type, setError, setLoading])
 
   useEffect(() => {
-    // Fetch logos for each movie using the utility function
     const fetchLogosData = async () => {
       if (show.length > 0) {
         const logosData = await fetchLogos(show, options)
@@ -134,11 +133,9 @@ const Slider = props => {
                 className={`w-full object-cover object-top ${height}`}
               />
               <div className='absolute w-full px-4 sm:px-6 md:px-[9%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6'>
-                {/* Movie Title Logo */}
                 {logos[movie.id] ? (
-                  // If there's an English logo, display it
                   <img
-                    src={`https://image.tmdb.org/t/p/w500${logos[movie.id]}`}
+                    src={`https://image.tmdb.org/t/p/w300${logos[movie.id]}`}
                     alt={movie.title || movie.name}
                     className='max-w-[200px] sm:max-w-[200px] md:max-w-[200px] min-w-[200px] me-auto mb-4'
                   />

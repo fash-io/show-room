@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import Loading from './Loading'
 import Error from './Error'
 import ShowCard from './ShowCard'
 import { options, fetchDetails } from '../utils/api'
