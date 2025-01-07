@@ -7,7 +7,7 @@ import Hero from '../components/show-page/Hero'
 import ShowDetails from '../components/show-page/ShowDetails'
 import ScrollCard from '../components/show-page/ScrollCard'
 import TitleCards from '../components/TitleCards'
-import ShowCollection from '../components/show-page/ShowCOllection'
+import ShowCollection from '../components/show-page/ShowCollection'
 
 const ContentPage = () => {
   const { id, type } = useParams()
