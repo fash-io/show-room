@@ -4,8 +4,8 @@ import { ToastContainer } from 'react-toastify'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './utils/firebase'
 import { fetchAndSetUserData } from './utils/firebaseHandlers'
-import Loading from './components/Loading'
-import Navbar from './components/Navbar'
+import Loading from './components/Loaders/Loading'
+import Navbar from './components/navbar/Navbar'
 import Footer from './components/Footer'
 import UserContext from './UserContext'
 
@@ -51,16 +51,16 @@ const App = () => {
   }, [])
 
   useEffect(() => {
+    localStorage.setItem('exploring', true)
+  }, [isExploring])
+
+  useEffect(() => {
     if (!loading) {
       if (!isExploring && !user) {
         navigate('/login')
       }
     }
   }, [isExploring, loading, user, navigate])
-
-  useEffect(() => {
-    localStorage.setItem('exploring', true)
-  }, [isExploring])
 
   if (loading) {
     return <Loading />

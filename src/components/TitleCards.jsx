@@ -1,11 +1,20 @@
+/* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react'
 import Error from './Error'
 import ShowCard from './ShowCard'
 import { options, fetchDetails } from '../utils/api'
 import UserContext from '../UserContext'
 import randomizeArray from 'randomize-array'
+import axios from 'axios'
 
-const TitleCards = ({ title, category, type, userWatchlist }) => {
+const TitleCards = ({
+  title,
+  category,
+  type,
+  userWatchlist,
+  data_,
+  className
+}) => {
   const { userData } = useContext(UserContext)
   const [watchlistData, setWatchlistData] = useState([])
   const [error, setError] = useState(null)
@@ -18,14 +27,12 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
       try {
         let data = []
         for (let i = 1; i <= 3; i++) {
-          let response = await fetch(
+          let response = await axios.get(
             `https://api.themoviedb.org/3/${type}/${category}?language=en-US&page=${i}`,
             options
           )
-          let jsonData = await response.json()
-          data = data.concat(jsonData.results)
+          data = data.concat(response.data.results)
         }
-
         setData(randomizeArray(data))
       } catch (err) {
         setError('Failed to load API data. Please try again later.')
@@ -43,17 +50,21 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
       setWatchlistData(detailedWatchlistData)
     }
 
-    if (userWatchlist) {
-      fetchWatchListData()
+    if (data_) {
+      setData(data_)
     } else {
-      fetchApiData()
+      if (userWatchlist) {
+        fetchWatchListData()
+      } else {
+        fetchApiData()
+      }
     }
 
     return () => {
       setError(null)
       setWatchlistData([])
     }
-  }, [category, type, userWatchlist, userData, setLoading])
+  }, [category, type, userWatchlist, userData, setLoading, data_])
 
   if (loading) return <div className='bg-black h-[10vh]' />
   if (error) return <Error message={error} isSmall={true} />
@@ -62,17 +73,17 @@ const TitleCards = ({ title, category, type, userWatchlist }) => {
 
   return (
     <div className='mt-3 mb-3 sm:mt-7 md:mt-12 sm:mb-5 md:mb-8'>
-      <h2 className='mb-3 text-lg font-semibold'>
+      <h2 className={`mb-3 text-lg font-semibold ${className}`}>
         {title || 'Popular on Netflix'}
       </h2>
-      <div className='overflow-x-scroll whitespace-nowrap div inset-0 gradient'>
+      <div className='overflow-x-scroll whitespace-nowrap div inset-0'>
         {dataToDisplay.length > 0 ? (
-          dataToDisplay.map(card => (
-            <ShowCard key={card.id} type_={type} show={card} type={2} />
+          dataToDisplay.map((card, i) => (
+            <ShowCard key={i} type_={type} show={card} type={2} />
           ))
         ) : (
           <p className='p-5 border border-white/20 rounded'>
-            No items found in Watchlist.
+            No items found in WatchList.
           </p>
         )}
       </div>

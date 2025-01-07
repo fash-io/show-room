@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react'
 import { featured } from '../constants/index'
 import '../components/poster-background/index.css'
 import { options } from '../utils/api'
-import Loading from '../components/Loading'
+import Loading from '../components/Loaders/Loading'
 import Error from '../components/Error'
 import randomizeArray from 'randomize-array'
 import { Link, useNavigate } from 'react-router-dom'
@@ -20,9 +20,8 @@ const PosterBackground = () => {
   const [resolution, setResolution] = useState('w185')
   const [selectedFeatured, setSelectedFeatured] = useState('default')
   const [isButtonVisible, setIsButtonVisible] = useState(true)
-  const [orientation, setOrientation] = useState('slant')
+  const [orientation, setOrientation] = useState('straight')
   const [allowHover, setAllowHover] = useState(true)
-  const [deviceType, setDeviceType] = useState('')
   const navigator = useNavigate()
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -44,7 +43,7 @@ const PosterBackground = () => {
     }
 
     try {
-      const fetchPromises = Array.from({ length: 14 }, (_, i) =>
+      const fetchPromises = Array.from({ length: 20 }, (_, i) =>
         fetch(`${endpoint}${i + 1}`, options)
           .then(response => response.json())
           .then(jsonData => jsonData.results)
@@ -114,19 +113,10 @@ const PosterBackground = () => {
   const handleHide = () => {
     setIsButtonVisible(prev => !prev)
   }
+
   const handleMovieClick = movie => {
     setSelectedMovie(movie)
   }
-
-  useEffect(() => {
-    const detectDeviceType = () => {
-      return /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
-        ? 'Mobile'
-        : 'Desktop'
-    }
-    setDeviceType(detectDeviceType())
-    setOrientation(deviceType === 'Mobile' ? 'straight' : 'slant')
-  }, [])
 
   const posterElements = useMemo(
     () =>
@@ -137,7 +127,7 @@ const PosterBackground = () => {
             i === tooltip.index
               ? 'z-40 brightness-110 scale-[1.8]  skew-x-[0deg] '
               : tooltip.visible
-              ? `brightness-[0.4] ${
+              ? `brightness-[0.7] ${
                   orientation === 'slant' ? 'skew-x-[10deg]' : ''
                 }`
               : `${orientation === 'slant' ? 'skew-x-[10deg]' : ''}`

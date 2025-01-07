@@ -7,7 +7,7 @@ import Error from '../components/Error'
 import { handleLogout, handleRemoveItem } from '../utils/firebaseHandlers'
 import GoBackButton from '../components/GoBackButton'
 import { useNavigate } from 'react-router-dom'
-import Loading from '../components/Loading'
+import Loading from '../components/Loaders/Loading'
 import { fetchWatchlistData } from '../utils/api'
 import UserContext from '../UserContext'
 

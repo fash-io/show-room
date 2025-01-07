@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import Error from '../components/Error'
-import Loader_ from '../components/Loader_'
+import Loader_ from '../components/Loaders/Loader_'
 import { options } from '../utils/api'
 import ShowCard from '../components/ShowCard'
 import { FaFilter, FaTimes } from 'react-icons/fa'
+import axios from 'axios'
+import { fetchData } from '../utils/tmdbfetch'
 
 const PopularPage = () => {
   const [mediaType, setMediaType] = useState('all')
@@ -21,12 +23,12 @@ const PopularPage = () => {
   const fetchMovies = useCallback(async () => {
     try {
       setLoading(true)
-      const url = `https://api.themoviedb.org/3/trending/${mediaType}/${timeWindow}?language=en-US&page=${page}`
-      const response = await fetch(url, options)
-      if (!response.ok) {
-        throw new Error('Failed to fetch new releases.')
-      }
-      const data = await response.json()
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/trending/${mediaType}/${timeWindow}?language=en-US&page=${page}`,
+        options
+      )
+      if (response.status !== 200) throw new Error(response.statusText)
+      const data = response.data
       setPopularMovies(prevMovies => [...prevMovies, ...data.results])
       setTotalPages(data.total_pages)
     } catch (err) {
@@ -38,22 +40,13 @@ const PopularPage = () => {
 
   const prefetchMovies = useCallback(async () => {
     if (page + 1 > totalPages || isPrefetching) return
-    try {
-      setIsPrefetching(true)
-      const url = `https://api.themoviedb.org/3/trending/${mediaType}/${timeWindow}?language=en-US&page=${
+    fetchData({
+      url: `https://api.themoviedb.org/3/trending/${mediaType}/${timeWindow}?language=en-US&page=${
         page + 1
-      }`
-      const response = await fetch(url, options)
-      if (!response.ok) {
-        throw new Error('Failed to prefetch new releases.')
-      }
-      const data = await response.json()
-      setPrefetchedMovies(data.results)
-    } catch (err) {
-      console.error(err.message)
-    } finally {
-      setIsPrefetching(false)
-    }
+      }`,
+      setData: setPrefetchedMovies,
+      setLoading: setIsPrefetching
+    })
   }, [mediaType, timeWindow, page, totalPages, isPrefetching])
 
   useEffect(() => {
@@ -194,9 +187,9 @@ const PopularPage = () => {
       <div className='sm:px-20 sm:py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-y-8'>
         {popularMovies
           .filter(movie => movie.poster_path)
-          .map(movie => (
+          .map((movie, i) => (
             <ShowCard
-              key={movie.id}
+              key={i}
               show={movie}
               type={3}
               mediaType={mediaType}

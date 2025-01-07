@@ -57,7 +57,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: min-content;
+  /* height: min-content; */
 }
 .divv {
   height: 100%;

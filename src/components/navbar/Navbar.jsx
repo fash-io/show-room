@@ -1,7 +1,7 @@
-import { navLinks } from '../constants'
+import { navLinks } from '../../constants'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import UserContext from '../UserContext'
+import UserContext from '../../UserContext'
 import 'react-toastify/dist/ReactToastify.css'
 import SearchBar from './SearchBar'
 
@@ -10,7 +10,6 @@ const Navbar = () => {
   const [photo, setPhoto] = useState('')
   const [searchIcon, setSearchIcon] = useState(false)
   const { pathname } = useLocation()
-
   const navRef = useRef()
   const location = useLocation()
 
@@ -40,7 +39,7 @@ const Navbar = () => {
           navRef.current.classList.remove('bg-black/50', 'backdrop-blur-md')
         }
       } else {
-        if (window.scrollY > 300) {
+        if (window.scrollY > 10) {
           navRef.current.classList.add('bg-black/50', 'backdrop-blur-md')
         } else {
           navRef.current.classList.remove('bg-black/50', 'backdrop-blur-md')
@@ -123,7 +122,7 @@ const Navbar = () => {
         }
       >
         {navLinks
-          .filter(movie => movie.order > 0)
+          .filter(link => link.order > 0)
           .sort((a, b) => a.order - b.order)
           .map((val, i) => (
             <Link

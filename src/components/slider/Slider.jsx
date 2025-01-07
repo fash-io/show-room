@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import { Link } from 'react-router-dom'
-import info_icon from '../assets/info_icon.png'
-import { options } from '../utils/api'
-import Loading from './Loading'
-import { fetchLogos } from '../utils/logo-util'
-import { getFontForGenres } from '../utils/get-font'
+import { options } from '../../utils/api'
+import { fetchLogos } from '../../utils/logo-util'
+import { getFontForGenres } from '../../utils/get-font'
 import axios from 'axios'
+import SliderButtons from './SliderButtons'
+import { BiInfoCircle } from 'react-icons/bi'
 
 const Slider = props => {
   const { height, type, setError, setLoading } = props
@@ -102,20 +102,7 @@ const Slider = props => {
 
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
-      <div
-        onClick={goToPreviousSlide}
-        className='hidden sm:flex justify-center items-center w-32 absolute h-full z-10 cursor-pointer text-white hover:bg-black/20 duration-200 group'
-        title='Previous slide'
-      >
-        <button
-          aria-label='Previous slide'
-          className='md:left-10 left-2 p-2 md:p-3 rounded-full group-hover:scale-150 transition duration-200'
-          style={{ textShadow: '0px 2px 2px rgba(0, 0, 0, 0.9)' }}
-        >
-          ❮
-        </button>
-      </div>
-
+      <SliderButtons onClick={goToPreviousSlide} direction={'left'} />
       <div
         ref={sliderRef}
         {...swipeHandlers}
@@ -153,7 +140,7 @@ const Slider = props => {
                 )}
 
                 <p
-                  className='max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-xs lg:text-lg leading-5 mb-2 sm:mb-4 hidden md:block'
+                  className='max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-sm lg:text-base leading-5 mb-2 sm:mb-4 hidden md:block'
                   style={{ textShadow: '2px 2px 4px #000000' }}
                 >
                   {movie.overview.length > 300
@@ -161,7 +148,7 @@ const Slider = props => {
                     : movie.overview}
                 </p>
                 <p
-                  className='text-xs sm:text-sm md:text-md mb-2 uppercase tracking-wider text-slate-400 font-bold'
+                  className='text-xs sm:text-sm md:text-md mb-2 uppercase tracking-wider text-slate-200 font-bold'
                   style={{ textShadow: '2px 2px 4px #000000' }}
                 >
                   {movie.media_type === 'movie' ? 'Movie' : 'TV Show'}
@@ -173,33 +160,18 @@ const Slider = props => {
                     }/${movie.id}`}
                     className='py-1 sm:py-2 flex px-3 sm:px-4 md:px-5 items-center gap-1 sm:gap-2 md:gap-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded cursor-pointer hover:bg-[#6d6d6e66] transition duration-200'
                   >
-                    <img src={info_icon} width={20} alt='Info Icon' />
-                    More Info
+                    <BiInfoCircle /> More info
                   </Link>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <div className='w-full h-full flex justify-center items-center text-white'>
-            <Loading isSmall={true} />
-          </div>
+          <></>
         )}
       </div>
 
-      <div
-        onClick={goToNextSlide}
-        className='hidden sm:flex justify-center items-center w-32 absolute right-0 top-0 h-full z-10 cursor-pointer text-white hover:bg-black/20 duration-500 group'
-        title='Next slide'
-      >
-        <button
-          aria-label='Next slide'
-          className='md:left-10 left-2 p-2 md:p-3 rounded-full group-hover:scale-150 transition duration-200'
-          style={{ textShadow: '0px 2px 2px rgba(0, 0, 0, 0.9)' }}
-        >
-          ❯
-        </button>
-      </div>
+      <SliderButtons onClick={goToNextSlide} direction={'right'} />
     </div>
   )
 }

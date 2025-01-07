@@ -11,32 +11,29 @@ import {
   FaTwitter,
   FaYoutube
 } from 'react-icons/fa'
+import { fetchData } from '../utils/tmdbfetch'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
   const [credits, setCredits] = useState([])
   const [taggedImages, setTaggedImages] = useState([])
   const [externalIds, setExternalIds] = useState({})
-  const [tvCredits, setTvCredits] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedCredit, setSelectedCredit] = useState(null)
   const [filter, setFilter] = useState('all')
 
-  const personId = 226001 // Replace with the actual person ID
+  const personId = 226001
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData_ = async () => {
       try {
+        fetchData()
         const profileRes = await axios.get(
           `https://api.themoviedb.org/3/person/${personId}`,
           options
         )
         const creditsRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${personId}/movie_credits`,
-          options
-        )
-        const tvCreditsRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${personId}/tv_credits`,
+          `https://api.themoviedb.org/3/person/${personId}/combined_credits`,
           options
         )
         const taggedImagesRes = await axios.get(
@@ -50,7 +47,6 @@ const Profile = () => {
 
         setProfile(profileRes.data)
         setCredits(creditsRes.data.cast)
-        setTvCredits(tvCreditsRes.data.cast)
         setTaggedImages(taggedImagesRes.data.results)
         setExternalIds(externalIdsRes.data)
       } catch (error) {
@@ -58,7 +54,7 @@ const Profile = () => {
       }
     }
 
-    fetchData()
+    fetchData_()
   }, [personId])
 
   const formatDate = dateStr => {
@@ -85,7 +81,7 @@ const Profile = () => {
     setSelectedCredit(null)
   }
 
-  const filteredCredits = credits.concat(tvCredits).filter(credit => {
+  const filteredCredits = credits.filter(credit => {
     if (filter === 'all') return true
     if (filter === 'acting' && credit.character) return true
     if (filter === 'directing' && credit.job === 'Director') return true
@@ -164,19 +160,16 @@ const Profile = () => {
 
             <div className='bg-gray-800 p-6 rounded-lg'>
               <h2 className='text-3xl font-semibold mb-4'>Known For</h2>
-              {credits
-                .concat(tvCredits)
-                .slice(0, 10)
-                .map(credit => (
-                  <div key={credit.id}>
-                    <img
-                      className='w-32 object-cover h-40 rounded-lg'
-                      src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
-                      alt={credit.title || credit.name}
-                    />
-                    <p className='legend'>{credit.title || credit.name}</p>
-                  </div>
-                ))}
+              {credits.slice(0, 10).map(credit => (
+                <div key={credit.id}>
+                  <img
+                    className='w-32 object-cover h-40 rounded-lg'
+                    src={`https://image.tmdb.org/t/p/w200${credit.poster_path}`}
+                    alt={credit.title || credit.name}
+                  />
+                  <p className='legend'>{credit.title || credit.name}</p>
+                </div>
+              ))}
             </div>
 
             <div className='bg-gray-800 p-6 rounded-lg'>

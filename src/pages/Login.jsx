@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { RxEyeOpen, RxEyeClosed, RxCrossCircled } from 'react-icons/rx'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import Loader_ from '../components/Loader_'
+import Loader_ from '../components/Loaders/Loader_'
 import PosterBackground from '../components/poster-background/PosterBackground'
 
 const Login = props => {

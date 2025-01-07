@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ShowCard from '../components/ShowCard'
 import Error from '../components/Error'
-import { options } from '../utils/api'
-import Loading from '../components/Loading'
+import Loading from '../components/Loaders/Loading'
+import { fetchData } from '../utils/tmdbfetch'
 
 const CollectionPage = () => {
   const [collection, setCollection] = useState(null)
@@ -12,28 +12,14 @@ const CollectionPage = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchCollection = async () => {
-      try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/collection/${id}?language=en-US`,
-          options
-        )
-        const contentData = await response.json()
-
-        if (response.ok) {
-          setCollection(contentData)
-        } else {
-          setError(contentData.status_message)
-        }
-      } catch (err) {
-        console.error('Failed to fetch collection:', err)
-        setError('Failed to load collection.')
-      } finally {
-        setLoading(false)
-      }
+    const dataProps = {
+      url: `https://api.themoviedb.org/3/collection/${id}?language=en-US`,
+      setData: setCollection,
+      single: true,
+      setLoading: setLoading,
+      setError: setError
     }
-
-    fetchCollection()
+    fetchData(dataProps)
   }, [id])
 
   if (loading) {

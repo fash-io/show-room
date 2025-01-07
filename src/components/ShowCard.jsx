@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import LazyLoader from './LazyLoader'
+import LazyLoader from './Loaders/LazyLoader'
 const ShowCard = props => {
   const { show, type_, type } = props
 

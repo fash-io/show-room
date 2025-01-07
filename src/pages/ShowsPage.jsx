@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import Slider from '../components/Slider'
+import Slider from '../components/slider/Slider'
 import useDebounce from '../utils/useDebounce'
 import { movieGenre, tvGenre } from '../constants'
 import ShowCard from '../components/ShowCard'
@@ -7,7 +7,7 @@ import Pagination from '../components/Pagination'
 import { options } from '../utils/api'
 import { useLocation } from 'react-router-dom'
 import { useWindowWidth } from '../utils/windowWidth'
-import LoadingSpinner from '../components/LoadingSpinner'
+import LoadingSpinner from '../components/Loaders/LoadingSpinner'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 const TVShowsPage = () => {
@@ -55,7 +55,7 @@ const TVShowsPage = () => {
     } finally {
       setLoading(false)
     }
-  }, [page, options, type_, sort, debouncedYear, genres])
+  }, [page, type_, sort, debouncedYear, genres])
 
   useEffect(() => {
     fetchShows()
@@ -186,7 +186,7 @@ const TVShowsPage = () => {
             <div className='my-6 md:flex items-center justify-end duration-200 overflow-x-scroll div'>
               <TransitionGroup className='flex'>
                 {genres.map((genre, i) => (
-                  <CSSTransition key={genre} timeout={300} classNames='fade'>
+                  <CSSTransition key={i} timeout={300} classNames='fade'>
                     <div className='bg-gray-900 text-white border-blue-900/50 border rounded-full flex justify-between items-center p-2 gap-2 py-0 duration-200 ml-2 '>
                       <span className='font-light whitespace-nowrap'>
                         {genre_.find(g => g.id === parseInt(genre))?.name}

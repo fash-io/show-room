@@ -66,28 +66,6 @@ export const tvGenre = [
   { id: 37, name: 'Western' }
 ]
 
-export function calculateAge (birthDate) {
-  const today = new Date()
-  const birth = new Date(birthDate)
-
-  let age = today.getFullYear() - birth.getFullYear()
-  const monthDifference = today.getMonth() - birth.getMonth()
-  const dayDifference = today.getDate() - birth.getDate()
-
-  if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-    age--
-  }
-
-  let months = monthDifference >= 0 ? monthDifference : 12 + monthDifference
-  let days =
-    dayDifference >= 0
-      ? dayDifference
-      : new Date(today.getFullYear(), today.getMonth(), 0).getDate() +
-        dayDifference
-
-  return { years: age, months, days }
-}
-
 export const faqs = [
   {
     question: 'What is ShowRoom?',
@@ -126,6 +104,7 @@ export const featured = [
   { title: 'On The Air', category: 'on_the_air', type: 'tv' },
   { title: 'Your Watch List', userWatchlist: true }
 ]
+
 export const actorLinks = [
   { name: 'imdb_id', href: 'https://www.imdb.com/name/' },
   { name: 'tiktok_id', href: 'https://tiktok.com/@' },
