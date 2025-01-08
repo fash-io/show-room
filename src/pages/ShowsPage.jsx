@@ -7,7 +7,7 @@ import Pagination from '../components/Pagination'
 import { options } from '../utils/api'
 import { useLocation } from 'react-router-dom'
 import { useWindowWidth } from '../utils/windowWidth'
-import LoadingSpinner from '../components/Loaders/LoadingSpinner'
+import Loader_ from '../components/Loaders/Loader_'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 const TVShowsPage = () => {
@@ -218,7 +218,7 @@ const TVShowsPage = () => {
               </button>
             </div>
           ) : loading ? (
-            <LoadingSpinner />
+            <Loader_ />
           ) : (
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 sm:gap-y-8'>
               {shows.map(show => (

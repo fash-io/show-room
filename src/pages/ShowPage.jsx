@@ -18,6 +18,7 @@ const ContentPage = () => {
   const [content, setContent] = useState(null)
   const [credits, setCredits] = useState({ cast: [], crew: [] })
   const [backdrops, setBackdrops] = useState([])
+  const [posters, setPosters] = useState([])
   const [videos, setVIdeos] = useState([])
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
@@ -56,17 +57,29 @@ const ContentPage = () => {
         }
         setRecommendations(randomizeArray(data))
 
-        fetchData({
-          url: `https://api.themoviedb.org/3/${
-            type === 'series' ? 'tv' : 'movie'
-          }/${id}/images`,
-          setData: data => {
-            setBackdrops(data.backdrops || [])
-          },
-          single: true,
-          setError: setError
-        })
+        const fetchImages = async () => {
+          await fetchData({
+            url: `https://api.themoviedb.org/3/${
+              type === 'series' ? 'tv' : 'movie'
+            }/${id}/images`,
+            setData: setBackdrops,
+            single: true,
+            setError: setError
+          })
+          const data = await axios.get(
+            `https://api.themoviedb.org/3/${
+              type === 'series' ? 'tv' : 'movie'
+            }/${id}/images`,
+            options
+          )
+          const backdrops_ = data.data.backdrops
+          const posters_ = data.data.posters
 
+          setBackdrops(backdrops_)
+          setPosters(posters_)
+        }
+
+        fetchImages()
         fetchData({
           url: `https://api.themoviedb.org/3/${
             type === 'series' ? 'tv' : 'movie'
@@ -85,13 +98,11 @@ const ContentPage = () => {
     fetchContentDetails()
   }, [id, type])
 
-  console.log(backdrops, videos)
-
-  if (loading || !content) {
+  if (loading) {
     return <Loading />
   }
-  if (error) {
-    return <Error />
+  if (error || !content) {
+    return <Error error={error} />
   }
 
   const directors =
@@ -106,7 +117,7 @@ const ContentPage = () => {
         <Hero content={content} />
         <ShowDetails content={content} />
         {backdrops.length > 0 && (
-          <Gallery backdrops={backdrops} videos={videos} />
+          <Gallery backdrops={backdrops} videos={videos} posters={posters} />
         )}
         {type === 'series' && content?.next_episode_to_air && (
           <div className='px-4 sm:px-6 md:px-10 lg:p-20'>

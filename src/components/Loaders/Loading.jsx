@@ -1,3 +1,7 @@
+/* eslint-disable react/prop-types */
+import Lottie from 'react-lottie'
+import animationData from '../../assets/animation data/Animation - 1736161602266.json'
+
 const Loading = ({ isSmall, transparent }) => {
   if (!transparent) {
     return (
@@ -10,9 +14,10 @@ const Loading = ({ isSmall, transparent }) => {
       >
         <div
           className={` rounded-lg text-center ${
-            isSmall ? 'p-4' : 'bg-gray-800 p-8 shadow-lg'
+            isSmall ? 'p-4 ' : 'bg-black p-8 shadow-lg rounded-full'
           }`}
         >
+          {/* <Lottie options={{ loop: true, autoplay: true, animationData }} /> */}
           <p className='text-xl font-semibold'>Loading</p>
           <p className={`spans ${isSmall ? 'text-lg' : 'text-2xl'}`}>
             <span>.</span>

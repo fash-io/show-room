@@ -20,17 +20,23 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
               <LuX />
             </button>
           </div>
-          <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-6'>
+          <div
+            className={`grid p-2 sm:p-4 md:p-6 ${
+              selectedType === 'poster'
+                ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2'
+                : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'
+            }`}
+          >
             {data.map((data, index) => (
               <div key={index} className='relative overflow-hidden rounded-lg'>
                 <img
                   src={
-                    selectedType === 'image'
-                      ? `https://image.tmdb.org/t/p/w780${data.file_path}`
-                      : `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
+                    selectedType === 'video'
+                      ? `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
+                      : `https://image.tmdb.org/t/p/w780${data.file_path}`
                   }
                   alt={`Backdrop ${index + 1}`}
-                  className='shadow-md cursor-pointer hover:scale-110  duration-200 max-h-48 object-cover w-full'
+                  className='shadow-md cursor-pointer hover:scale-110  duration-200  object-cover w-full'
                   onClick={() => handleClick(data)}
                 />
               </div>
