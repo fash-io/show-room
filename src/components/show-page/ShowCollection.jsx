@@ -38,12 +38,15 @@ const ShowCollection = ({ content, setError, label }) => {
             label === 'Collection' &&
             `/collection/${content.belongs_to_collection.id}`
           }
-          className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded-lg'
+          className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded-lg max-sm:hidden'
         >
           <img
             src={
               content.belongs_to_collection
-                ? `https://image.tmdb.org/t/p/w300${content.belongs_to_collection.poster_path}`
+                ? `https://image.tmdb.org/t/p/w300${
+                    content.belongs_to_collection.poster_path ||
+                    content.poster_path
+                  }`
                 : label === 'Seasons'
                 ? `https://image.tmdb.org/t/p/w300${content.poster_path}`
                 : 'https://via.placeholder.com/150x225?text=No+Image'
@@ -59,9 +62,9 @@ const ShowCollection = ({ content, setError, label }) => {
             </div>
           )}
         </Link>
-        <BsFilm className='text-3xl text-gray-400 group-hover:text-[#ff7e5f] transition duration-300' />
+        <BsFilm className='text-5xl text-gray-400 group-hover:text-[#ff7e5f] transition duration-300 max-sm:hidden' />
 
-        <div className='flex overflow-x-scroll inset-10 div space-x-4 mr-10'>
+        <div className='flex flex-nowrap overflow-x-scroll inset-10 div space-x-4 '>
           {dataToUse?.map(item => (
             <Link
               key={item.id}

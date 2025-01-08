@@ -1,6 +1,21 @@
+import { useEffect } from 'react'
 import { BiLeftArrowCircle, BiRightArrowCircle } from 'react-icons/bi'
 
 const SliderButtons = ({ onClick, direction }) => {
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.key === 'ArrowLeft') {
+        goToPreviousSlide()
+      } else if (event.key === 'ArrowRight') {
+        goToNextSlide()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
   return (
     <div
       onClick={onClick}

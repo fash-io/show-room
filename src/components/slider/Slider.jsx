@@ -1,12 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import { Link } from 'react-router-dom'
+import { BiInfoCircle } from 'react-icons/bi'
 import { options } from '../../utils/api'
 import { fetchLogos } from '../../utils/logo-util'
 import { getFontForGenres } from '../../utils/get-font'
-import axios from 'axios'
+import { fetchData } from '../../utils/tmdbfetch'
 import SliderButtons from './SliderButtons'
-import { BiInfoCircle } from 'react-icons/bi'
 
 const Slider = props => {
   const { height, type, setError, setLoading } = props
@@ -17,23 +18,12 @@ const Slider = props => {
   const intervalRef = useRef()
 
   useEffect(() => {
-    const fetchNewReleases = async () => {
-      try {
-        setLoading(true)
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/trending/${type}/day`,
-          options
-        )
-        setShow(response.data.results || [])
-      } catch (err) {
-        setError('Failed to load new releases.')
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchNewReleases()
+    fetchData({
+      url: `https://api.themoviedb.org/3/trending/${type}/day`,
+      setData: setShow,
+      setLoading: setLoading,
+      setError: setError
+    })
   }, [type, setError, setLoading])
 
   useEffect(() => {
@@ -63,6 +53,9 @@ const Slider = props => {
   const resetAutoSlide = () => {
     clearInterval(intervalRef.current)
     startAutoSlide()
+  }
+  const disableAutoSlide = () => {
+    clearInterval(intervalRef.current)
   }
 
   const goToPreviousSlide = () => {
@@ -107,6 +100,12 @@ const Slider = props => {
         ref={sliderRef}
         {...swipeHandlers}
         className='flex transition-transform duration-1000 ease-in-out'
+        onMouseEnter={() => {
+          disableAutoSlide()
+        }}
+        onMouseLeave={() => {
+          startAutoSlide()
+        }}
         style={{
           transform: `translateX(-${currentIndex * 100}%)`
         }}
@@ -122,7 +121,7 @@ const Slider = props => {
               <div className='absolute w-full px-4 sm:px-6 md:px-[9%] bottom-0 text-white bg-gradient-to-t from-black via-transparent to-transparent pb-4 sm:pb-6'>
                 {logos[movie.id] ? (
                   <img
-                    src={`https://image.tmdb.org/t/p/w300${logos[movie.id]}`}
+                    src={`https://image.tmdb.org/t/p/w500${logos[movie.id]}`}
                     alt={movie.title || movie.name}
                     className='max-w-[200px] sm:max-w-[200px] md:max-w-[200px] min-w-[200px] me-auto mb-4'
                   />

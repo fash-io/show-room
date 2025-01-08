@@ -8,11 +8,17 @@ import ShowDetails from '../components/show-page/ShowDetails'
 import ScrollCard from '../components/show-page/ScrollCard'
 import TitleCards from '../components/TitleCards'
 import ShowCollection from '../components/show-page/ShowCollection'
+import randomizeArray from 'randomize-array'
+import { options } from '../utils/api'
+import axios from 'axios'
+import Gallery from '../components/show-page/Gallery'
 
 const ContentPage = () => {
   const { id, type } = useParams()
   const [content, setContent] = useState(null)
   const [credits, setCredits] = useState({ cast: [], crew: [] })
+  const [backdrops, setBackdrops] = useState([])
+  const [videos, setVIdeos] = useState([])
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
@@ -27,28 +33,49 @@ const ContentPage = () => {
           }/${id}?language=en-US`,
           setData: setContent,
           single: true,
-          setError: setError,
-          useTryCatch: false
+          setError: setError
         })
+
         fetchData({
           url: `https://api.themoviedb.org/3/${
             type === 'series' ? 'tv' : 'movie'
           }/${id}/credits`,
           setData: setCredits,
           single: true,
-          setError: setError,
-          useTryCatch: false
+          setError: setError
         })
+        let data = []
+        for (let i = 1; i <= 3; i++) {
+          let response = await axios.get(
+            `https://api.themoviedb.org/3/${
+              type === 'series' ? 'tv' : 'movie'
+            }/${id}/recommendations?language=en-US&page=${i}`,
+            options
+          )
+          data = data.concat(response.data.results)
+        }
+        setRecommendations(randomizeArray(data))
+
         fetchData({
           url: `https://api.themoviedb.org/3/${
             type === 'series' ? 'tv' : 'movie'
-          }/${id}/recommendations?language=en-US&page=1`,
-          setData: setRecommendations,
-          setError: setError,
-          useTryCatch: false
+          }/${id}/images`,
+          setData: data => {
+            setBackdrops(data.backdrops || [])
+          },
+          single: true,
+          setError: setError
+        })
+
+        fetchData({
+          url: `https://api.themoviedb.org/3/${
+            type === 'series' ? 'tv' : 'movie'
+          }/${id}/videos?language=en-US`,
+          setData: setVIdeos,
+          setError: setError
         })
       } catch (err) {
-        console.error('Failed to fetch content details or credits:', err)
+        console.error('Failed to fetch content details or backdrops:', err)
         setError('Failed to load content details.')
       } finally {
         setLoading(false)
@@ -57,6 +84,8 @@ const ContentPage = () => {
 
     fetchContentDetails()
   }, [id, type])
+
+  console.log(backdrops, videos)
 
   if (loading || !content) {
     return <Loading />
@@ -76,8 +105,11 @@ const ContentPage = () => {
       <div className='text-white min-h-screen'>
         <Hero content={content} />
         <ShowDetails content={content} />
+        {backdrops.length > 0 && (
+          <Gallery backdrops={backdrops} videos={videos} />
+        )}
         {type === 'series' && content?.next_episode_to_air && (
-          <div className='px-4 sm:px-6 md:px-10 lg:px-20'>
+          <div className='px-4 sm:px-6 md:px-10 lg:p-20'>
             <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>
               Next Episode
             </h2>
@@ -101,7 +133,7 @@ const ContentPage = () => {
           </div>
         )}
 
-        <div className='p-4 sm:p-6 md:p-10 lg:p-20'>
+        <div className='p-4 sm:p-6 md:p-10 lg:p-20 space-y-4  lg:pb-0'>
           {credits?.cast?.length > 0 && (
             <>
               <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>Cast</h2>
@@ -117,7 +149,7 @@ const ContentPage = () => {
 
           {directors?.length > 0 && (
             <>
-              <h2 className='text-2xl sm:text-3xl font-semibold mt-8 mb-4'>
+              <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>
                 Director(s)
               </h2>
               <div className='flex overflow-x-scroll space-x-4 pb-4 div'>
@@ -128,6 +160,7 @@ const ContentPage = () => {
             </>
           )}
         </div>
+
         {content?.belongs_to_collection && (
           <ShowCollection
             content={content}

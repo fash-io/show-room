@@ -59,11 +59,17 @@ const Hero = content => {
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
           <div className='absolute bottom-10 left-5 sm:left-10 p-4 sm:p-8 space-y-4'>
-            <img
-              src={`https://image.tmdb.org/t/p/original${logo}`}
-              alt={content.content.title || content.content.name}
-              className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto '
-            />
+            {logo ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${logo}`}
+                alt={content.content.title || content.content.name}
+                className='w-[190px] sm:max-w-[250px] md:max-w-[350px] md:min-w-[350px] me-auto '
+              />
+            ) : (
+              <h1 className='text-2xl'>
+                {content.content.title || content.content.name}
+              </h1>
+            )}
             <p className='text-sm sm:text-xl italic'>
               {content.content.tagline}
             </p>
