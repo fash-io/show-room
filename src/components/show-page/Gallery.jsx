@@ -11,14 +11,15 @@ const Gallery = ({ backdrops, videos }) => {
   const [selectedType, setSelectedType] = useState('image')
   const [data, setData] = useState([])
   const [width, setWidth] = useState(window.innerWidth)
+
   const closeModal = () => {
     setSelectedData(null)
   }
+
   const handleClick = dataPath => {
     setSelectedData(dataPath)
   }
 
-  console.log(width)
   const filteredAndSortedVideos = videos
     .filter(video => video.iso_639_1 === 'en')
     .sort((a, b) => {
@@ -41,11 +42,7 @@ const Gallery = ({ backdrops, videos }) => {
     const dataToDisplay =
       selectedType === 'image' ? sortedImages : filteredAndSortedVideos
     setData(dataToDisplay)
-  }, [selectedType, id, type])
-
-  useEffect(() => {
-    setSelectedData(null)
-  }, [id])
+  }, [selectedType, backdrops, videos, id, type])
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
@@ -58,9 +55,7 @@ const Gallery = ({ backdrops, videos }) => {
       {backdrops.length > 0 && (
         <div className='px-4 sm:px-6 md:px-10 lg:px-20'>
           <div className='flex items-center justify-between gap-10'>
-            <h2 className='text-2xl sm:text-3xl font-semibold mb-4 '>
-              Gallery
-            </h2>
+            <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>Gallery</h2>
             <div className='space-x-5'>
               {videos.length > 0 && (
                 <>
