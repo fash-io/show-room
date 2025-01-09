@@ -1,10 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '../../useOnClickOutside'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { options } from '../../utils/api'
 import axios from 'axios'
-import { FaSearch } from 'react-icons/fa'
-import { RxCross1 } from 'react-icons/rx'
 
 const SearchBar = ({ searchIcon, setSearchIcon }) => {
   const [results, setResults] = useState([])
@@ -52,11 +51,11 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
     setResults([])
     setSearchIcon(false)
   }
-  const handleSearchClick = () => {
-    searchRef.current.focus()
-    IconRef.current.focus()
-    setSearchIcon(true)
-  }
+  // const handleSearchClick = () => {
+  //   searchRef.current.focus()
+  //   IconRef.current.focus()
+  //   setSearchIcon(true)
+  // }
 
   useOnClickOutside(searchRef, handleClickOutside)
   if (location.pathname.startsWith('/search')) return
@@ -72,7 +71,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
         onFocus={() => setSearchIcon(true)}
-        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 
+        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 text-[14px] 
           ${searchIcon ? 'w-44 md:w-64' : 'w-10 cursor-pointer'}`}
         placeholder='Type to search...'
         ref={IconRef}
