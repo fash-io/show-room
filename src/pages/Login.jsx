@@ -114,7 +114,7 @@ const Login = props => {
       <div className='h-screen py-5 lg:px-[8%] px-2 bg-gradient flex'>
         <div className='w-full relative max-w-md transition-all duration-500 overflow-hidden bg-black bg-opacity-75 rounded-2xl shadow-lg py-16 px-10 sm:p-16 m-auto backdrop-blur-sm flex'>
           <div
-            className={`w-[80%] sm:w-[70%] md:w-[20rem] flex flex-col justify-center translate-y-[10%}  transition-transform duration-500 absolute ${
+            className={`w-[80%] sm:w-[70%] md:w-[20rem] flex flex-col justify-center items-stretch h-[70%] translate-y-[10%}  transition-transform duration-500 absolute ${
               signState === 'Login' ? 'translate-x-0' : '-translate-x-[150%]'
             }`}
           >

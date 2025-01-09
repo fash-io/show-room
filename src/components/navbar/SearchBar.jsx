@@ -71,7 +71,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
         onFocus={() => setSearchIcon(true)}
-        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 text-[14px] 
+        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 text-[12px] 
           ${searchIcon ? 'w-44 md:w-64' : 'w-10 cursor-pointer'}`}
         placeholder='Type to search...'
         ref={IconRef}
