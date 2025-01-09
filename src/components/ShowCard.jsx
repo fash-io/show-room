@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom'
 import LazyLoader from './Loaders/LazyLoader'
 const ShowCard = props => {
@@ -18,11 +19,13 @@ const ShowCard = props => {
         className='flex flex-col justify-between items-center rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto'
         aria-label={show.name || show.title}
       >
-        <LazyLoader
-          src={`https://image.tmdb.org/t/p/w300${show.backdrop_path}`}
-          alt={show.name || show.title}
-          className='w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300'
-        />
+        <div className='max-h-[156px] min-h-[127px] relative'>
+          <LazyLoader
+            src={`https://image.tmdb.org/t/p/w300${show.backdrop_path}`}
+            alt={show.name || show.title}
+            className='w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300'
+          />
+        </div>
         <div className='p-4 flex-1'>
           <h3 className='text-lg sm:text-xl font-semibold text-white mb-3'>
             {show.name || show.title}
@@ -42,8 +45,7 @@ const ShowCard = props => {
         key={show.id}
         className='relative inline-block h-60 mr-3 w-[8rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg group'
       >
-        <Loader />
-        <img
+        <LazyLoader
           src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
           alt={show.title || show.name || 'Movie Poster'}
           className='cursor-pointer object-cover h-full w-full rounded-lg group-hover:scale-110 transition-transform duration-300'

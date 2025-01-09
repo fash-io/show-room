@@ -6,7 +6,8 @@ export const fetchData = async ({
   single = false,
   setLoading,
   setError,
-  useTryCatch = true
+  useTryCatch = true,
+  setTotalPages
 }) => {
   if (!useTryCatch) {
     const response = await axios.get(url, options)
@@ -21,11 +22,16 @@ export const fetchData = async ({
   setLoading && setLoading(true)
   try {
     const response = await axios.get(url, options)
-    response.status === 200
-      ? single
-        ? setData(response.data)
-        : setData(response.data.results)
-      : setError && setError(response.statusText)
+    if (response.status === 200) {
+      if (single) {
+        setData(response.data)
+      } else {
+        setData(response.data.results)
+        setTotalPages && setTotalPages(response.data.total_pages)
+      }
+    } else {
+      setError && setError(response.statusText)
+    }
   } catch (err) {
     console.error(err)
     setError(err.message)

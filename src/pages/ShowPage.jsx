@@ -12,6 +12,7 @@ import randomizeArray from 'randomize-array'
 import { options } from '../utils/api'
 import axios from 'axios'
 import Gallery from '../components/show-page/Gallery'
+import { calculateDaysToNextEpisode } from '../utils/calculate-date-to-air'
 
 const ContentPage = () => {
   const { id, type } = useParams()
@@ -120,7 +121,7 @@ const ContentPage = () => {
           <Gallery backdrops={backdrops} videos={videos} posters={posters} />
         )}
         {type === 'series' && content?.next_episode_to_air && (
-          <div className='px-4 sm:px-6 md:px-10 lg:p-20'>
+          <div className='p-6 sm:p-6 md:p-10 lg:p-20'>
             <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>
               Next Episode
             </h2>
@@ -131,7 +132,17 @@ const ContentPage = () => {
             </p>
             <p>
               <span className='font-semibold'>Air Date:</span>{' '}
-              {content?.next_episode_to_air.air_date}
+              {content?.next_episode_to_air.air_date +
+                ' (' +
+                calculateDaysToNextEpisode(
+                  content?.next_episode_to_air.air_date
+                )}{' '}
+              {calculateDaysToNextEpisode(
+                content?.next_episode_to_air.air_date
+              ) === 1
+                ? 'day'
+                : 'days'}{' '}
+              left{')'}
             </p>
             <p>
               <span className='font-semibold'>Season:</span>{' '}
@@ -179,7 +190,7 @@ const ContentPage = () => {
             label={'Collection'}
           />
         )}
-        {content?.seasons && (
+        {content?.seasons.length > 1 && (
           <ShowCollection
             content={content}
             setError={setError}

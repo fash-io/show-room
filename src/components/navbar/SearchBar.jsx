@@ -64,7 +64,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
   return (
     <form
       onSubmit={handleSearchSubmit}
-      className='flex group duration-150 gap-1 items-center relative'
+      className='relative group'
       ref={searchRef}
     >
       <input
@@ -72,28 +72,38 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
         onFocus={() => setSearchIcon(true)}
-        className={`outline-none border-none w-0 group-focus-within:w-[180px] sm:group-focus-within:w-[250px] duration-300 ease-in-out transform rounded-xl bg-transparent focus:bg-white/80 px-2 py-[6px] focus:ring-2  text-black placeholder-transparent group-focus-within:placeholder-gray-500 text-[16px]`}
-        placeholder='Search...'
+        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 
+          ${searchIcon ? 'w-44 md:w-64' : 'w-10 cursor-pointer'}`}
+        placeholder='Type to search...'
         ref={IconRef}
+        onFocusCapture={() => setSearchIcon(true)}
+        onBlur={() => setSearchIcon(false)}
       />
 
-      <button type='submit' className='relative'>
-        {searchIcon ? (
-          <RxCross1
-            className='text-black cursor-pointer absolute top-[50%] translate-y-[-50%] right-3 duration-200 transform hover:scale-125'
-            onClick={() => {
-              handleClickOutside()
-            }}
+      <div className='absolute top-0 left-0 w-10 h-8 flex items-center justify-center pointer-events-none'>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='w-6 h-6 text-white'
+          viewBox='0 0 512 512'
+        >
+          <title>Search</title>
+          <path
+            d='M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z'
+            fill='none'
+            stroke='currentColor'
+            strokeMiterlimit={10}
+            strokeWidth={32}
           />
-        ) : (
-          <FaSearch
-            className='cursor-pointer absolute top-[50%] translate-y-[-50%] right-3 duration-200 transform hover:scale-125'
-            onClick={() => {
-              handleSearchClick()
-            }}
+          <path
+            fill='none'
+            stroke='currentColor'
+            strokeLinecap='round'
+            strokeMiterlimit={10}
+            strokeWidth={32}
+            d='M338.29 338.29L448 448'
           />
-        )}
-      </button>
+        </svg>
+      </div>
 
       {results.length > 0 && searchIcon && (
         <div className='absolute top-10 min-w-[300px] -left-14 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg'>

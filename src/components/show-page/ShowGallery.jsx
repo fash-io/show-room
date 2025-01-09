@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { BiLogoYoutube, BiZoomIn } from 'react-icons/bi'
 import { LuX } from 'react-icons/lu'
 const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
   return (
@@ -28,7 +29,10 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
             }`}
           >
             {data.map((data, index) => (
-              <div key={index} className='relative overflow-hidden rounded-lg'>
+              <div
+                key={index}
+                className='relative overflow-hidden rounded-lg group'
+              >
                 <img
                   src={
                     selectedType === 'video'
@@ -39,6 +43,13 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
                   className='shadow-md cursor-pointer hover:scale-110  duration-200  object-cover w-full'
                   onClick={() => handleClick(data)}
                 />
+                <div className='absolute top-0 h-full w-full left-0 bg-black/50  flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
+                  {selectedType === 'video' ? (
+                    <BiLogoYoutube size={40} />
+                  ) : (
+                    <BiZoomIn size={40} />
+                  )}
+                </div>
               </div>
             ))}
           </div>

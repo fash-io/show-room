@@ -1,17 +1,6 @@
-import { useEffect, useState } from 'react'
-
+/* eslint-disable react/prop-types */
 const Pagination = props => {
   const { totalPages, page, handlePageChange, loading } = props
-
-  const [displayPage, setDisplayPage] = useState(page)
-
-  const handleDisplayPageChange = e => {
-    setDisplayPage(e.target.value)
-  }
-  useEffect(() => {
-    handlePageChange(displayPage)
-  }, [displayPage, handlePageChange])
-
   return (
     <>
       <div className='mt-8 flex justify-center items-center '>
@@ -39,14 +28,9 @@ const Pagination = props => {
         >
           ‹
         </button>
-        <input
-          type='text'
-          className='text-white max-w-[40px] bg-black/0 border-none outline- text-center p-[5px] m-1'
-          onChange={e => {
-            handleDisplayPageChange(e)
-          }}
-          value={displayPage}
-        />
+        <span className='text-white max-w-[40px] bg-black/0 border-none outline- text-center p-[5px] m-1'>
+          {page}
+        </span>
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || loading}

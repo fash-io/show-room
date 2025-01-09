@@ -61,33 +61,29 @@ const Navbar = () => {
             'linear-gradient(180deg, rgba(0,0,0,0.7) 30%, transparent)'
         }}
       >
-        <div className='flex items-center gap-12'>
-          <Link to={'/'}>
-            <span
-              className={`sm:text-4xl font-bold bg-clip-text text-transparent duration-300 bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
-                searchIcon ? 'text-xs' : 'text-xl'
-              }`}
-            >
-              ShowRoom
-            </span>
-          </Link>
+        <Link to={'/'}>
+          <img src='/public/5188399.png' className='w-14 aspect-auto' />
+        </Link>
 
-          <ul className='hidden md:flex gap-8'>
-            {navLinks
-              .sort((a, b) => a.index - b.index)
-              .map((val, i) => (
-                <Link key={i} to={val.href}>
-                  <li
-                    className={`cursor-pointer text-xs lg:text-base duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
-                      pathname === val.href ? 'text-transparent active' : ''
-                    }`}
-                  >
-                    {val.label}
-                  </li>
-                </Link>
-              ))}
-          </ul>
-        </div>
+        <ul
+          className={`hidden md:flex gap-8 transition-colors ${
+            searchIcon && 'md:hidden lg:flex'
+          }`}
+        >
+          {navLinks
+            .sort((a, b) => a.index - b.index)
+            .map((val, i) => (
+              <Link key={i} to={val.href}>
+                <li
+                  className={`cursor-pointer text-xs lg:text-base transition-colors duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
+                    pathname === val.href ? 'text-transparent active' : ''
+                  }`}
+                >
+                  {val.label}
+                </li>
+              </Link>
+            ))}
+        </ul>
 
         {!(pathname === '/profile') && (
           <div className=' flex gap-4 lg:gap-15 items-center'>

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import ShowGallery from './ShowGallery'
 import GalleryModal from './GalleryModal'
 import { useParams } from 'react-router-dom'
+import { BiLogoYoutube, BiZoomIn } from 'react-icons/bi'
+import { LuYoutube } from 'react-icons/lu'
 
 const Gallery = ({ backdrops, videos, posters }) => {
   const { id, type } = useParams()
@@ -52,7 +54,7 @@ const Gallery = ({ backdrops, videos, posters }) => {
         ? sortedImages
         : selectedType === 'video'
         ? filteredAndSortedVideos
-        : posters
+        : sortedPosters
     setData(dataToDisplay)
   }, [selectedType, backdrops, videos, id, type, posters])
 
@@ -132,7 +134,7 @@ const Gallery = ({ backdrops, videos, posters }) => {
                 .map((data, index) => (
                   <div
                     key={index}
-                    className='relative overflow-hidden w-full rounded-lg'
+                    className='relative overflow-hidden w-full rounded-lg group'
                   >
                     <img
                       src={
@@ -144,6 +146,13 @@ const Gallery = ({ backdrops, videos, posters }) => {
                       className='shadow-md cursor-pointer hover:scale-110  duration-200  object-cover w-full'
                       onClick={() => handleClick(data)}
                     />
+                    <div className='absolute top-0 h-full w-full left-0 bg-black/50 z-50 flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
+                      {selectedType === 'video' ? (
+                        <BiLogoYoutube size={40} color='red' />
+                      ) : (
+                        <BiZoomIn size={40} />
+                      )}
+                    </div>
                   </div>
                 ))}
 

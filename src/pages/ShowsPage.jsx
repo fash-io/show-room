@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Slider from '../components/slider/Slider'
-import useDebounce from '../utils/useDebounce'
 import { movieGenre, tvGenre } from '../constants'
 import ShowCard from '../components/ShowCard'
 import Pagination from '../components/Pagination'
@@ -9,6 +8,7 @@ import { useLocation } from 'react-router-dom'
 import { useWindowWidth } from '../utils/windowWidth'
 import Loader_ from '../components/Loaders/Loader_'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { fetchData } from '../utils/tmdbfetch'
 
 const TVShowsPage = () => {
   const { pathname } = useLocation()
@@ -16,12 +16,10 @@ const TVShowsPage = () => {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [sort, setSort] = useState('popularity')
-  const [year, setYear] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const debouncedYear = useDebounce(year, 1000)
   const type_ = pathname === '/series' ? 'tv' : 'movie'
   const genre_ = type_ === 'movie' ? movieGenre : tvGenre
   const showsRef = useRef()
@@ -29,55 +27,31 @@ const TVShowsPage = () => {
   const type = windowWidth < 768 ? 3 : 1
 
   const fetchShows = useCallback(async () => {
-    try {
-      setLoading(true)
-      const yearParam = debouncedYear
-        ? type_ === 'movie'
-          ? `primary_release_year=${debouncedYear}`
-          : `first_air_date_year=${debouncedYear}`
-        : ''
-      const response = await fetch(
-        `https://api.themoviedb.org/3/discover/${type_}?page=${page}&sort_by=${sort}.desc&${yearParam}&vote_count.gte=${
-          sort === 'popularity' ? 400 : sort === 'vote_average' ? 400 : 0
-        }${genres.length > 0 ? `&with_genres=${genres.join(',')}` : ''}`,
-        options
-      )
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data')
-      }
-
-      const data = await response.json()
-      setTotalPages(data.total_pages)
-      setShows(data.results)
-    } catch (error) {
-      setError('Error fetching data: ' + error.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [page, type_, sort, debouncedYear, genres])
+    fetchData({
+      url: `https://api.themoviedb.org/3/discover/${type_}?page=${page}&sort_by=${sort}.desc&vote_count.gte=${
+        sort === 'popularity' ? 400 : sort === 'vote_average' ? 400 : 0
+      }${genres.length > 0 ? `&with_genres=${genres.join(',')}` : ''}`,
+      setData: setShows,
+      setLoading: setLoading,
+      setError: setError,
+      setTotalPages: setTotalPages
+    })
+  }, [page, type_, sort, genres])
 
   useEffect(() => {
     fetchShows()
   }, [fetchShows])
 
-  useEffect(() => {
-    setPage(1)
-  }, [sort, type, year, genre])
-
   const handlePageChange = newPage => {
-    if (newPage >= 1) {
-      setPage(newPage)
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
-    }
+    setPage(newPage)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
   }
 
   const handleSortChange = event => setSort(event.target.value)
   const handleGenreChange = event => setGenre(event.target.value)
-  const handleYearChange = event => setYear(event.target.value)
 
   useEffect(() => {
     if (genre && !genres.includes(genre)) {
@@ -146,38 +120,6 @@ const TVShowsPage = () => {
                 <label htmlFor='year' className='text-white text-sm mb-2'>
                   Year:
                 </label>
-                <div className='relative'>
-                  <input
-                    type='number'
-                    id='year'
-                    value={year}
-                    onChange={handleYearChange}
-                    placeholder='Enter Year'
-                    className='p-2 rounded-lg bg-gray-900 text-white border border-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-900'
-                  />
-                  <div className='absolute top-0 right-0 flex flex-col h-full text-[8px]'>
-                    <button
-                      type='button'
-                      onClick={() =>
-                        setYear(prev => (prev ? Number(prev) + 1 : 1))
-                      }
-                      className='p-1 px-2 bg-gray-900 text-white rounded-t hover:bg-gray-800'
-                      aria-label='Increase Year'
-                    >
-                      ▲
-                    </button>
-                    <button
-                      type='button'
-                      onClick={() =>
-                        setYear(prev => (prev ? Number(prev) - 1 : 0))
-                      }
-                      className='p-1 px-2 bg-gray-900 text-white rounded-b hover:bg-gray-800'
-                      aria-label='Decrease Year'
-                    >
-                      ▼
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
