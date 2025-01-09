@@ -62,7 +62,7 @@ const Navbar = () => {
         }}
       >
         <Link to={'/'}>
-          <img src='/public/5188399.png' className='w-14 aspect-auto' />
+          <img src='/5188399.png' className='w-14 aspect-auto' />
         </Link>
 
         <ul

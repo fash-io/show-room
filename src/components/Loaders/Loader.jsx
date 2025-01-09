@@ -85,7 +85,7 @@ const Loader = () => {
       <div className='loader'>
         <div style={{ '--i': 1, '--inset': '44%' }} className='box'>
           <div className='logo scale-150'>
-            <img src='/public/5188399.png' />
+            <img src='/5188399.png' />
           </div>
         </div>
         <div style={{ '--i': 2, '--inset': '40%' }} className='box' />
