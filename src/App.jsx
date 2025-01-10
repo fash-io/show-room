@@ -73,17 +73,17 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/list' element={<MyList />} />
-          <Route path='/movies' element={<ShowsPage />} />
-          <Route path='/series' element={<ShowsPage />} />
           <Route path='/trending' element={<PopularPage />} />
           <Route path='/person/:id' element={<PersonPage />} />
-          <Route path='/collection/:id' element={<CollectionPage />} />
-          <Route path='/:type/:id' element={<ShowPage />} />
-          <Route path='/search/:searchQuery' element={<SearchPage />} />
           <Route path='/search' element={<SearchPage />} />
-          <Route path='/contact-us' element={<ContactUs />} />
-          <Route path='/poster' element={<PosterBackground />} />
+          <Route path='/collection/:id' element={<CollectionPage />} />
           <Route path='/faq' element={<FAQ />} />
+          <Route path='/contact-us' element={<ContactUs />} />
+          <Route path='/search/:searchQuery' element={<SearchPage />} />
+          <Route path='/poster' element={<PosterBackground />} />
+          <Route path='/:type/:id' element={<ShowPage />} />
+          <Route path='/shows' element={<ShowsPage />} />
+          <Route path='/shows/:type' element={<ShowsPage />} />
           <Route path='*' element={<Error />} />
         </Routes>
         {location.pathname === '/login' || location.pathname === '/poster' ? (

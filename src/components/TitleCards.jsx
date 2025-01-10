@@ -20,6 +20,7 @@ const TitleCards = ({
   const [error, setError] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -72,11 +73,18 @@ const TitleCards = ({
   const dataToDisplay = userWatchlist ? watchlistData : data
 
   return (
-    <div className='mt-3 mb-3 sm:mt-7 md:mt-12 sm:mb-5 md:mb-8'>
-      <h2 className={`mb-3 text-lg font-semibold ${className}`}>
-        {title || 'Popular on Netflix'}
-      </h2>
-      <div className='overflow-x-scroll whitespace-nowrap div inset-0'>
+    <div
+      className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div
+        className={`absolute h-[30%] md:h-[35%] w-20 bg right-0 z-10 bg-gradient-to-r from-transparent  hover:opacity-0 transition-all duration-200 to-black ${
+          isHovered && 'pointer-events-none opacity-0'
+        }`}
+      ></div>
+      <h2 className={`mb-1 ${className}`}>{title || 'Popular'}</h2>
+      <div className='overflow-x-scroll whitespace-nowrap div inset-1'>
         {dataToDisplay.length > 0 ? (
           dataToDisplay.map((card, i) => (
             <ShowCard key={i} type_={type} show={card} type={2} />

@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { options } from './api'
 
-export const fetchLogos = async (show, options) => {
+export const fetchLogos = async show => {
   const logos = {}
 
   for (const movie of show) {

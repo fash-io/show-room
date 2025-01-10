@@ -36,26 +36,29 @@ const ShowCard = props => {
       <Link
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
         key={show.id}
-        className='relative inline-block h-60 mr-3 w-[8rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg group'
+        className='relative inline-block h-auto mr-3 w-[7rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-300 rounded-lg'
       >
         <LazyLoader
           src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
           alt={show.title || show.name || 'Movie Poster'}
-          className='cursor-pointer object-cover h-full w-full rounded-lg group-hover:scale-110 transition-transform duration-300'
+          className='cursor-pointer object-cover h-full w-full rounded-lg md:group-hover:scale-110 transition-transform duration-300'
         />
 
-        <div className='absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg group-hover:opacity-100'>
+        <div className='absolute bottom-0 left-0 flex opacity-0 items-center justify-center p-2 text-xs text-white bg-black/70 duration-200 rounded-tr-lg md:group-hover:opacity-100'>
           {show.vote_average > 1 ? show.vote_average.toFixed(1) : 'N/A'}
         </div>
+        <p className='text-[8px] md:hidden text-white/60 mt-0.5'>
+          {show.first_air_date || show.release_date}
+        </p>
       </Link>
     )
   } else if (type === 3) {
     return (
       <div
         key={show.id}
-        className='group relative rounded-lg overflow-hidden shadow-lg w-full h-[16rem] sm:h-80 perspective'
+        className='group relative rounded-lg overflow-hidden shadow-lg w-full  '
       >
-        <div className='absolute top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg] z-[1]'>
+        <div className=' top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg] z-[1]'>
           <img
             src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.title || show.name}

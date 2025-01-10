@@ -111,6 +111,8 @@ const ContentPage = () => {
       ? content.created_by
       : credits.crew.filter(member => member.job === 'Director')
 
+  console.log(content)
+
   return (
     <>
       {loading && <Loading transparent={true} />}
@@ -190,7 +192,7 @@ const ContentPage = () => {
             label={'Collection'}
           />
         )}
-        {content?.seasons.length > 1 && (
+        {content?.seasons?.length > 1 && (
           <ShowCollection
             content={content}
             setError={setError}

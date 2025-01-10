@@ -1,10 +1,11 @@
 export const navLinks = [
   { label: 'Home', href: '/', icon: 'fa-house', order: 3, index: 1 },
-  { label: 'TV Shows', href: '/series', icon: 'fa-tv', order: 1, index: 2 },
-  { label: 'Movies', href: '/movies', icon: 'fa-film', order: 2, index: 3 },
-  { label: 'Trending', href: '/trending', icon: 'fa-fire', order: 4, index: 4 },
+  { label: 'Shows', href: '/shows', icon: 'fa-tv', order: 1, index: 2 },
+  // { label: 'Movies', href: '/movies', icon: 'fa-film', order: 2, index: 3 },
+  { label: 'Trending', href: '/trending', icon: 'fa-fire', order: 2, index: 4 },
   { label: 'My List', href: '/list', icon: 'fa-list', order: 5, index: 5 },
-  { label: 'Poster', href: '/poster', icon: 'fa-images', order: 0, index: 6 }
+  { label: 'Poster', href: '/poster', icon: 'fa-images', order: 0, index: 6 },
+  { label: 'Profile', href: '/profile', icon: 'fa-user', order: 6, index: 6 }
 ]
 
 export const footerLinks = [
@@ -95,14 +96,14 @@ export const faqs = [
 ]
 
 export const featured = [
+  { title: 'Your Watch List', userWatchlist: true },
   { title: "Now in Cinema's", category: 'now_playing', type: 'movie' },
   { title: 'Popular Movies', category: 'popular', type: 'movie' },
   { title: 'Top Rated Movies', category: 'top_rated', type: 'movie' },
   { title: 'Upcoming Movies', category: 'upcoming', type: 'movie' },
   { title: 'Popular Series', category: 'popular', type: 'tv' },
   { title: 'Top Rated Series', category: 'top_rated', type: 'tv' },
-  { title: 'On The Air', category: 'on_the_air', type: 'tv' },
-  { title: 'Your Watch List', userWatchlist: true }
+  { title: 'On The Air', category: 'on_the_air', type: 'tv' }
 ]
 
 export const actorLinks = [

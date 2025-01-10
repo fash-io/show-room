@@ -1,11 +1,18 @@
+import { useEffect } from 'react'
+
 /* eslint-disable react/prop-types */
-const Pagination = props => {
-  const { totalPages, page, handlePageChange, loading } = props
+const Pagination = ({ totalPages, page, setPage, loading }) => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 700,
+      behavior: 'smooth'
+    })
+  }, [page])
   return (
     <>
       <div className='mt-8 flex justify-center items-center '>
         <button
-          onClick={() => handlePageChange(1)}
+          onClick={() => setPage(1)}
           disabled={page === 1 || loading}
           className={`py-2 px-4 rounded-l ${
             page === 1 || loading
@@ -17,7 +24,7 @@ const Pagination = props => {
           «
         </button>
         <button
-          onClick={() => handlePageChange(page - 1)}
+          onClick={() => setPage(prev => prev - 1)}
           disabled={page === 1 || loading}
           className={`py-2 px-4  ${
             page === 1 || loading
@@ -32,7 +39,7 @@ const Pagination = props => {
           {page}
         </span>
         <button
-          onClick={() => handlePageChange(page + 1)}
+          onClick={() => setPage(prev => prev + 1)}
           disabled={page === totalPages || loading}
           className={`py-2 px-4  ${
             page === totalPages || loading
@@ -44,7 +51,7 @@ const Pagination = props => {
           ›
         </button>
         <button
-          onClick={() => handlePageChange(totalPages)}
+          onClick={() => setPage(totalPages)}
           disabled={page === totalPages || loading}
           className={`py-2 px-4 rounded-r ${
             page === totalPages || loading
