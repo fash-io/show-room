@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import { Link } from 'react-router-dom'
 import { BiInfoCircle } from 'react-icons/bi'
 import { options } from '../../utils/api'
 import { fetchLogos } from '../../utils/logo-util'
 import { getFontForGenres } from '../../utils/get-font'
-import { fetchData } from '../../utils/tmdbfetch'
+import { fetchData, fetchTrailer } from '../../utils/tmdbfetch'
 import SliderButtons from './SliderButtons'
+import { BsYoutube } from 'react-icons/bs'
+import UserContext from '../../UserContext'
 
 const Slider = props => {
   const { height, type, setError, setLoading } = props
@@ -16,6 +18,7 @@ const Slider = props => {
   const [logos, setLogos] = useState({})
   const sliderRef = useRef()
   const intervalRef = useRef()
+  const { setTrailerUrl, trailerUrl } = useContext(UserContext)
 
   useEffect(() => {
     fetchData({
@@ -78,20 +81,13 @@ const Slider = props => {
     trackMouse: true
   })
 
-  useEffect(() => {
-    const handleKeyDown = event => {
-      if (event.key === 'ArrowLeft') {
-        goToPreviousSlide()
-      } else if (event.key === 'ArrowRight') {
-        goToNextSlide()
-      }
-    }
+  const handleClick = dataPath => {
+    fetchTrailer(dataPath.media_type, dataPath.id, setTrailerUrl)
+  }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
+  useEffect(() => {
+    trailerUrl ? disableAutoSlide() : resetAutoSlide()
+  }, [trailerUrl])
 
   return (
     <div className={`relative overflow-hidden z-40 ${height}`}>
@@ -104,13 +100,13 @@ const Slider = props => {
           disableAutoSlide()
         }}
         onMouseLeave={() => {
-          startAutoSlide()
+          !trailerUrl && startAutoSlide()
         }}
         style={{
           transform: `translateX(-${currentIndex * 100}%)`
         }}
       >
-        {show.length > 0 ? (
+        {show.length > 0 &&
           show.map((movie, index) => (
             <div key={index} className='min-w-full relative h-full'>
               <img
@@ -157,19 +153,24 @@ const Slider = props => {
                     to={`/${
                       movie.media_type === 'movie' ? 'movie' : 'series'
                     }/${movie.id}`}
-                    className='py-1 sm:py-2 flex px-3 sm:px-4 md:px-5 items-center gap-1 sm:gap-2 md:gap-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded cursor-pointer hover:bg-[#6d6d6e66] transition duration-200'
+                    className='py-1 sm:py-2 flex px-3 sm:px-4 md:px-5 items-center gap-1 sm:gap-2 md:gap-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded cursor-pointer hover:bg-[#6d6d6e66] transition duration-200 relative group'
                   >
                     <BiInfoCircle /> More info
                   </Link>
+                  <button
+                    className='py-1 sm:py-2 flex px-3 sm:px-4 md:px-5 items-center gap-1 sm:gap-2 md:gap-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded cursor-pointer hover:bg-[#6d6d6e66] transition duration-200'
+                    onClick={() => {
+                      handleClick(movie)
+                      disableAutoSlide()
+                    }}
+                  >
+                    <BsYoutube color='' /> Play Trailer
+                  </button>
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          <></>
-        )}
+          ))}
       </div>
-
       <SliderButtons onClick={goToNextSlide} direction={'right'} />
     </div>
   )

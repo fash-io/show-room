@@ -24,10 +24,10 @@ export const fetchData = async ({
     const response = await axios.get(url, options)
     if (response.status === 200) {
       if (single) {
-        setData(response.data)
+        setData(response.data || {})
       } else {
-        setData(response.data.results)
-        setTotalPages && setTotalPages(response.data.total_pages)
+        setData(response.data.results || [])
+        setTotalPages && setTotalPages(response.data.total_pages || 0)
       }
     } else {
       setError && setError(response.statusText)
@@ -40,8 +40,13 @@ export const fetchData = async ({
   }
 }
 
-export const fetchTrailer = async (url, setTrailerUrl) => {
-  const response = await axios.get(url, options)
+export const fetchTrailer = async (type, id, setTrailerUrl) => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/${
+      type === 'series' ? 'tv' : type
+    }/${id}/videos?language=en-US`,
+    options
+  )
   const trailer = response.data.results.find(
     video => video.type === 'Trailer' && video.site === 'YouTube'
   )

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './utils/firebase'
@@ -25,16 +25,14 @@ import {
   MyList
 } from './pages'
 import PosterBackground from './pages/PosterBackground'
+import GalleryModal from './components/show-page/GalleryModal'
 
 const App = () => {
-  const [isExploring, setIsExploring] = useState(
-    localStorage.getItem('exploring')
-  )
   const [loading, setLoading] = useState(true)
   const location = useLocation()
   const [user, setUser] = useState(null)
   const [userData, setUserData] = useState(null)
-  const navigate = useNavigate()
+  const [trailerUrl, setTrailerUrl] = useState('')
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user_ => {
@@ -50,25 +48,20 @@ const App = () => {
     return () => unsubscribe()
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem('exploring', true)
-  }, [isExploring])
-
-  useEffect(() => {
-    if (!loading) {
-      if (!isExploring && !user) {
-        navigate('/login')
-      }
-    }
-  }, [isExploring, loading, user, navigate])
-
   if (loading) {
     return <Loading />
   }
 
   return (
     <>
-      <UserContext.Provider value={{ user: user, userData: userData }}>
+      <UserContext.Provider
+        value={{
+          user: user,
+          userData: userData,
+          setTrailerUrl: setTrailerUrl,
+          trailerUrl: trailerUrl
+        }}
+      >
         <ToastContainer className={'toast-container z-[1000]'} />
         {location.pathname === '/login' || location.pathname === '/poster' ? (
           <></>
@@ -77,10 +70,7 @@ const App = () => {
         )}
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route
-            path='/login'
-            element={<Login setIsExploring={setIsExploring} />}
-          />
+          <Route path='/login' element={<Login />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/list' element={<MyList />} />
           <Route path='/movies' element={<ShowsPage />} />
@@ -99,7 +89,15 @@ const App = () => {
         {location.pathname === '/login' || location.pathname === '/poster' ? (
           <></>
         ) : (
-          <Footer />
+          <>
+            <Footer />
+          </>
+        )}
+        {trailerUrl && (
+          <GalleryModal
+            selectedData={trailerUrl}
+            closeModal={() => setTrailerUrl('')}
+          />
         )}
       </UserContext.Provider>
     </>

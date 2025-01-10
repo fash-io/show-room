@@ -4,6 +4,9 @@ import { useOnClickOutside } from '../../useOnClickOutside'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { options } from '../../utils/api'
 import axios from 'axios'
+import { BsPerson } from 'react-icons/bs'
+import { BiMovie, BiTv } from 'react-icons/bi'
+import { fetchData } from '../../utils/tmdbfetch'
 
 const SearchBar = ({ searchIcon, setSearchIcon }) => {
   const [results, setResults] = useState([])
@@ -13,21 +16,21 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
   const IconRef = useRef()
   const location = useLocation()
 
-  const searchMovies = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
+  const fakeData = [
+    { media_type: 'tv', id: 110201, title: 'avenge' },
+    { media_type: 'movie', id: 1102321, title: 'My' },
+    { media_type: 'person', id: 1394301, title: 'Brother' }
+  ]
+
+  useEffect(() => {
+    if (searchValue) {
+      fetchData({
+        url: `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
           searchValue
         )}&include_adult=false&page=1`,
-        options
-      )
-      setResults(response.data.results || [])
-    } catch (err) {
-      console.error('Error fetching search results:', err)
+        setData: setResults
+      })
     }
-  }
-  useEffect(() => {
-    if (searchValue) searchMovies()
   }, [searchValue])
 
   const handleClickOutside = function () {
@@ -41,7 +44,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchValue) {
-      navigate(`/search/${searchValue}`)
+      navigate(`/search/${encodeURIComponent(searchValue)}`)
       handleClickOutside()
     }
   }
@@ -51,11 +54,12 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
     setResults([])
     setSearchIcon(false)
   }
-  // const handleSearchClick = () => {
-  //   searchRef.current.focus()
-  //   IconRef.current.focus()
-  //   setSearchIcon(true)
-  // }
+
+  const handleSearchClick = () => {
+    searchRef.current.focus()
+    IconRef.current.focus()
+    setSearchIcon(true)
+  }
 
   useOnClickOutside(searchRef, handleClickOutside)
   if (location.pathname.startsWith('/search')) return
@@ -71,7 +75,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
         onFocus={() => setSearchIcon(true)}
-        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 text-[12px] 
+        className={`transition-all duration-300 ease-in-out pl-10 h-8 text-sm rounded-full bg-gray-800 text-white shadow-inner focus:outline-none focus:shadow-lg focus:ring-2 focus:ring-purple-500 max-sm:text-[16px] 
           ${searchIcon ? 'w-44 md:w-64' : 'w-10 cursor-pointer'}`}
         placeholder='Type to search...'
         ref={IconRef}
@@ -84,6 +88,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
           xmlns='http://www.w3.org/2000/svg'
           className='w-6 h-6 text-white'
           viewBox='0 0 512 512'
+          onClick={handleSearchClick}
         >
           <title>Search</title>
           <path
@@ -104,9 +109,9 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         </svg>
       </div>
 
-      {results.length > 0 && searchIcon && (
+      {fakeData.length > 0 && searchIcon && (
         <div className='absolute top-10 min-w-[300px] -left-14 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg'>
-          {results.map((val, i) => (
+          {fakeData.map((val, i) => (
             <Link
               className='w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer'
               key={i}
@@ -133,8 +138,12 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
                   alt={val.name || val.title}
                   className='w-10 h-10 object-cover rounded-lg'
                 />
+              ) : val.media_type === 'movie' ? (
+                <BiMovie />
+              ) : val.media_type === 'tv' ? (
+                <BiTv />
               ) : (
-                'N/A'
+                <BsPerson />
               )}
             </Link>
           ))}

@@ -18,6 +18,7 @@ const TVShowsPage = () => {
   const [sort, setSort] = useState('popularity')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const [year, setYear] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const type_ = pathname === '/series' ? 'tv' : 'movie'
@@ -29,14 +30,16 @@ const TVShowsPage = () => {
   const fetchShows = useCallback(async () => {
     fetchData({
       url: `https://api.themoviedb.org/3/discover/${type_}?page=${page}&sort_by=${sort}.desc&vote_count.gte=${
-        sort === 'popularity' ? 400 : sort === 'vote_average' ? 400 : 0
-      }${genres.length > 0 ? `&with_genres=${genres.join(',')}` : ''}`,
+        sort === 'popularity' || sort === 'vote_average' ? 400 : 0
+      }${genres.length > 0 ? `&with_genres=${genres.join(',')}` : ''}${
+        year ? `&primary_release_year=${year}` : ''
+      }`,
       setData: setShows,
       setLoading: setLoading,
       setError: setError,
       setTotalPages: setTotalPages
     })
-  }, [page, type_, sort, genres])
+  }, [page, type_, sort, genres, year])
 
   useEffect(() => {
     fetchShows()
@@ -52,6 +55,7 @@ const TVShowsPage = () => {
 
   const handleSortChange = event => setSort(event.target.value)
   const handleGenreChange = event => setGenre(event.target.value)
+  const handleYearChange = event => setYear(event.target.value)
 
   useEffect(() => {
     if (genre && !genres.includes(genre)) {
@@ -79,7 +83,7 @@ const TVShowsPage = () => {
       <div className='container min-h-screen mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white'>
         <div className='mb-8'>
           <div
-            className='p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1 '
+            className='p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1'
             ref={showsRef}
           >
             <div className='flex flex-col sm:flex-row sm:space-x-6 w-full ml-auto justify-end'>
@@ -95,9 +99,17 @@ const TVShowsPage = () => {
                 >
                   <option value='popularity'>Popularity</option>
                   <option value='vote_average'>Rating</option>
-                  <option value='first_air_date'>Release Date</option>
+                  <option value='first_air_date'>Newest to Oldest</option>
+                  <option value='release_date.asc'>Oldest to Newest</option>
+                  <option value='vote_count.desc'>Most Watched</option>
+                  <option value='vote_count.asc'>Least Watched</option>
+                  <option value='original_title.asc'>Alphabetical (A-Z)</option>
+                  <option value='original_title.desc'>
+                    Alphabetical (Z-A)
+                  </option>
                 </select>
               </div>
+
               <div className='flex flex-col mb-4 sm:mb-0'>
                 <label htmlFor='genre' className='text-white text-sm mb-2'>
                   Genre
@@ -116,10 +128,19 @@ const TVShowsPage = () => {
                   ))}
                 </select>
               </div>
-              <div className='flex flex-col'>
+
+              <div className='flex flex-col mb-4 sm:mb-0'>
                 <label htmlFor='year' className='text-white text-sm mb-2'>
                   Year:
                 </label>
+                <input
+                  type='number'
+                  id='year'
+                  value={year}
+                  onChange={handleYearChange}
+                  className='p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
+                  placeholder='Enter Year'
+                />
               </div>
             </div>
           </div>
@@ -129,7 +150,7 @@ const TVShowsPage = () => {
               <TransitionGroup className='flex'>
                 {genres.map((genre, i) => (
                   <CSSTransition key={i} timeout={300} classNames='fade'>
-                    <div className='bg-gray-900 text-white border-blue-900/50 border rounded-full flex justify-between items-center p-2 gap-2 py-0 duration-200 ml-2 '>
+                    <div className='bg-gray-900 text-white border-blue-900/50 border rounded-full flex justify-between items-center p-2 gap-2 py-0 duration-200 ml-2'>
                       <span className='font-light whitespace-nowrap'>
                         {genre_.find(g => g.id === parseInt(genre))?.name}
                       </span>

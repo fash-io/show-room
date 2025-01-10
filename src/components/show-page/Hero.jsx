@@ -12,12 +12,7 @@ const Hero = content => {
 
   useEffect(() => {
     try {
-      fetchTrailer(
-        `https://api.themoviedb.org/3/${
-          type === 'series' ? 'tv' : type
-        }/${id}/videos?language=en-US`,
-        setTrailerUrl
-      )
+      fetchTrailer(type, id, setTrailerUrl)
       getLogos(
         `https://api.themoviedb.org/3/${
           type === 'series' ? 'tv' : type

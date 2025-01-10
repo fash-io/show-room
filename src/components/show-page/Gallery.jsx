@@ -4,7 +4,6 @@ import ShowGallery from './ShowGallery'
 import GalleryModal from './GalleryModal'
 import { useParams } from 'react-router-dom'
 import { BiLogoYoutube, BiZoomIn } from 'react-icons/bi'
-import { LuYoutube } from 'react-icons/lu'
 
 const Gallery = ({ backdrops, videos, posters }) => {
   const { id, type } = useParams()

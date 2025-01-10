@@ -4,13 +4,6 @@ import LazyLoader from './Loaders/LazyLoader'
 const ShowCard = props => {
   const { show, type_, type } = props
 
-  const Loader = () => (
-    <div
-      className='absolute top-0 bottom-0 -z-10 left-0 right-0 bg-[rgba(20,20,20,0.9)] animate-pulse  rounded-lg flex justify-center items-center'
-      style={{ animationDuration: '1.4s' }}
-    ></div>
-  )
-
   if (type === 1) {
     return (
       <Link

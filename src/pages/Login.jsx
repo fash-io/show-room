@@ -9,8 +9,7 @@ import * as Yup from 'yup'
 import Loader_ from '../components/Loaders/Loader_'
 import PosterBackground from '../components/poster-background/PosterBackground'
 
-const Login = props => {
-  const { setIsExploring } = props
+const Login = () => {
   const [signState, setSignState] = useState('Login')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -74,11 +73,6 @@ const Login = props => {
       }
     }
   })
-
-  const handleExploring = () => {
-    setIsExploring(true)
-    navigator(nextPath || '/')
-  }
 
   const handleShowSelect = movie => {
     if (movie === undefined) {
@@ -195,7 +189,7 @@ const Login = props => {
                 </p>
                 <h2
                   className='font-medium cursor-pointer text-white'
-                  onClick={handleExploring}
+                  onClick={() => navigator(nextPath || '/')}
                 >
                   Just exploring?
                 </h2>

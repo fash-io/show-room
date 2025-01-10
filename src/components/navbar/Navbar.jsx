@@ -86,7 +86,7 @@ const Navbar = () => {
         </ul>
 
         {!(pathname === '/profile') && (
-          <div className=' flex gap-4 lg:gap-15 items-center'>
+          <div className=' flex gap-4 lg:gap-8 items-center justify-between'>
             <SearchBar searchIcon={searchIcon} setSearchIcon={setSearchIcon} />
             {userData && Object.keys(userData).length !== 0 ? (
               <Link
@@ -104,7 +104,10 @@ const Navbar = () => {
                 )}
               </Link>
             ) : (
-              <Link to={'/login'} className='text-white'>
+              <Link
+                to={'/login'}
+                className='text-white h-full w-full flex items-center'
+              >
                 Login
               </Link>
             )}
