@@ -113,17 +113,13 @@ const PopularPage = () => {
   return (
     <div className='min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8'>
       <h2 className='font-creepster text-2xl text-center pb-5'>
-        Explore{' '}
-        <span className='underline cursor-pointer'>
-          {mediaType === 'tv'
-            ? "this week's top series"
-            : mediaType === 'all'
-            ? 'all categories'
-            : "this week's latest movies"}
-        </span>{' '}
-        <span className='underline cursor-pointer'>
-          {timeWindow === 'daily' ? 'today' : 'this week'}
-        </span>
+        Top{' '}
+        {mediaType === 'tv'
+          ? 'Series'
+          : mediaType === 'all'
+          ? 'Content'
+          : 'Movies'}{' '}
+        {timeWindow === 'daily' ? 'Today' : 'This Week'}
       </h2>
 
       <button
@@ -198,7 +194,7 @@ const PopularPage = () => {
           </div>
         </div>
       </div>
-      <div className='sm:px-20 sm:py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-y-8'>
+      <div className='sm:px-20 sm:py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 gap-5 sm:gap-y-8'>
         {popularMovies
           .filter(movie => movie.poster_path)
           .map((movie, i) => (

@@ -126,37 +126,40 @@ const ShowCard = props => {
     return (
       <div
         key={show.id}
-        className='group relative rounded-lg overflow-hidden shadow-lg w-full  '
+        className='group relative rounded-lg overflow-hidden shadow-lg w-full'
       >
-        <div className=' top-0 left-0 w-full h-full rounded-lg shadow-md transform origin-top transition duration-700 group-hover:rotate-[50deg] z-[1]'>
+        <div className='relative w-full h-full'>
           <img
             src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.title || show.name}
-            className='w-full h-full object-cover rounded-lg'
+            className='w-full h-full object-cover rounded-lg transition-all duration-700'
           />
+          <div className='h-full w-0 duration-700 group-hover:w-full absolute top-0 bg-black ' />
+          <div className='h-full w-0 duration-700 group-hover:w-full absolute top-0 right-0 bg-black z-' />
         </div>
 
         <Link
-          className='absolute top-[44%] left-[29%] sm:top-[53%] sm:left-[31%] whitespace-pre-wrap text-white text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 underline text-sm'
+          className='absolute whitespace-pre-wrap text-white text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 text-lg font-semibold hover:text-pink-600'
           to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
         >
-          {show.title || show.name} <i className='fa fa-arrow-right    '></i>
+          {show.title || show.name} <i className='fa fa-arrow-right'></i>
         </Link>
-
-        <div className='absolute bottom-0 text-white text-sm p-2 rounded-lg transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
-          <p className='font-medium'>
-            Rating:{' '}
-            <span className='text-pink-600'>
-              {show.vote_average > 1 ? show.vote_average.toFixed(1) : 'N/A'}
-            </span>
-          </p>
-          {show.overview && (
-            <p className='mt-1 text-xs'>
-              {show.overview.length > 60
-                ? `${show.overview.slice(0, 60)}...`
-                : show.overview}
+        <div className='absolute bottom-0 left-0 right-0 text-white text-sm p-4 rounded-lg bg-gradient-to-t from-black to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
+          <div className='flex justify-between'>
+            <p className='font-medium'>
+              Rating:{' '}
+              <span className='text-pink-600'>
+                {show.vote_average > 1 ? show.vote_average.toFixed(1) : 'N/A'}
+              </span>
             </p>
-          )}
+            {show.overview && (
+              <p className='text-xs hidden lg:block mt-1'>
+                {show.overview.length > 60
+                  ? `${show.overview.slice(0, 60)}...`
+                  : show.overview}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     )
