@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -53,7 +52,6 @@ const Slider = ({ height, type, setError, setLoading }) => {
     getGenre()
   }, [type, show])
 
-  console.log(genres)
   useEffect(() => {
     const fetchLogosData = async () => {
       if (show.length > 0) {
@@ -160,6 +158,12 @@ const Slider = ({ height, type, setError, setLoading }) => {
                   </div>
                 </div>
               </div>
+              <Link
+                to={`/${movie.media_type === 'movie' ? 'movie' : 'series'}/${
+                  movie.id
+                }`}
+                className='block absolute inset-0 md:hidden'
+              />
             </div>
           </SwiperSlide>
         ))}

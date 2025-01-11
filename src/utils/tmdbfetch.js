@@ -51,6 +51,7 @@ export const fetchTrailer = async (type, id, setTrailerUrl) => {
     video => video.type === 'Trailer' && video.site === 'YouTube'
   )
   if (trailer) {
-    setTrailerUrl(trailer.key)
+    if (setTrailerUrl) setTrailerUrl(trailer)
+    else return trailer
   }
 }

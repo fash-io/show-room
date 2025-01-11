@@ -6,6 +6,7 @@ import { options, fetchDetails } from '../utils/api'
 import UserContext from '../UserContext'
 import randomizeArray from 'randomize-array'
 import axios from 'axios'
+import { fetchTrailer } from '../utils/tmdbfetch'
 
 const TitleCards = ({
   title,
@@ -21,6 +22,7 @@ const TitleCards = ({
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [activeTrailer, setActiveTrailer] = useState({ id: null, url: null })
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -67,16 +69,23 @@ const TitleCards = ({
     }
   }, [category, type, userWatchlist, userData, setLoading, data_])
 
+  const handleHover = async show => {
+    if (activeTrailer.id === show.id) {
+      setActiveTrailer({ id: null, url: null })
+    } else {
+      const trailer = await fetchTrailer(type, show.id)
+      setActiveTrailer({ id: show.id, url: trailer.key })
+    }
+  }
   if (loading) return <div className='bg-black h-[10vh]' />
   if (error) return <Error message={error} isSmall={true} />
 
   const dataToDisplay = userWatchlist ? watchlistData : data
-
+  console.log(activeTrailer)
   return (
     <div
       className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div
         className={`absolute h-[30%] md:h-[35%] w-20 bg right-0 z-10 bg-gradient-to-r from-transparent  hover:opacity-0 transition-all duration-200 to-black ${
@@ -84,10 +93,19 @@ const TitleCards = ({
         }`}
       ></div>
       <h2 className={`mb-1 ${className}`}>{title || 'Popular'}</h2>
-      <div className='overflow-x-scroll whitespace-nowrap div inset-1'>
+      <div className='overflow-x-scroll py-3 whitespace-nowrap div inset-1'>
         {dataToDisplay.length > 0 ? (
           dataToDisplay.map((card, i) => (
-            <ShowCard key={i} type_={type} show={card} type={2} />
+            <ShowCard
+              key={i}
+              type_={type}
+              show={card}
+              type={2}
+              isPlaying={activeTrailer.id === card.id}
+              trailerUrl={activeTrailer.url}
+              onHover={() => handleHover(card)}
+              onHoverEnd={() => setActiveTrailer({ id: null, url: null })}
+            />
           ))
         ) : (
           <p className='p-5 border border-white/20 rounded'>

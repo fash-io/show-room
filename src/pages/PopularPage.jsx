@@ -112,6 +112,20 @@ const PopularPage = () => {
 
   return (
     <div className='min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8'>
+      <h2 className='font-creepster text-2xl text-center pb-5'>
+        Explore{' '}
+        <span className='underline cursor-pointer'>
+          {mediaType === 'tv'
+            ? "this week's top series"
+            : mediaType === 'all'
+            ? 'all categories'
+            : "this week's latest movies"}
+        </span>{' '}
+        <span className='underline cursor-pointer'>
+          {timeWindow === 'daily' ? 'today' : 'this week'}
+        </span>
+      </h2>
+
       <button
         className='fixed md:hidden bottom-[7%] left-[2%] z-50 p-3 py-2 aspect-square rounded-full bg-blue-500 text-white mobile-filter-btn'
         onClick={() => setShowFilters(!showFilters)}

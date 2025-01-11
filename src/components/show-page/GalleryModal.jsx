@@ -6,6 +6,7 @@ import { LuDownload, LuMinimize, LuX } from 'react-icons/lu'
 
 const GalleryModal = ({ selectedData, closeModal }) => {
   const [size, setSize] = useState('default')
+  console.log(size)
 
   if (selectedData.file_path) {
     return (
@@ -42,7 +43,7 @@ const GalleryModal = ({ selectedData, closeModal }) => {
       <div
         className={`fixed z-50 ${
           size === 'mini'
-            ? 'w-[29rem] h-72 bottom-3 right-3 rounded-xl overflow-hidden'
+            ? 'md:w-[29rem] md:h-72 bottom-14 md:bottom-3 right-3 rounded-xl overflow-hidden'
             : ' inset-0 z-[1000] bg-black/90 flex justify-center items-center w-screen h-screen'
         }`}
         onClick={closeModal}
@@ -52,7 +53,7 @@ const GalleryModal = ({ selectedData, closeModal }) => {
             size === 'mini'
               ? 'w-full h-full'
               : size === 'default'
-              ? 'h-4/5 w-4/5 bg-gray-900 pt-6 pb-1 px-0.5'
+              ? 'h-[33%] w-[95%] sm:h-3/4 sm:w-4/5 bg-gray-900 pt-6 pb-1 px-0.5'
               : 'h-screen w-screen bg-gray-900 pt-6 pb-1 px-0.5'
           }`}
           onClick={e => e.stopPropagation()}
