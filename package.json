@@ -13,6 +13,7 @@
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.12.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@videojs/http-streaming": "^3.16.2",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -40,6 +41,8 @@
     "swiper": "^11.2.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "video.js": "^8.21.0",
+    "videojs-youtube": "^3.0.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {
