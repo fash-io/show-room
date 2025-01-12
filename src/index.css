@@ -232,12 +232,12 @@ body {
 }
 .swiper-button-next::after {
   content: '›';
-  transform: scale(1.3) !important;
+  transform: scale(2) !important;
   color: aliceblue !important;
 }
 .swiper-button-prev::after {
   content: '‹';
-  transform: scale(1.3) !important;
+  transform: scale(2) !important;
   color: aliceblue !important;
 }
 @media not all and (min-width: 768px) {

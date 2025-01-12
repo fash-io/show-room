@@ -75,7 +75,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
         loop={true}
         autoplay={{
           delay: 8000,
-          pauseOnMouseEnter: true
+          pauseOnMouseEnter: false
         }}
         pagination={{
           dynamicBullets: true
