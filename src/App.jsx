@@ -63,7 +63,9 @@ const App = () => {
         }}
       >
         <ToastContainer className={'toast-container z-[1000]'} />
-        {location.pathname === '/login' || location.pathname === '/poster' ? (
+        {location.pathname === '/login' ||
+        location.pathname === '/poster' ||
+        location.pathname === '/signup' ? (
           <></>
         ) : (
           <Navbar />
@@ -71,6 +73,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Login />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/list' element={<MyList />} />
           <Route path='/trending' element={<PopularPage />} />
@@ -86,7 +89,9 @@ const App = () => {
           <Route path='/shows/:type' element={<ShowsPage />} />
           <Route path='*' element={<Error />} />
         </Routes>
-        {location.pathname === '/login' || location.pathname === '/poster' ? (
+        {location.pathname === '/login' ||
+        location.pathname === '/poster' ||
+        location.pathname === '/signup' ? (
           <></>
         ) : (
           <>

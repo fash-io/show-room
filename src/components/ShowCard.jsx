@@ -5,12 +5,12 @@ import { useWindowWidth } from '../utils/windowWidth'
 import VideoPlayer from './show-page/VideoPlayer'
 import { useEffect, useState } from 'react'
 import { BsYoutube } from 'react-icons/bs'
+import { BiSolidError } from 'react-icons/bi'
 const ShowCard = props => {
   const { show, type_, type, isPlaying, trailerUrl, onHover, onHoverEnd } =
     props
   const windowWidth = useWindowWidth()
   const location = useLocation()
-  console.log(location.pathname)
   const [isTrailerPlaying, setIsTrailerPlaying] = useState(false)
   const showTrailer =
     windowWidth > 768 && location.pathname === '/' ? true : false
@@ -77,10 +77,10 @@ const ShowCard = props => {
                 className='text-white'
                 style={{ textShadow: '2px 2px 4px #000000' }}
               >
-                <div className='text-xl font-semibold mb-2'>
+                <div className='font-semibold mb-2'>
                   {show.title || show.name}
                 </div>
-                <p className='text-sm mb-2'>
+                <p className='text-xs mb-2'>
                   {show.overview.length > 90
                     ? `${show.overview.slice(0, 90)}...`
                     : show.overview}
@@ -92,19 +92,31 @@ const ShowCard = props => {
               </div>
 
               {isPlaying && trailerUrl ? (
-                <div
-                  className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3'
-                  onClick={e => {
-                    e.preventDefault()
-                    setIsTrailerPlaying(true)
-                  }}
-                >
-                  <div className='text-center'>
-                    <div className='text-xs py-2 flex items-center'>
-                      <BsYoutube /> Play Trailer
+                trailerUrl === 'no' ? (
+                  <>
+                    <div className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3'>
+                      <div className='text-center'>
+                        <div className='text-xs py-2 flex items-center'>
+                          <BiSolidError /> No trailer found
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3'
+                    onClick={e => {
+                      e.preventDefault()
+                      setIsTrailerPlaying(true)
+                    }}
+                  >
+                    <div className='text-center'>
+                      <div className='text-xs py-2 flex items-center'>
+                        <BsYoutube /> Play Trailer
+                      </div>
                     </div>
                   </div>
-                </div>
+                )
               ) : (
                 <div className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3 py-2'>
                   <div className='text-center'>
@@ -116,7 +128,7 @@ const ShowCard = props => {
             </div>
 
             <p className='text-[8px] md:hidden text-white/60 mt-0.5'>
-              {show.first_air_date || show.release_date}
+              {show.first_air_date || show.release_date.slice}
             </p>
           </>
         )}
@@ -132,20 +144,20 @@ const ShowCard = props => {
           <img
             src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.title || show.name}
-            className='w-full h-full object-cover rounded-lg transition-all duration-700'
+            className='w-full h-full object-cover rounded-lg transition-transform '
           />
-          <div className='h-full w-0 duration-700 group-hover:w-full absolute top-0 bg-black ' />
-          <div className='h-full w-0 duration-700 group-hover:w-full absolute top-0 right-0 bg-black z-' />
+          <div className='h-full w-0 duration-300 md:group-hover:w-1/2 absolute top-0 bg-blue-800/70 z-10' />
+          <div className='h-full w-0 duration-300 md:group-hover:w-1/2 absolute top-0 right-0 bg-pink-800/70 z-10' />
         </div>
 
         <Link
-          className='absolute whitespace-pre-wrap text-white text transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10 text-lg font-semibold hover:text-pink-600'
           to={`/${show.media_type === 'movie' ? 'movie' : 'series'}/${show.id}`}
+          className='w-full h-full absolute top-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent transition-opacity duration-500 opacity-0 md:group-hover:opacity-100 z-20'
         >
-          {show.title || show.name} <i className='fa fa-arrow-right'></i>
-        </Link>
-        <div className='absolute bottom-0 left-0 right-0 text-white text-sm p-4 rounded-lg bg-gradient-to-t from-black to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-10'>
-          <div className='flex justify-between'>
+          <div className='text-sm font-semibold text-white'>
+            {show.title || show.name}
+          </div>
+          <div className='text-white text-sm mt-2'>
             <p className='font-medium'>
               Rating:{' '}
               <span className='text-pink-600'>
@@ -153,14 +165,14 @@ const ShowCard = props => {
               </span>
             </p>
             {show.overview && (
-              <p className='text-xs hidden lg:block mt-1'>
+              <p className='text-xs mt-1 hidden lg:block'>
                 {show.overview.length > 60
                   ? `${show.overview.slice(0, 60)}...`
                   : show.overview}
               </p>
             )}
           </div>
-        </div>
+        </Link>
       </div>
     )
   }

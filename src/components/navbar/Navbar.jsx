@@ -21,7 +21,7 @@ const Navbar = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'instant'
+      behavior: 'smooth'
     })
   }, [pathname])
 

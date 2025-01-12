@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { login, signup } from '../utils/firebase'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { RxEyeOpen, RxEyeClosed, RxCrossCircled } from 'react-icons/rx'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -10,7 +10,10 @@ import Loader_ from '../components/Loaders/Loader_'
 import PosterBackground from '../components/poster-background/PosterBackground'
 
 const Login = () => {
-  const [signState, setSignState] = useState('Login')
+  const location = useLocation()
+  const [signState, setSignState] = useState(
+    location === 'login' ? 'Login' : 'Sign Up'
+  )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [selectedShow, setSelectedShow] = useState({})
@@ -18,7 +21,11 @@ const Login = () => {
   const navigator = useNavigate()
 
   const handleSignState = () => {
-    setSignState(prevState => (prevState === 'Sign Up' ? 'Login' : 'Sign Up'))
+    const newSignState = signState === 'Sign Up' ? 'Login' : 'Sign Up'
+    setSignState(newSignState)
+    const newPath = newSignState === 'Login' ? '/login' : '/signup'
+    navigator(newPath)
+
     formik.resetForm()
   }
 

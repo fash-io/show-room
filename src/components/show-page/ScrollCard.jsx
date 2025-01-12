@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const ScrollCard = ({ person }) => {
   return (
     <Link key={person.id} to={`/person/${person.id}`}>
-      <div className='flex-shrink-0 w-[9rem] sm:w-44 divvv group'>
+      <div className='flex-shrink-0 w-[9rem]  sm:w-44 divvv group'>
         <div className='overflow-hidden w-full h-full'>
           <img
             src={

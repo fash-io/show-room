@@ -21,7 +21,6 @@ const TitleCards = ({
   const [error, setError] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
   const [activeTrailer, setActiveTrailer] = useState({ id: null, url: null })
 
   useEffect(() => {
@@ -74,6 +73,7 @@ const TitleCards = ({
       setActiveTrailer({ id: null, url: null })
     } else {
       const trailer = await fetchTrailer(type, show.id)
+      !trailer && setActiveTrailer({ id: show.id, url: 'no' })
       setActiveTrailer({ id: show.id, url: trailer.key })
     }
   }
@@ -81,17 +81,8 @@ const TitleCards = ({
   if (error) return <Error message={error} isSmall={true} />
 
   const dataToDisplay = userWatchlist ? watchlistData : data
-  console.log(activeTrailer)
   return (
-    <div
-      className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'
-      onMouseEnter={() => setIsHovered(true)}
-    >
-      <div
-        className={`absolute h-[30%] md:h-[35%] w-20 bg right-0 z-10 bg-gradient-to-r from-transparent  hover:opacity-0 transition-all duration-200 to-black ${
-          isHovered && 'pointer-events-none opacity-0'
-        }`}
-      ></div>
+    <div className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'>
       <h2 className={`mb-1 ${className}`}>{title || 'Popular'}</h2>
       <div className='overflow-x-scroll py-3 whitespace-nowrap div inset-1'>
         {dataToDisplay.length > 0 ? (
@@ -108,9 +99,7 @@ const TitleCards = ({
             />
           ))
         ) : (
-          <p className='p-5 border border-white/20 rounded'>
-            No items found in WatchList.
-          </p>
+          <></>
         )}
       </div>
     </div>

@@ -23,7 +23,7 @@ const Home = () => {
         setLoading={setLoading}
         setError={setError}
       />
-      <div className='flex justify-center items-center h-[200px] bg-gradient-to-r from-black via-blue-900 to-red-900 text-white relative overflow-hidden -z-10'>
+      <div className='flex justify-center items-center h-[200px] bg-gradient-to-r from-black via-blue-900 to-red-900 text-white relative overflow-hidden -z-10 scale-'>
         <div className='custom-shape-divider-top-1736542638'>
           <svg
             xmlns='http://www.w3.org/2000/svg'

@@ -6,6 +6,7 @@ import ShowCard from '../components/ShowCard'
 import { FaFilter, FaTimes } from 'react-icons/fa'
 import axios from 'axios'
 import { fetchData } from '../utils/tmdbfetch'
+import ScrollToTop from '../components/ScrollToTOp'
 
 const PopularPage = () => {
   const [mediaType, setMediaType] = useState('all')
@@ -111,7 +112,7 @@ const PopularPage = () => {
   }
 
   return (
-    <div className='min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8'>
+    <div className='min-h-screen text-white py-7 md:py-20 px-4 lg:px-8'>
       <h2 className='font-creepster text-2xl text-center pb-5'>
         Top{' '}
         {mediaType === 'tv'
@@ -131,7 +132,7 @@ const PopularPage = () => {
       <div
         ref={filterRef}
         className={`mobile-filter-popup md:visible  ${
-          showFilters ? 'max-md:visible' : 'max-md:hidden'
+          showFilters ? 'max-md:visible' : 'min-md:hidden'
         } md:visible`}
       >
         <button
@@ -140,7 +141,7 @@ const PopularPage = () => {
         >
           <FaTimes />
         </button>
-        <div className='flex flex-col h-10 lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20'>
+        <div className='flex flex-col h-10 md:flex-row items-center justify-between space-y-4 lg:space-y-0 sm:px-20'>
           <div className='flex type flex-wrap items-center gap-4'>
             {['all', 'movie', 'tv'].map(type => (
               <button
@@ -194,7 +195,7 @@ const PopularPage = () => {
           </div>
         </div>
       </div>
-      <div className='sm:px-20 sm:py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 gap-5 sm:gap-y-8'>
+      <div className=' grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-1 sm:gap-2 md:py-10 md:px-20'>
         {popularMovies
           .filter(movie => movie.poster_path)
           .map((movie, i) => (
@@ -209,6 +210,7 @@ const PopularPage = () => {
       </div>
       {loading && <Loader_ />}
       <div ref={observerRef} className='h-10'></div>
+      <ScrollToTop />
     </div>
   )
 }

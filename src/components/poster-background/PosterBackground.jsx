@@ -79,12 +79,12 @@ const PosterBackground = ({ className, handleShowSelect, selectedShow }) => {
           key={i}
           className={`poster-wrapper cursor-pointer duration-200 ${
             i === tooltip.index || selectedShow.id === movie.id
-              ? 'z-50 brightness-110 scale-[1.7] skew-x-[0deg]'
+              ? 'z-50 brightness-110 scale-[1.7]'
               : tooltip.visible
-              ? 'brightness-[0.4] -skew-x-[10deg]'
+              ? 'brightness-[0.4]'
               : selectedShow.id
-              ? 'brightness-[0.4] -skew-x-[10deg]'
-              : 'brightness-[0.6] -skew-x-[10deg]'
+              ? 'brightness-[0.4]'
+              : 'brightness-[0.6]'
           }`}
           onMouseEnter={e => handleMouseEnter(e, movie, i)}
           onMouseLeave={handleMouseLeave}

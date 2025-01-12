@@ -6,7 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import Error from '../components/Error'
 import { handleLogout, handleRemoveItem } from '../utils/firebaseHandlers'
 import GoBackButton from '../components/GoBackButton'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Loading from '../components/Loaders/Loading'
 import { fetchWatchlistData } from '../utils/api'
 import UserContext from '../UserContext'
@@ -138,7 +138,24 @@ const ProfilePage = () => {
   if (userData_ === null) {
     return (
       <div className='p-8 min-h-screen flex justify-center items-center bg-gray-900 text-white'>
-        <p className='text-lg'>No user data available.</p>
+        <div className='text-center bg-gray-800 p-8 rounded-xl  shadow-lg'>
+          <h2 className='text-2xl font-bold mb-4'>Welcome to ShowRoom!</h2>
+          <p className='text-gray-400 mb-6'>
+            You need to log in to access your profile and personalized content.
+          </p>
+          <Link
+            to='/login'
+            className='px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition'
+          >
+            Login
+          </Link>
+          <p className='text-sm text-gray-400 mt-4'>
+            Don't have an account?{' '}
+            <Link to='/signup' className='text-blue-400 hover:underline'>
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     )
   }
