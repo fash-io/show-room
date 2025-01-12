@@ -6,7 +6,7 @@ import ShowCard from '../components/ShowCard'
 import { FaFilter, FaTimes } from 'react-icons/fa'
 import axios from 'axios'
 import { fetchData } from '../utils/tmdbfetch'
-import ScrollToTop from '../components/ScrollToTOp'
+import ScrollToTop from '../components/ScrollToTop'
 
 const PopularPage = () => {
   const [mediaType, setMediaType] = useState('all')
