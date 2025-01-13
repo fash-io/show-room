@@ -32,7 +32,7 @@ const Error = ({
           </Link>
         ) : (
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => window.location.replace('/')} // Or trigger your fetch logic
             className='text-sm px-2 py-1 bg-blue-600 rounded hover:bg-blue-500 transition duration-200'
           >
             Try Again
