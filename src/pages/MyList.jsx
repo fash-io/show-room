@@ -3,6 +3,7 @@ import ShowCard from '../components/ShowCard'
 import Error from '../components/Error'
 import { fetchWatchlistData, options } from '../utils/api'
 import UserContext from '../UserContext'
+import { Link } from 'react-router-dom'
 
 const MyListPage = () => {
   const { user, userData } = useContext(UserContext)
@@ -62,8 +63,26 @@ const MyListPage = () => {
   if (!user) {
     return (
       <>
-        <div className='h-[100vh] flex items-center justify-center'>
-          <Error error={'Log in'} href={'/login'} />
+        <div className='p-8 min-h-screen flex justify-center items-center  text-white'>
+          <div className='relative flex flex-col items-center bg-gray-800/80 p-8 rounded-xl shadow-lg'>
+            <h2 className='text-2xl font-bold mb-4'>Welcome to ShowRoom!</h2>
+            <p className='text-gray-400 mb-6'>
+              You need to log in to access your profile and personalized
+              content.
+            </p>
+            <Link
+              to='/login'
+              className='px-6 py-3 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition'
+            >
+              Login
+            </Link>
+            <p className='text-sm text-gray-400 mt-4'>
+              Don't have an account?{' '}
+              <Link to='/signup' className='text-blue-400 hover:underline'>
+                Sign up
+              </Link>
+            </p>
+          </div>
         </div>
       </>
     )

@@ -19,6 +19,7 @@ const PosterBackground = () => {
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [resolution, setResolution] = useState('w185')
   const [selectedFeatured, setSelectedFeatured] = useState('default')
+  const [mediaType, setMediaType] = useState('')
   const [isButtonVisible, setIsButtonVisible] = useState(true)
   const [orientation, setOrientation] = useState('straight')
   const [allowHover, setAllowHover] = useState(true)
@@ -37,9 +38,11 @@ const PosterBackground = () => {
     if (selectedFeatured === 'default') {
       endpoint =
         'https://api.themoviedb.org/3/trending/all/week?language=en-US&page='
+      setMediaType('')
     } else {
       const { type, category } = JSON.parse(selectedFeatured)
       endpoint = `https://api.themoviedb.org/3/${type}/${category}?language=en-US&page=`
+      setMediaType(type)
     }
 
     try {
@@ -77,7 +80,13 @@ const PosterBackground = () => {
           visible: true,
           index: i,
           content: `${movie.title || movie.name} (${
-            movie.media_type === 'movie' ? 'Movie' : 'Series'
+            mediaType
+              ? mediaType === 'tv'
+                ? 'Series'
+                : 'Movie'
+              : movie.media_type === 'tv'
+              ? 'Series'
+              : 'Movie'
           })`,
           x: e.clientX + 15,
           y: e.clientY + 15
@@ -86,7 +95,7 @@ const PosterBackground = () => {
         setTooltip({ visible: false, i: undefined, content: '', x: 0, y: 0 })
       }
     },
-    [allowHover]
+    [allowHover, mediaType]
   )
 
   const handleMouseLeave = useCallback(() => {
@@ -304,9 +313,13 @@ const PosterBackground = () => {
               {selectedMovie.id && (
                 <Link
                   to={`/${
-                    selectedMovie.media_type === 'tv'
+                    mediaType
+                      ? mediaType === 'tv'
+                        ? 'series'
+                        : 'movie'
+                      : selectedMovie.media_type === 'tv'
                       ? 'series'
-                      : selectedMovie.media_type
+                      : 'movie'
                   }/${selectedMovie.id}`}
                   className='modal-link group'
                 >

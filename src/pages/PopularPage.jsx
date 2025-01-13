@@ -30,7 +30,15 @@ const PopularPage = () => {
       )
       if (response.status !== 200) throw new Error(response.statusText)
       const data = response.data
-      setPopularMovies(prevMovies => [...prevMovies, ...data.results])
+
+      setPopularMovies(prevMovies => {
+        const existingIds = new Set(prevMovies.map(movie => movie.id))
+        const uniqueMovies = data.results.filter(
+          movie => !existingIds.has(movie.id)
+        )
+        return [...prevMovies, ...uniqueMovies]
+      })
+
       setTotalPages(data.total_pages)
     } catch (err) {
       setError(err.message)
@@ -79,7 +87,7 @@ const PopularPage = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: '200px',
+      rootMargin: '9px',
       threshold: 1.0
     })
     if (observerRef.current) observer.observe(observerRef.current)
@@ -131,8 +139,9 @@ const PopularPage = () => {
       </button>
       <div
         ref={filterRef}
-        className={`mobile-filter-popup md:visible  ${
-          showFilters ? 'max-md:visible' : 'min-md:hidden'
+        onClick={() => setShowFilters(false)}
+        className={`mobile-filter-popup   ${
+          showFilters ? 'max-md:visible' : 'max-md:hidden'
         } md:visible`}
       >
         <button
@@ -208,7 +217,7 @@ const PopularPage = () => {
             />
           ))}
       </div>
-      {loading && <Loader_ />}
+      {isPrefetching && <Loader_ />}
       <div ref={observerRef} className='h-10'></div>
       <ScrollToTop />
     </div>

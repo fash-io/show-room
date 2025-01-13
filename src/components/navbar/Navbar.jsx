@@ -76,6 +76,7 @@ const Navbar = () => {
           }`}
         >
           {navLinks
+            .filter(_ => _.order < 6)
             .sort((a, b) => a.index - b.index)
             .map((val, i) => (
               <Link key={i} to={val.href}>
@@ -88,6 +89,15 @@ const Navbar = () => {
                 </li>
               </Link>
             ))}
+          <Link to={'/top-people'}>
+            <li
+              className={`cursor-pointer text-xs lg:text-base transition-colors duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
+                pathname === '/top-people' ? 'text-transparent active' : ''
+              }`}
+            >
+              People
+            </li>
+          </Link>
         </ul>
 
         {!(pathname === '/profile') && (

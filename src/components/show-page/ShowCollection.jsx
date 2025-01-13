@@ -24,7 +24,6 @@ const ShowCollection = ({ content, setError, label }) => {
   }, [content, setError, label])
 
   const dataToUse = label === 'Collection' ? data.parts : seasons
-  console.log(dataToUse)
 
   return (
     <div className='p-4 sm:p-6 md:p-10 lg:p-20 max-w-full group'>
@@ -73,7 +72,7 @@ const ShowCollection = ({ content, setError, label }) => {
                 label === 'Seasons' && 'cursor-default'
               }`}
             >
-              <div className='overflow-hidden rounded-md'>
+              <div className='overflow-hidden'>
                 <img
                   src={
                     item.poster_path

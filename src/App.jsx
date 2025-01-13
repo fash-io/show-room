@@ -26,6 +26,7 @@ import {
 } from './pages'
 import PosterBackground from './pages/PosterBackground'
 import GalleryModal from './components/show-page/GalleryModal'
+import TopPeople from './pages/TopPeople'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -84,6 +85,7 @@ const App = () => {
           <Route path='/contact-us' element={<ContactUs />} />
           <Route path='/search/:searchQuery' element={<SearchPage />} />
           <Route path='/poster' element={<PosterBackground />} />
+          <Route path='/top-people' element={<TopPeople />} />
           <Route path='/:type/:id' element={<ShowPage />} />
           <Route path='/shows' element={<ShowsPage />} />
           <Route path='/shows/:type' element={<ShowsPage />} />

@@ -2,8 +2,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '../../useOnClickOutside'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { options } from '../../utils/api'
-import axios from 'axios'
 import { BsPerson } from 'react-icons/bs'
 import { BiMovie, BiTv } from 'react-icons/bi'
 import { fetchData } from '../../utils/tmdbfetch'
@@ -15,12 +13,6 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
   const searchRef = useRef()
   const IconRef = useRef()
   const location = useLocation()
-
-  const fakeData = [
-    { media_type: 'tv', id: 110201, title: 'avenge' },
-    { media_type: 'movie', id: 1102321, title: 'My' },
-    { media_type: 'person', id: 1394301, title: 'Brother' }
-  ]
 
   useEffect(() => {
     if (searchValue) {
@@ -80,7 +72,6 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         placeholder='Type to search...'
         ref={IconRef}
         onFocusCapture={() => setSearchIcon(true)}
-        onBlur={() => setSearchIcon(false)}
       />
 
       <div className='absolute top-0 left-0 w-10 h-8 flex items-center justify-center pointer-events-none'>
@@ -109,16 +100,16 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
         </svg>
       </div>
 
-      {fakeData.length > 0 && searchIcon && (
+      {results.length > 0 && searchIcon && (
         <div className='absolute top-10 min-w-[300px] -left-14 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg'>
-          {fakeData.map((val, i) => (
+          {results.map((val, i) => (
             <Link
               className='w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer'
               key={i}
-              onClick={() => handleResultClick(val.media_type, val.id)}
               to={`/${val.media_type === 'tv' ? 'series' : val.media_type}/${
                 val.id
               }`}
+              onClick={handleResultClick}
             >
               <div className='flex flex-col mr-5'>
                 <span className='font-semibold'>{val.name || val.title}</span>

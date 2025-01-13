@@ -24,7 +24,7 @@ const ContentPage = () => {
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
-
+  const [nextAirDate, setNextAirDate] = useState(false)
   useEffect(() => {
     const fetchContentDetails = async () => {
       setLoading(true)
@@ -88,6 +88,10 @@ const ContentPage = () => {
           setData: setVIdeos,
           setError: setError
         })
+        content?.next_episode_to_air?.air_date &&
+          setNextAirDate(
+            calculateDaysToNextEpisode(content?.next_episode_to_air?.air_date)
+          )
       } catch (err) {
         console.error('Failed to fetch content details or backdrops:', err)
         setError('Failed to load content details.')
@@ -111,14 +115,14 @@ const ContentPage = () => {
       ? content.created_by
       : credits.crew.filter(member => member.job === 'Director')
 
-  console.log(content)
+  console.log(directors)
 
   return (
     <>
       {loading && <Loading transparent={true} />}
       <div className='text-white min-h-screen'>
         <Hero content={content} />
-        <ShowDetails content={content} />
+        <ShowDetails content={content} directors={directors} />
         {backdrops.length > 0 && (
           <Gallery backdrops={backdrops} videos={videos} posters={posters} />
         )}
@@ -136,15 +140,13 @@ const ContentPage = () => {
               <span className='font-semibold'>Air Date:</span>{' '}
               {content?.next_episode_to_air.air_date +
                 ' (' +
-                calculateDaysToNextEpisode(
-                  content?.next_episode_to_air.air_date
-                )}{' '}
-              {calculateDaysToNextEpisode(
-                content?.next_episode_to_air.air_date
-              ) === 1
-                ? 'day'
-                : 'days'}{' '}
-              left{')'}
+                (nextAirDate > 0 ? nextAirDate : '')}{' '}
+              {nextAirDate === 1
+                ? 'day left'
+                : nextAirDate < 1
+                ? 'Released'
+                : 'days left'}
+              {' )'}
             </p>
             <p>
               <span className='font-semibold'>Season:</span>{' '}
@@ -171,7 +173,7 @@ const ContentPage = () => {
             </>
           )}
 
-          {directors?.length > 0 && (
+          {directors?.length > 1 && (
             <>
               <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>
                 Director(s)

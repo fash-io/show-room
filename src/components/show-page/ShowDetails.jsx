@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { handleAddItem } from '../../utils/firebaseHandlers'
 import { FaCheck, FaHeart, FaStar, FaStarHalfAlt } from 'react-icons/fa'
 import UserContext from '../../UserContext'
 import { useContext } from 'react'
 import { BiCheckCircle, BiLink } from 'react-icons/bi'
 
-const ShowDetails = ({ content }) => {
+const ShowDetails = ({ content, directors }) => {
+  console.log(directors)
   const { type } = useParams()
   const { user } = useContext(UserContext)
 
@@ -21,9 +22,8 @@ const ShowDetails = ({ content }) => {
   const { fullStars, hasHalfStar } = calculateStarRating(content.vote_average)
 
   return (
-    <div className='p-6 md:p-10 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-100 rounded-lg shadow-lg'>
-      {/* Poster Section */}
-      <div className='flex justify-center w-full md:justify-start'>
+    <div className='sm:p-6 px-6 pb-6 md:p-10 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-100'>
+      <div className='hidden sm:flex justify-center w-full md:justify-start '>
         <img
           src={`https://image.tmdb.org/t/p/original${content.poster_path}`}
           alt={`${content.title || content.name} Poster`}
@@ -32,14 +32,14 @@ const ShowDetails = ({ content }) => {
       </div>
 
       <div className='col-span-1 md:col-span-2 space-y-6'>
-        <h2 className='text-3xl font-semibold text-gray-50'>
+        <h2 className='text-3xl font-semibold text-gray-50 max-sm:hidden'>
           {content.title || content.name}
         </h2>
         <p className='text-base leading-relaxed text-gray-300'>
           {content.overview}
         </p>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-2 gap-0.5 sm:gap-6 text-[13px] sm:text-base'>
           <div>
             <p>
               <span className='font-medium text-gray-400'>Release Date:</span>{' '}
@@ -74,20 +74,33 @@ const ShowDetails = ({ content }) => {
                 </span>
               </span>
             </p>
+            {directors[0] && (
+              <p className=''>
+                <span className='font-medium text-gray-400'>Director: </span>
+                <Link className='' to={`/person/${directors[0]?.id}`}>
+                  {directors[0]?.name}
+                </Link>
+              </p>
+            )}
           </div>
 
           <div>
-            {content.budget && (
+            {content.budget ? (
               <p>
                 <span className='font-medium text-gray-400'>Budget:</span> $
                 {content.budget.toLocaleString()}
               </p>
+            ) : (
+              ''
             )}
-            {content.revenue && (
+
+            {content.revenue ? (
               <p>
                 <span className='font-medium text-gray-400'>Revenue:</span> $
                 {content.revenue.toLocaleString()}
               </p>
+            ) : (
+              ''
             )}
             <p>
               <span className='font-medium text-gray-400'>Status:</span>{' '}

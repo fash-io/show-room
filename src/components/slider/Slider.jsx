@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
