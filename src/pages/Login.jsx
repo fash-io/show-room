@@ -12,7 +12,7 @@ import PosterBackground from '../components/poster-background/PosterBackground'
 const Login = () => {
   const location = useLocation()
   const [signState, setSignState] = useState(
-    location === 'login' ? 'Login' : 'Sign Up'
+    location === '/signup' ? 'Sign Up' : 'Login'
   )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')

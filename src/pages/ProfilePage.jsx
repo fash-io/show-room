@@ -139,25 +139,13 @@ const ProfilePage = () => {
     return (
       <div className='p-8 min-h-screen flex justify-center items-center bg-gray-900 text-white'>
         <div className='relative flex flex-col items-center bg-gray-800 p-8 rounded-xl shadow-lg'>
-          {/* ShowRoom Image */}
-          <div className='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[-35deg] skew-y-[20deg]'>
-            <img
-              src='/path-to-your-showroom-image.jpg' // Replace with your image path
-              alt='ShowRoom'
-              className='w-40 h-auto object-cover rounded-lg shadow-md'
-            />
-          </div>
-
-          {/* Text Content */}
-          <h2 className='text-2xl font-bold mt-24 mb-4'>
-            Welcome to ShowRoom!
-          </h2>
+          <h2 className='text-2xl font-bold mb-4'>Welcome to ShowRoom!</h2>
           <p className='text-gray-400 mb-6'>
             You need to log in to access your profile and personalized content.
           </p>
           <Link
             to='/login'
-            className='px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition'
+            className='px-6 py-3 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition'
           >
             Login
           </Link>

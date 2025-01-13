@@ -11,19 +11,7 @@ export const navLinks = [
 export const footerLinks = [
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact Us', href: '/contact-us' },
-  { label: 'Search', href: '/search' },
-  {
-    label: 'Random Actor',
-    href: `/person/${Math.floor(Math.random() * 10000) + 1}`
-  },
-  {
-    label: 'Random Movie',
-    href: `/movie/${Math.floor(Math.random() * 10000) + 1}`
-  },
-  {
-    label: 'Random Tv Show',
-    href: `/series/${Math.floor(Math.random() * 10000) + 1}`
-  }
+  { label: 'Search', href: '/search' }
 ]
 
 export const movieGenre = [
