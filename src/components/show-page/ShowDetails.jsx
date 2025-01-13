@@ -22,11 +22,11 @@ const ShowDetails = ({ content, directors }) => {
 
   return (
     <div className='sm:p-6 px-6 pb-6 md:p-10 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-100'>
-      <div className='hidden sm:flex justify-center w-full md:justify-start '>
+      <div className='hidden sm:flex justify-center w-full md:justify-start px-4'>
         <img
           src={`https://image.tmdb.org/t/p/original${content.poster_path}`}
           alt={`${content.title || content.name} Poster`}
-          className='w-64 sm:w-80 rounded-lg shadow-md hover:shadow-xl transition duration-300'
+          className='w-64 sm:w-80 rounded shadow-md hover:shadow-xl transition duration-300'
         />
       </div>
 

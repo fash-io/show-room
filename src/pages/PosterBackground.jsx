@@ -165,7 +165,7 @@ const PosterBackground = () => {
 
   const Loader = () => (
     <div
-      className='absolute top-0 z-10 bg-[rgba(20,20,20,0.9)] animate-pulse h-[150px] w-[100px]  rounded-lg flex justify-center items-center'
+      className='absolute top-0 z-10 bg-[rgba(20,20,20,0.9)] animate-pulse h-[150px] w-[100px] rounded flex justify-center items-center'
       style={{ animationDuration: '1.4s' }}
     ></div>
   )

@@ -187,7 +187,7 @@ const MyListPage = () => {
             data.map((show, i) => (
               <div
                 key={i}
-                className='relative group rounded-lg overflow-hidden shadow-lg'
+                className='relative group rounded overflow-hidden shadow-lg'
               >
                 <ShowCard show={show} type_={show.type} type={1} user={user} />
               </div>

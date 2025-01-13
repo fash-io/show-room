@@ -67,15 +67,13 @@ const TVShowsPage = () => {
       <div className='container min-h-screen mx-auto px-4 sm:px-6 lg:px-8 pt-20 text-white'>
         <div className='flex justify-center space-x-4 mb-8'>
           <button
-            className={`p-2 rounded-lg ${
-              !type ? 'bg-yellow-500' : 'bg-gray-800'
-            }`}
+            className={`p-2 rounded-${!type ? 'bg-yellow-500' : 'bg-gray-800'}`}
             onClick={() => handleTypeChange('')}
           >
             All Shows
           </button>
           <button
-            className={`p-2 rounded-lg ${
+            className={`p-2 rounded ${
               type === 'movies' ? 'bg-yellow-500' : 'bg-gray-800'
             }`}
             onClick={() => handleTypeChange('movies')}
@@ -83,7 +81,7 @@ const TVShowsPage = () => {
             Movies
           </button>
           <button
-            className={`p-2 rounded-lg ${
+            className={`p-2 rounded ${
               type === 'series' ? 'bg-yellow-500' : 'bg-gray-800'
             }`}
             onClick={() => handleTypeChange('series')}
@@ -114,7 +112,7 @@ const TVShowsPage = () => {
             <div className='text-center text-red-500 mb-4'>
               {error}
               <button
-                className='ml-3 p-2 bg-gray-900 text-white rounded-lg'
+                className='ml-3 p-2 bg-gray-900 text-white rounded'
                 onClick={fetchShows}
               >
                 Try again

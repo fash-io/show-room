@@ -23,7 +23,7 @@ const Genre = ({ genres, setSort, setYear, setGenres, type, sort, year }) => {
 
   return (
     <div className='my-8'>
-      <div className='p-4 sm:p-6 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1'>
+      <div className='p-4 sm:p-6 rounded flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0 ring-1'>
         <div className='flex flex-col sm:flex-row sm:space-x-6 w-full ml-auto justify-end'>
           <div className='flex flex-col mb-4 sm:mb-0'>
             <label htmlFor='sort' className='text-white text-sm mb-2'>
@@ -33,7 +33,7 @@ const Genre = ({ genres, setSort, setYear, setGenres, type, sort, year }) => {
               id='sort'
               value={sort}
               onChange={handleSortChange}
-              className='p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
+              className='p-2 rounded bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
             >
               <option value='popularity'>Popularity</option>
               <option value='vote_average'>Rating</option>
@@ -54,7 +54,7 @@ const Genre = ({ genres, setSort, setYear, setGenres, type, sort, year }) => {
               id='genre'
               value=''
               onChange={handleGenreChange}
-              className='p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
+              className='p-2 rounded bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
             >
               <option value=''>Select Genre</option>
               {genre_.map(genre => (
@@ -74,7 +74,7 @@ const Genre = ({ genres, setSort, setYear, setGenres, type, sort, year }) => {
               id='year'
               value={year}
               onChange={handleYearChange}
-              className='p-2 rounded-lg bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
+              className='p-2 rounded bg-gray-900 text-white border border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-900 w-full sm:w-auto'
               placeholder='Enter Year'
             />
           </div>

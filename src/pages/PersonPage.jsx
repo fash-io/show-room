@@ -262,7 +262,7 @@ const Profile = () => {
                         }/${credit.id}`}
                       >
                         <img
-                          className=' w-full object-cover rounded-lg'
+                          className=' w-full object-cover rounded'
                           src={`https://image.tmdb.org/t/p/w500${credit.file_path}`}
                           alt={credit.title || credit.name}
                         />

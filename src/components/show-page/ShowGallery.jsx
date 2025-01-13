@@ -9,7 +9,7 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
         onClick={onClose}
       >
         <div
-          className='relative w-11/12 max-w-5xl bg-gray-900 rounded-lg pb-6 pt-0 overflow-y-scroll max-h-[90vh]'
+          className='relative w-11/12 max-w-5xl bg-gray-900 rounded pb-6 pt-0 overflow-y-scroll max-h-[90vh]'
           onClick={e => e.stopPropagation()}
         >
           <div className='sticky top-0 z-10 bg-gray-900 px-10 py-5 pb-2 flex items-center justify-between'>
@@ -31,7 +31,7 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
             {data.map((data, index) => (
               <div
                 key={index}
-                className='relative overflow-hidden rounded-lg group'
+                className='relative overflow-hidden rounded group'
               >
                 <img
                   src={

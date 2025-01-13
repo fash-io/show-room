@@ -21,7 +21,7 @@ const FAQ = () => {
             <div
               onClick={() => toggleFAQ(index)}
               key={index}
-              className={"bg-gray-800/60 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-200 cursor-pointer"+
+              className={"bg-gray-800/60 p-6 rounded shadow-lg transition-transform transform hover:scale-105 duration-200 cursor-pointer"+
               (expandedIndex === index ? " bg-gray-800/80, scale-105" : "")
               }
             >

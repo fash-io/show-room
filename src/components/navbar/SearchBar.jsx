@@ -101,7 +101,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
       </div>
 
       {results.length > 0 && searchIcon && (
-        <div className='absolute top-10 min-w-[300px] -left-14 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded-lg'>
+        <div className='absolute top-10 min-w-[300px] -left-14 sm:left-0 max-h-96 w-full bg-black/80 overflow-y-auto rounded'>
           {results.map((val, i) => (
             <Link
               className='w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer'
@@ -127,7 +127,7 @@ const SearchBar = ({ searchIcon, setSearchIcon }) => {
                     val.poster_path || val.profile_path
                   }`}
                   alt={val.name || val.title}
-                  className='w-10 h-10 object-cover rounded-lg'
+                  className='w-10 h-10 object-cover rounded'
                 />
               ) : val.media_type === 'movie' ? (
                 <BiMovie />

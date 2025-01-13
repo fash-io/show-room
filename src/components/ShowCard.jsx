@@ -23,7 +23,7 @@ const ShowCard = props => {
       <Link
         key={show.id}
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
-        className='flex flex-col justify-between items-center rounded-lg overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto'
+        className='flex flex-col justify-between items-center rounded-xl overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto'
         aria-label={show.name || show.title}
       >
         <div className='max-h-[156px] min-h-[127px] relative'>
@@ -138,13 +138,13 @@ const ShowCard = props => {
     return (
       <div
         key={show.id}
-        className='group relative rounded-lg overflow-hidden shadow-lg w-full'
+        className='group relative rounded overflow-hidden shadow-lg w-full'
       >
         <div className='relative w-full h-full'>
           <img
             src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.title || show.name}
-            className='w-full h-full object-cover rounded-lg transition-transform '
+            className='w-full h-full object-cover rounded transition-transform '
           />
           <div className='h-full w-0 duration-300 md:group-hover:w-1/2 absolute top-0 bg-blue-800/70 z-10' />
           <div className='h-full w-0 duration-300 md:group-hover:w-1/2 absolute top-0 right-0 bg-pink-800/70 z-10' />

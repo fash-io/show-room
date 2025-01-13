@@ -133,7 +133,7 @@ const Gallery = ({ backdrops, videos, posters }) => {
                 .map((data, index) => (
                   <div
                     key={index}
-                    className='relative overflow-hidden w-full rounded-lg group'
+                    className='relative overflow-hidden w-full rounded group'
                   >
                     <img
                       src={
@@ -159,7 +159,7 @@ const Gallery = ({ backdrops, videos, posters }) => {
               (videos.length > 7 && selectedType === 'video') ||
               (posters.length > 11 && selectedType === 'poster')) && (
               <div
-                className={`rounded-lg flex items-center justify-center duration-200 cursor-pointer ${
+                className={`rounded flex items-center justify-center duration-200 cursor-pointer ${
                   selectedType === 'video'
                     ? ''
                     : 'bg-white/10 hover:bg-white/20'

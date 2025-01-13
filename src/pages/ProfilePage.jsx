@@ -216,7 +216,7 @@ const ProfilePage = () => {
     <>
       <GoBackButton />
       <div className='bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen flex items-center justify-center flex-col'>
-        <div className='sm:bg-gray-900/80 text-white rounded-lg sm:shadow-xl max-w-4xl w-full p-8'>
+        <div className='sm:bg-gray-900/80 text-white rounded sm:shadow-xl max-w-4xl w-full p-8'>
           <div className='flex flex-col items-center'>
             {userData_.photoURL ? (
               <img
@@ -233,13 +233,13 @@ const ProfilePage = () => {
             <div className='flex gap-4'>
               <button
                 onClick={handleEditToggle}
-                className='mt-4 px-3 py-1 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition'
+                className='mt-4 px-3 py-1 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition'
               >
                 {isEditing ? 'Cancel' : 'Edit'}
               </button>
               <button
                 onClick={handle_Logout}
-                className='mt-4 px-3  py-1 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition'
+                className='mt-4 px-3  py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition'
               >
                 Logout
               </button>
@@ -346,7 +346,7 @@ const ProfilePage = () => {
 
               <button
                 type='submit'
-                className='mt-4 px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition'
+                className='mt-4 px-6 py-3 bg-green-600 text-white rounded shadow hover:bg-green-700 transition'
                 disabled={isUploading}
               >
                 {isUploading ? 'Uploading...' : 'Save Changes'}

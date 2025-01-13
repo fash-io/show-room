@@ -26,7 +26,7 @@ const Error = ({
         {goHome ? (
           <Link
             to={'/'}
-            className='inline-block bg-slate-950 px-3 py-2 rounded-md hover:bg-slate-900 duration-200'
+            className='inline-block bg-slate-950 px-3 py-2 rounded hover:bg-slate-900 duration-200'
           >
             Go to the homepage
           </Link>

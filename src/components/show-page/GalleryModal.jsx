@@ -25,7 +25,7 @@ const GalleryModal = ({ selectedData, closeModal }) => {
           <img
             src={`https://image.tmdb.org/t/p/original${selectedData.file_path}`}
             alt='Selected Backdrop'
-            className='max-w-[90vw] max-h-[80vh] rounded-lg shadow-2xl'
+            className='max-w-[90vw] max-h-[80vh] rounded shadow-2xl'
           />
           <a
             href={`https://image.tmdb.org/t/p/original${selectedData.file_path}`}

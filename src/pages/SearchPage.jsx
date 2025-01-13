@@ -147,7 +147,7 @@ const SearchPage = () => {
                       ? 'series'
                       : filter
                   }/${data.id}`}
-                  className='flex flex-col items-center bg-gray-800 rounded-lg overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300'
+                  className='flex flex-col items-center bg-gray-800 rounded overflow-hidden shadow-lg sm:transform sm:hover:scale-105 sm:transition-transform sm:duration-300'
                 >
                   <img
                     src={

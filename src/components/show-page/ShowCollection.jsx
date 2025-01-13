@@ -37,7 +37,7 @@ const ShowCollection = ({ content, setError, label }) => {
             label === 'Collection' &&
             `/collection/${content.belongs_to_collection.id}`
           }
-          className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded-lg max-sm:hidden'
+          className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded max-sm:hidden'
         >
           <img
             src={
@@ -51,7 +51,7 @@ const ShowCollection = ({ content, setError, label }) => {
                 : 'https://via.placeholder.com/150x225?text=No+Image'
             }
             alt={`${label} Poster`}
-            className='rounded-lg object-cover group-hover:scale-105 duration-500 bg-black mr-10'
+            className='rounded object-cover group-hover:scale-105 duration-500 bg-black mr-10'
           />
           {label === 'Collection' && (
             <div className='absolute z-50 px-1 py-3'>
