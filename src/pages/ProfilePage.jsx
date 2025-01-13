@@ -182,9 +182,9 @@ const ProfilePage = () => {
       )
     }
 
-    return data.map(item => (
+    return data.map((item, i) => (
       <div
-        key={item.id}
+        key={i}
         className='mt-4 px-6 py-3 shadow-lg rounded bg-gray-800 flex justify-between items-center transition'
       >
         <div className='flex items-center space-x-4'>

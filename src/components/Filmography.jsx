@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom'
 
 const Filmography = ({ credits }) => {
@@ -12,7 +13,6 @@ const Filmography = ({ credits }) => {
       return acc
     }, {})
 
-  // Use the cast and crew arrays
   const sortedMovies = sortCreditsByYear(
     [...credits.cast, ...credits.crew].filter(
       credit => credit.media_type === 'movie'
@@ -39,7 +39,7 @@ const Filmography = ({ credits }) => {
         to={`/${credit.media_type === 'tv' ? 'series' : credit.media_type}/${
           credit.id
         }`}
-        key={credit.id}
+        key={credit.id + ' ' + (credit.character || credit.job)}
         className='flex items-center space-x-2 px-2 py-1 md:hover:bg-gray-600/30 duration-200 rounded'
       >
         <img

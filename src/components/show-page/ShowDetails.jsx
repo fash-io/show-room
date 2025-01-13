@@ -7,7 +7,6 @@ import { useContext } from 'react'
 import { BiCheckCircle, BiLink } from 'react-icons/bi'
 
 const ShowDetails = ({ content, directors }) => {
-  console.log(directors)
   const { type } = useParams()
   const { user } = useContext(UserContext)
 

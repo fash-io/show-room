@@ -64,9 +64,9 @@ const ShowCollection = ({ content, setError, label }) => {
         <BsFilm className='text-5xl text-gray-400 group-hover:text-[#ff7e5f] transition duration-300 max-sm:hidden' />
 
         <div className='flex flex-nowrap overflow-x-scroll inset-10 div space-x-4 '>
-          {dataToUse?.map(item => (
+          {dataToUse?.map((item, i) => (
             <Link
-              key={item.id}
+              key={i}
               to={label === 'Collection' && `/movie/${item.id}`}
               className={`flex-shrink-0 max-w-[150px] ${
                 label === 'Seasons' && 'cursor-default'

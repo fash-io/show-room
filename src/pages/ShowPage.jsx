@@ -115,8 +115,6 @@ const ContentPage = () => {
       ? content.created_by
       : credits.crew.filter(member => member.job === 'Director')
 
-  console.log(directors)
-
   return (
     <>
       {loading && <Loading transparent={true} />}

@@ -20,44 +20,49 @@ import { Pagination } from 'swiper/modules'
 import { Link, useParams } from 'react-router-dom'
 import Filmography from '../components/Filmography'
 import Error from '../components/Error'
+import { fetchData } from '../utils/tmdbfetch'
 
 const Profile = () => {
   const { id } = useParams()
   const [profile, setProfile] = useState(null)
-  const [credits, setCredits] = useState({ cast: [], crew: [] }) // Separate cast and crew
+  const [credits, setCredits] = useState({ cast: [], crew: [] })
   const [images, setImages] = useState([])
   const [externalIds, setExternalIds] = useState({})
   const [showModal, setShowModal] = useState(false)
   const [ranking, setRanking] = useState(null)
   const [knownFor, setKnownFor] = useState([])
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPersonDetails = async () => {
+      setLoading(true)
       try {
-        const profileRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${id}`,
-          options
-        )
-        const creditsRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${id}/combined_credits`,
-          options
-        )
-        const imagesRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${id}/images`,
-          options
-        )
-        const externalIdsRes = await axios.get(
-          `https://api.themoviedb.org/3/person/${id}/external_ids`,
-          options
-        )
-
-        setProfile(profileRes.data)
-        setCredits(creditsRes.data)
-        setImages(imagesRes.data.profiles)
-        setExternalIds(externalIdsRes.data)
-
-        for (let page = 1; page <= 500; page++) {
+        fetchData({
+          url: `https://api.themoviedb.org/3/person/${id}`,
+          setData: setProfile,
+          single: true,
+          setError: setError
+        })
+        fetchData({
+          url: `https://api.themoviedb.org/3/person/${id}/combined_credits`,
+          setData: setCredits,
+          single: true,
+          setError: setError
+        })
+        fetchData({
+          url: `https://api.themoviedb.org/3/person/${id}/images`,
+          setData: setImages,
+          single: true,
+          setError: setError
+        })
+        fetchData({
+          url: `https://api.themoviedb.org/3/person/${id}/external_ids`,
+          setData: setExternalIds,
+          single: true,
+          setError: setError
+        })
+        for (let page = 1; page <= 100; page++) {
           const popularRes = await axios.get(
             `https://api.themoviedb.org/3/person/popular?language=en-US&page=${page}`,
             options
@@ -75,11 +80,12 @@ const Profile = () => {
         }
       } catch (error) {
         console.error(error)
-        setError(error)
+      } finally {
+        setLoading(false)
       }
     }
 
-    fetchData()
+    fetchPersonDetails()
   }, [id])
 
   const formatDate = dateStr => {
@@ -106,8 +112,8 @@ const Profile = () => {
     twitter_id: <FaTwitter />
   }
 
-  if (!profile) return <Loading />
-  if (error) return <Error />
+  if (loading) return <Loading />
+  if (error) return <Error error={error} />
 
   return (
     <div className='text-white px-4 min-h-screen'>
@@ -117,7 +123,7 @@ const Profile = () => {
             <div className='space-y-4'>
               <img
                 className='w-full object-cover rounded-xl max-w-sm'
-                src={`https://image.tmdb.org/t/p/w500${profile.profile_path}`}
+                src={`https://image.tmdb.org/t/p/w500${profile?.profile_path}`}
                 alt={profile.name}
               />
               <div className='flex flex-wrap gap-5'>
@@ -208,30 +214,31 @@ const Profile = () => {
               </p>
             </div>
             <div className='flex gap-4 flex-col md:flex-row'>
-              <div className='md:w-1/2 w-full bg-white/10 px-6 pt-2 rounded-xl'>
-                <h2 className='text-3xl font-semibold mb-4'>Known For</h2>
-                <div className='flex gap-1'>
-                  {/* Display Known For */}
-                  {knownFor.map(credit => (
-                    <div key={credit.id}>
-                      <Link
-                        to={`/${
-                          credit.media_type === 'tv'
-                            ? 'series'
-                            : credit.media_type
-                        }/${credit.id}`}
-                        className='overflow-hidden hover:z-[99]'
-                      >
-                        <img
-                          className=' w-full md:hover:scale-125  object-cover transform-gpu duration-150'
-                          src={`https://image.tmdb.org/t/p/w500${credit.poster_path}`}
-                          alt={credit.title || credit.name}
-                        />
-                      </Link>
-                    </div>
-                  ))}
+              {knownFor.length > 0 && (
+                <div className='md:w-1/2 w-full bg-white/10 px-6 pt-2 rounded-xl'>
+                  <h2 className='text-3xl font-semibold mb-4'>Known For</h2>
+                  <div className='flex gap-1'>
+                    {knownFor.map((credit, i) => (
+                      <div key={i}>
+                        <Link
+                          to={`/${
+                            credit.media_type === 'tv'
+                              ? 'series'
+                              : credit.media_type
+                          }/${credit.id}`}
+                          className='overflow-hidden hover:z-[99]'
+                        >
+                          <img
+                            className=' w-full md:hover:scale-125  object-cover transform-gpu duration-150'
+                            src={`https://image.tmdb.org/t/p/w500${credit.poster_path}`}
+                            alt={credit.title || credit.name}
+                          />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className='md:w-1/2 w-full bg-white/10 px-6 pt-2 rounded-xl'>
                 <h2 className='text-3xl font-semibold mb-4'>Other Images</h2>
                 <Swiper
@@ -245,8 +252,8 @@ const Profile = () => {
                   className='mySwiper'
                 >
                   {/* Display Known For */}
-                  {images.map(credit => (
-                    <SwiperSlide key={credit.id} className='pb-10'>
+                  {images.profiles.map((credit, i) => (
+                    <SwiperSlide key={i} className='pb-10'>
                       <Link
                         to={`/${
                           credit.media_type === 'tv'

@@ -184,9 +184,9 @@ const MyListPage = () => {
               No items found.
             </p>
           ) : (
-            data.map(show => (
+            data.map((show, i) => (
               <div
-                key={show.id}
+                key={i}
                 className='relative group rounded-lg overflow-hidden shadow-lg'
               >
                 <ShowCard show={show} type_={show.type} type={1} user={user} />
