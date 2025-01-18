@@ -135,3 +135,71 @@ export const actorDetails = [
     path: 'also_known_as'
   }
 ]
+
+export const sortOptions = [
+  {
+    label: 'Popularity Ascending',
+    key: 'popularity.asc'
+  },
+  {
+    label: 'Popularity Descending',
+    key: 'popularity.desc'
+  },
+  {
+    label: 'Release Date Ascending',
+    key: 'release_date.asc'
+  },
+  {
+    label: 'Release Date Descending',
+    key: 'release_date.desc'
+  },
+  {
+    label: 'Title Ascending',
+    key: 'original_title.asc'
+  },
+  {
+    label: 'Title Descending',
+    key: 'original_title.desc'
+  },
+  {
+    label: 'Revenue Ascending',
+    key: 'revenue.asc'
+  },
+  {
+    label: 'Revenue Descending',
+    key: 'revenue.desc'
+  },
+
+  {
+    label: 'Release Date Ascending',
+    key: 'primary_release_date.asc'
+  },
+  {
+    label: 'Release Date Descending',
+    key: 'primary_release_date.desc'
+  },
+  {
+    label: 'Vote Average Ascending',
+    key: 'vote_average.asc'
+  },
+  {
+    label: 'Vote Average Descending',
+    key: 'vote_average.desc'
+  },
+  {
+    label: 'Title Ascending',
+    key: 'title.asc'
+  },
+  {
+    label: 'Title Descending',
+    key: 'title.desc'
+  },
+  {
+    label: 'Vote Count Ascending',
+    key: 'vote_count.asc'
+  },
+  {
+    label: 'Vote Count Descending',
+    key: 'vote_count.desc'
+  }
+]

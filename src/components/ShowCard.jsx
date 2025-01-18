@@ -23,25 +23,18 @@ const ShowCard = props => {
       <Link
         key={show.id}
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
-        className='flex flex-col justify-between items-center rounded-xl overflow-hidden transform sm:hover:scale-105 sm:transition-transform sm:duration-300 h-auto'
+        className='overflow-hidden group'
         aria-label={show.name || show.title}
       >
-        <div className='max-h-[156px] min-h-[127px] relative'>
+        <div className=' relative'>
           <LazyLoader
-            src={`https://image.tmdb.org/t/p/w300${show.backdrop_path}`}
+            src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.name || show.title}
-            className='w-full object-cover sm:group-hover:scale-105 sm:transition-transform sm:duration-300'
+            className='w-full object-cover rounded group-hover:scale-90 duration-200'
           />
-        </div>
-        <div className='p-4 flex-1'>
-          <h3 className='text-lg sm:text-xl font-semibold text-white mb-3'>
+          <h3 className='text-xs sm:text-sm font-light'>
             {show.name || show.title}
           </h3>
-          <p className='text-gray-400 text-sm mb-4'>
-            {show.overview.length > 100
-              ? `${show.overview.slice(0, 100)}...`
-              : show.overview}
-          </p>
         </div>
       </Link>
     )

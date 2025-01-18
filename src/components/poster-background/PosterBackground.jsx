@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { options } from '../../utils/api'
 import randomizeArray from 'randomize-array'

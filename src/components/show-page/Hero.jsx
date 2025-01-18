@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react'
 import { BsYoutube } from 'react-icons/bs'
 import { fetchTrailer } from '../../utils/tmdbfetch'

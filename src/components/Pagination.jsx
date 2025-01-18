@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 
 /* eslint-disable react/prop-types */
-const Pagination = ({ totalPages, page, setPage, loading }) => {
+const Pagination = ({
+  totalPages,
+  page,
+  setPage,
+  loading,
+  handlePageChange
+}) => {
   useEffect(() => {
     window.scrollTo({
       top: 700,
@@ -12,7 +18,9 @@ const Pagination = ({ totalPages, page, setPage, loading }) => {
     <>
       <div className='mt-8 flex justify-center items-center '>
         <button
-          onClick={() => setPage(1)}
+          onClick={() => {
+            setPage ? setPage(1) : handlePageChange('first')
+          }}
           disabled={page === 1 || loading}
           className={`py-2 px-4 rounded-l ${
             page === 1 || loading
@@ -24,7 +32,9 @@ const Pagination = ({ totalPages, page, setPage, loading }) => {
           «
         </button>
         <button
-          onClick={() => setPage(prev => prev - 1)}
+          onClick={() => {
+            setPage ? setPage(prev => prev - 1) : handlePageChange('previous')
+          }}
           disabled={page === 1 || loading}
           className={`py-2 px-4  ${
             page === 1 || loading
@@ -39,7 +49,9 @@ const Pagination = ({ totalPages, page, setPage, loading }) => {
           {page}
         </span>
         <button
-          onClick={() => setPage(prev => prev + 1)}
+          onClick={() => {
+            setPage ? setPage(prev => prev + 1) : handlePageChange('next')
+          }}
           disabled={page === totalPages || loading}
           className={`py-2 px-4  ${
             page === totalPages || loading
@@ -51,7 +63,9 @@ const Pagination = ({ totalPages, page, setPage, loading }) => {
           ›
         </button>
         <button
-          onClick={() => setPage(totalPages)}
+          onClick={() => {
+            setPage ? setPage(totalPages) : handlePageChange('double')
+          }}
           disabled={page === totalPages || loading}
           className={`py-2 px-4 rounded-r ${
             page === totalPages || loading

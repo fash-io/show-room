@@ -89,7 +89,7 @@ const Navbar = () => {
                 </li>
               </Link>
             ))}
-          <Link to={'/top-people'}>
+          <Link to={'/top-people?page=1'}>
             <li
               className={`cursor-pointer text-xs lg:text-base transition-colors duration-200 bg-clip-text hover:text-transparent bg-gradient-to-r from-[#ff7e5f] via-pink-500 to-[#1a2a6c] ${
                 pathname === '/top-people' ? 'text-transparent active' : ''

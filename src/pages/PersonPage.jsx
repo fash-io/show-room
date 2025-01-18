@@ -21,6 +21,7 @@ import { Link, useParams } from 'react-router-dom'
 import Filmography from '../components/Filmography'
 import Error from '../components/Error'
 import { fetchData } from '../utils/tmdbfetch'
+import GalleryModal from '../components/show-page/GalleryModal'
 
 const Profile = () => {
   const { id } = useParams()
@@ -33,30 +34,31 @@ const Profile = () => {
   const [knownFor, setKnownFor] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [selectedData, setSelectedData] = useState(null)
 
   useEffect(() => {
     const fetchPersonDetails = async () => {
       setLoading(true)
       try {
-        fetchData({
+        await fetchData({
           url: `https://api.themoviedb.org/3/person/${id}`,
           setData: setProfile,
           single: true,
           setError: setError
         })
-        fetchData({
+        await fetchData({
           url: `https://api.themoviedb.org/3/person/${id}/combined_credits`,
           setData: setCredits,
           single: true,
           setError: setError
         })
-        fetchData({
+        await fetchData({
           url: `https://api.themoviedb.org/3/person/${id}/images`,
           setData: setImages,
           single: true,
           setError: setError
         })
-        fetchData({
+        await fetchData({
           url: `https://api.themoviedb.org/3/person/${id}/external_ids`,
           setData: setExternalIds,
           single: true,
@@ -103,6 +105,13 @@ const Profile = () => {
     return Math.abs(ageDate.getUTCFullYear() - 1970)
   }
 
+  const handleClick = dataPath => {
+    setSelectedData(dataPath)
+  }
+  const closeModal = () => {
+    setSelectedData(null)
+  }
+
   const linkIcons = {
     imdb_id: <FaImdb />,
     tiktok_id: <FaTiktok />,
@@ -124,7 +133,7 @@ const Profile = () => {
               <img
                 className='w-full object-cover rounded-xl max-w-sm'
                 src={`https://image.tmdb.org/t/p/w500${profile?.profile_path}`}
-                alt={profile.name}
+                alt={profile?.name}
               />
               <div className='flex flex-wrap gap-5'>
                 <div className='flex gap-3 text-2xl'>
@@ -143,7 +152,7 @@ const Profile = () => {
                       )
                   )}
                 </div>
-                {profile.homepage && (
+                {profile?.homepage && (
                   <a
                     href={profile.homepage}
                     className='border-l-2 border-blue-500 text-blue-500 flex items-center pl-4 hover:underline'
@@ -153,6 +162,16 @@ const Profile = () => {
                 )}
               </div>
             </div>
+            {ranking && (
+              <Link
+                to={'/top-people?page=1'}
+                className='bg-blue-500 text-white p-4 rounded-xl block'
+              >
+                <h2 className='text-xl font-bold'>
+                  Ranking in TMDB's Top Popular People: #{ranking}
+                </h2>
+              </Link>
+            )}
             <div className='sticky top-28 space-y-8'>
               <div className='bg-white/10 p-4 rounded-xl space-y-3 '>
                 <h2 className='text-2xl font-bold mb-2'>Personal Info</h2>
@@ -179,23 +198,13 @@ const Profile = () => {
                   </p>
                 ))}
               </div>
-              {ranking && (
-                <Link
-                  to={'/top-people'}
-                  className='bg-blue-500 text-white p-4 rounded-xl block'
-                >
-                  <h2 className='text-xl font-bold'>
-                    Ranking in TMDB's Top Popular People: #{ranking}
-                  </h2>
-                </Link>
-              )}
             </div>
           </div>
 
           {/* Right Section */}
           <div className='lg:col-span-6 space-y-8'>
             <div className='bg-white/10 p-6 rounded-xl'>
-              <h1 className='text-4xl font-bold mb-4'>{profile.name}</h1>
+              <h1 className='text-4xl font-bold mb-4'>{profile?.name}</h1>
               <p>
                 {showModal
                   ? profile.biography
@@ -203,7 +212,7 @@ const Profile = () => {
                   ? profile.biography.slice(0, 1000)
                   : profile.biography}
 
-                {profile.biography.length > 999 && (
+                {profile?.biography.length > 999 && (
                   <button
                     onClick={() => setShowModal(prev => !prev)}
                     className='underline text-blue-300'
@@ -251,25 +260,23 @@ const Profile = () => {
                   modules={[Pagination]}
                   className='mySwiper'
                 >
-                  {/* Display Known For */}
                   {images.profiles.map((credit, i) => (
                     <SwiperSlide key={i} className='pb-10'>
-                      <Link
-                        to={`/${
-                          credit.media_type === 'tv'
-                            ? 'series'
-                            : credit.media_type
-                        }/${credit.id}`}
-                      >
-                        <img
-                          className=' w-full object-cover rounded'
-                          src={`https://image.tmdb.org/t/p/w500${credit.file_path}`}
-                          alt={credit.title || credit.name}
-                        />
-                      </Link>
+                      <img
+                        className=' w-full object-cover rounded max-h-[210px]'
+                        src={`https://image.tmdb.org/t/p/w500${credit.file_path}`}
+                        alt={credit.title || credit.name}
+                        onClick={() => handleClick(credit)}
+                      />
                     </SwiperSlide>
                   ))}
                 </Swiper>
+                {selectedData && (
+                  <GalleryModal
+                    selectedData={selectedData}
+                    closeModal={closeModal}
+                  />
+                )}
               </div>
             </div>
 

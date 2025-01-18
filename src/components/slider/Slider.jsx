@@ -92,7 +92,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
               <img
                 src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                 alt={movie.title || movie.name}
-                className={`w-full object-cover h-full ${height}`}
+                className={`w-full object-cover md:object-top h-full ${height}`}
               />
               <div className='absolute px-[7%] bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 space-y-1 text-white'>
                 {logos[movie.id] ? (
