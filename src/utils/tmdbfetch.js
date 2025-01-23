@@ -29,6 +29,7 @@ export const fetchData = async ({
         setData(response.data.results || [])
         setTotalPages && setTotalPages(response.data.total_pages || 0)
       }
+      return response.data
     } else {
       setError && setError(response.statusText)
     }

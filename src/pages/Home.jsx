@@ -1,5 +1,5 @@
 import TitleCards from '../components/TitleCards'
-import Slider from '../components/slider/Slider'
+import Slider from '../components/Slider'
 import Error from '../components/Error'
 import { useContext, useState } from 'react'
 import UserContext from '../UserContext'
@@ -23,7 +23,7 @@ const Home = () => {
         setLoading={setLoading}
         setError={setError}
       />
-      <div className='hidden justify-center items-center h-[200px] bg-gradient-to-r from-black via-blue-900 to-red-900 text-white relative overflow-hidden -z-10 scale-'>
+      <div className='hidden justify-center items-center h-[200px] bg-gradient-to-r from-black via-blue-900 to-red-900 text-white relative overflow-hidden -z-10'>
         <div className='custom-shape-divider-top-1736542638'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -54,12 +54,12 @@ const Home = () => {
       {!loading ? (
         <div className='pl-2 pr-1 sm:pl-10 '>
           {featured.map((feature, i) =>
-            feature.userWatchlist ? (
+            feature.userWatchList ? (
               user && (
                 <TitleCards
                   key={i}
                   title={feature.title}
-                  userWatchlist={feature.userWatchlist}
+                  userWatchList={feature.userWatchList}
                 />
               )
             ) : (
@@ -68,6 +68,9 @@ const Home = () => {
                 title={feature.title}
                 category={feature.category}
                 type={feature.type}
+                type_={feature.type || 'movie'}
+                feature={feature.feature}
+                url_={feature.url}
               />
             )
           )}

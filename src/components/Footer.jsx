@@ -62,7 +62,7 @@ const Footer = () => {
           target='_blank'
           className='text-center text-xs sm:text-left mt-2'
         >
-          Movie database from TMDB aai.
+          Movie database from TMDB api.
         </a>
       </div>
       <div className='h-20 w-full block sm:hidden'></div>

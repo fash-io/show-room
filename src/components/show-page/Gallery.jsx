@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 import ShowGallery from './ShowGallery'
-import GalleryModal from './GalleryModal'
+import GalleryModal from '../GalleryModal'
 import { useParams } from 'react-router-dom'
 import { BiLogoYoutube, BiZoomIn } from 'react-icons/bi'
 

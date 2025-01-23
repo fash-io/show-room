@@ -46,7 +46,7 @@ const Filmography = ({ credits }) => {
           src={
             credit.poster_path
               ? `https://image.tmdb.org/t/p/w200${credit.poster_path}`
-              : 'https://via.placeholder.com/150x225?text=No+Image'
+              : 'https://imageplaceholder.net/150x225/131313?text=No+Image'
           }
           alt={title}
           className='w-10 h-14 object-cover rounded-sm'

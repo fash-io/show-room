@@ -2,18 +2,34 @@
 import { Link, useLocation } from 'react-router-dom'
 import LazyLoader from './Loaders/LazyLoader'
 import { useWindowWidth } from '../utils/windowWidth'
-import VideoPlayer from './show-page/VideoPlayer'
+import VideoPlayer from './VideoPlayer'
 import { useEffect, useState } from 'react'
 import { BsYoutube } from 'react-icons/bs'
 import { BiSolidError } from 'react-icons/bi'
+import './shows-page/topten.css'
 const ShowCard = props => {
-  const { show, type_, type, isPlaying, trailerUrl, onHover, onHoverEnd } =
-    props
+  const {
+    show,
+    type_,
+    type,
+    isPlaying,
+    trailerUrl,
+    onHover,
+    onHoverEnd,
+    i,
+    disableHover
+  } = props
   const windowWidth = useWindowWidth()
   const location = useLocation()
   const [isTrailerPlaying, setIsTrailerPlaying] = useState(false)
+
   const showTrailer =
-    windowWidth > 768 && location.pathname === '/' ? true : false
+    windowWidth > 768 &&
+    (location.pathname === '/' || location.pathname.startsWith('/shows/')) &&
+    !disableHover
+      ? true
+      : false
+
   useEffect(() => {
     setIsTrailerPlaying(false)
   }, [show, isPlaying, trailerUrl])
@@ -23,16 +39,16 @@ const ShowCard = props => {
       <Link
         key={show.id}
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
-        className='overflow-hidden group'
+        className='group block overflow-hidden rounded-lg shadow-lg transition duration-300 ease-in-out hover:scale-105'
         aria-label={show.name || show.title}
       >
-        <div className=' relative'>
+        <div className='relative w-full h-full'>
           <LazyLoader
             src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
             alt={show.name || show.title}
-            className='w-full object-cover rounded group-hover:scale-90 duration-200'
+            className='w-full object-cover rounded group- peer transition-transform duration-300'
           />
-          <h3 className='text-xs sm:text-sm font-light'>
+          <h3 className='w-full bg-gradient-to-t from-black to-transparent p-3 text-xs sm:text-sm font-light text-white text-center  transition-opacity duration-300 font-lobster'>
             {show.name || show.title}
           </h3>
         </div>
@@ -43,8 +59,8 @@ const ShowCard = props => {
       <Link
         to={`/${type_ === 'movie' ? 'movie' : 'series'}/${show.id}`}
         key={show.id}
-        className={`relative inline-block md:h-[240px] mr-3 w-[7rem] lg:w-[10rem] md:w-[9rem] overflow-hidden group duration-500 rounded min-h-[168px] ${
-          showTrailer && 'hover:md:w-[22rem]'
+        className={`relative inline-block min-w-[150px] max-w-[180px] overflow-hidden group duration-500 rounded-[10px] max-h-[270px] min-h-[168px] ${
+          isTrailerPlaying && 'hover:md:min-w-[22rem]'
         }`}
         onMouseEnter={() => {
           showTrailer && onHover()
@@ -55,6 +71,7 @@ const ShowCard = props => {
       >
         <LazyLoader
           src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
+          i={i}
           alt={show.title || show.name || 'Movie Poster'}
           className='cursor-pointer object-cover h-full w-full  min-h-[168px] transition-transform duration-300'
         />
@@ -65,15 +82,15 @@ const ShowCard = props => {
         )}
         {showTrailer && (
           <>
-            <div className='h-full hidden md:flex p-2 justify-end whitespace-pre-wrap absolute top-0 flex-col opacity-0 z-50 group-hover:opacity-100 w-[22rem]'>
+            <div className='h-full hidden md:flex p-2 justify-end whitespace-pre-wrap absolute top-0 flex-col opacity-0 z-50 group-hover:opacity-100'>
               <div
-                className='text-white'
-                style={{ textShadow: '2px 2px 4px #000000' }}
+                className='text-white text-sm'
+                style={{ textShadow: '1px 1px 2px #000000' }}
               >
                 <div className='font-semibold mb-2'>
                   {show.title || show.name}
                 </div>
-                <p className='text-xs mb-2'>
+                <p className='text-xs font-bold mb-2'>
                   {show.overview.length > 90
                     ? `${show.overview.slice(0, 90)}...`
                     : show.overview}
@@ -87,7 +104,7 @@ const ShowCard = props => {
               {isPlaying && trailerUrl ? (
                 trailerUrl === 'no' ? (
                   <>
-                    <div className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3'>
+                    <div className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-fit px-2'>
                       <div className='text-center'>
                         <div className='text-xs py-2 flex items-center'>
                           <BiSolidError /> No trailer found
@@ -97,7 +114,7 @@ const ShowCard = props => {
                   </>
                 ) : (
                   <div
-                    className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3'
+                    className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-fit px-2'
                     onClick={e => {
                       e.preventDefault()
                       setIsTrailerPlaying(true)
@@ -111,10 +128,8 @@ const ShowCard = props => {
                   </div>
                 )
               ) : (
-                <div className='flex items-center justify-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-1/3 py-2'>
-                  <div className='text-center'>
-                    <div className='loader__ mb-2'></div>
-                  </div>
+                <div className='bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white mt-2 shadow-md rounded-full w-fit p-2'>
+                  <div className='w-4 h-4 border-2 animate-spin rounded-full border-l-transparent'></div>
                 </div>
               )}
               {isTrailerPlaying && <VideoPlayer trailerUrl={trailerUrl} />}

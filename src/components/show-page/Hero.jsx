@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { BsYoutube } from 'react-icons/bs'
+import UserContext from '../../UserContext'
 import { fetchTrailer } from '../../utils/tmdbfetch'
 import { getLogos } from '../../utils/get-font'
-import { useParams } from 'react-router-dom'
-import UserContext from '../../UserContext'
 
 const Hero = ({ content }) => {
   const { setTrailerUrl } = useContext(UserContext)

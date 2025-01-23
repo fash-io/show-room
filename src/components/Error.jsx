@@ -5,19 +5,20 @@ const Error = ({
   error = 'An unexpected error occurred.',
   href,
   isSmall,
-  goHome
+  goHome,
+  className
 }) => {
   return (
     <div
-      className={`body  text-white flex items-center justify-center ${
+      className={`body text-white flex items-center justify-center ${
         isSmall
           ? 'z-10 h-full w-full'
           : 'fixed top-0 bottom-0 left-0 right-0 h-screen z-50'
-      }`}
+      } ${className}`}
     >
       <div className='bg-gray-800/40 p-8 rounded-xl shadow-lg text-center space-y-5'>
         <Link
-          className='text-lg sm:text:xl font-semibold block'
+          className='text-lg sm:text-xl font-semibold block'
           to={href ? href : ''}
         >
           {error}
@@ -32,7 +33,7 @@ const Error = ({
           </Link>
         ) : (
           <button
-            onClick={() => window.location.replace('/')} // Or trigger your fetch logic
+            onClick={() => window.location.reload()}
             className='text-sm px-2 py-1 bg-blue-600 rounded hover:bg-blue-500 transition duration-200'
           >
             Try Again

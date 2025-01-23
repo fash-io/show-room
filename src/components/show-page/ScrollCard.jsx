@@ -10,7 +10,7 @@ const ScrollCard = ({ person }) => {
             src={
               person.profile_path
                 ? `https://image.tmdb.org/t/p/w300${person.profile_path}`
-                : 'https://via.placeholder.com/150x225?text=No+Image'
+                : 'https://imageplaceholder.net/180x265/131313?text=No+Image'
             }
             alt={person.name}
             className='md:group-hover:scale-110 duration-300'

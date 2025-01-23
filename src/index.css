@@ -43,6 +43,7 @@ body,
 .div::-webkit-scrollbar {
   display: none;
 }
+
 @media screen and (max-width: 768px) {
   .div1::-webkit-scrollbar {
     display: none;
@@ -359,4 +360,78 @@ body,
   box-shadow: none;
   transition: none;
   opacity: 1;
+}
+/* From Uiverse.io by alexmaracinaru */
+.cta {
+  position: relative;
+  padding: 10px 12px;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.cta:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 50px;
+  background: linear-gradient(to right, #ff7e57, #ec4899, #1a2a6c);
+  width: 35px;
+  height: 35px;
+  transition: all 0.3s ease;
+}
+
+.cta span {
+  position: relative;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+.cta svg {
+  position: relative;
+  top: 0;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #fff;
+  stroke-width: 2;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+.cta:hover:before {
+  width: 100%;
+}
+
+.cta:hover svg {
+  transform: translateX(0);
+}
+
+.cta:active {
+  transform: scale(0.95);
+}
+img {
+  transform-style: preserve-3d !important;
+  perspective: 2500px !important;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
 }

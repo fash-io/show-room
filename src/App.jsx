@@ -25,7 +25,7 @@ import {
   MyList
 } from './pages'
 import PosterBackground from './pages/PosterBackground'
-import GalleryModal from './components/show-page/GalleryModal'
+import GalleryModal from './components/GalleryModal'
 import TopPeople from './pages/TopPeople'
 
 const App = () => {

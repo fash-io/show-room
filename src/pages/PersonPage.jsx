@@ -21,7 +21,7 @@ import { Link, useParams } from 'react-router-dom'
 import Filmography from '../components/Filmography'
 import Error from '../components/Error'
 import { fetchData } from '../utils/tmdbfetch'
-import GalleryModal from '../components/show-page/GalleryModal'
+import GalleryModal from '../components/GalleryModal'
 
 const Profile = () => {
   const { id } = useParams()

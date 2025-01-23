@@ -87,7 +87,7 @@ const PopularPage = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: '9px',
+      rootMargin: '90px',
       threshold: 1.0
     })
     if (observerRef.current) observer.observe(observerRef.current)
@@ -121,14 +121,14 @@ const PopularPage = () => {
 
   return (
     <div className='min-h-screen text-white py-7 md:py-20 px-4 lg:px-8'>
-      <h2 className='font-creepster text-2xl text-center pb-5'>
+      <h2 className='text-2xl text-center pb-5'>
         Top{' '}
         {mediaType === 'tv'
-          ? 'Series'
+          ? 'series'
           : mediaType === 'all'
-          ? 'Content'
-          : 'Movies'}{' '}
-        {timeWindow === 'daily' ? 'Today' : 'This Week'}
+          ? 'content'
+          : 'movies'}{' '}
+        {timeWindow === 'daily' ? 'today' : 'this week'}
       </h2>
 
       <button

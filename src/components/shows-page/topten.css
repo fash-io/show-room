@@ -1,0 +1,76 @@
+/* Main Container */
+.top-ten-container {
+  display: flex;
+  gap: 30px;
+  scroll-behavior: smooth;
+  overflow: scroll hidden;
+}
+
+/* Individual Item */
+.top-ten-item {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  max-width: 180px;
+  min-width: 220px;
+  position: relative;
+  color: #fff;
+}
+
+/* Rank Styling */
+.top-ten-rank {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -40px;
+  font-size: 16rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.1);
+  z-index: -1;
+  transition: all 200ms ease;
+  letter-spacing: -40px;
+  pointer-events: none;
+}
+
+.top-ten-rank span {
+  position: relative;
+  z-index: 1;
+  color: #ff1e1e;
+}
+
+.top-ten-poster img {
+  border-radius: 10px;
+  max-width: 180px;
+  min-width: 150px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+  transition: transform 0.3s ease;
+}
+
+.top-ten-poster img:hover {
+  transform: scale(1.05);
+}
+.top-ten-item:hover .top-ten-rank {
+  color: rgba(255, 255, 255, 0.8);
+  transform: translate(-15px, -52%);
+  text-shadow: 10px 10px 2px rgba(255, 30, 30, 0.7), 20px 20px rgb(0, 0, 0);
+  z-index: 10;
+}
+
+/* Info Section */
+.top-ten-info {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.top-ten-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.top-ten-overview {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}

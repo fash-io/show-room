@@ -1,8 +1,7 @@
 export const navLinks = [
   { label: 'Home', href: '/', icon: 'fa-house', order: 3, index: 1 },
-  { label: 'Shows', href: '/shows', icon: 'fa-tv', order: 1, index: 2 },
-  // { label: 'Movies', href: '/movies', icon: 'fa-film', order: 2, index: 3 },
-  { label: 'Trending', href: '/trending', icon: 'fa-fire', order: 2, index: 4 },
+  { label: 'Shows', href: '/shows', icon: 'fa-tv', order: 2, index: 2 },
+  { label: 'Trending', href: '/trending', icon: 'fa-fire', order: 1, index: 4 },
   { label: 'My List', href: '/list', icon: 'fa-list', order: 5, index: 5 },
   { label: 'Poster', href: '/poster', icon: 'fa-images', order: 0, index: 6 },
   { label: 'Profile', href: '/profile', icon: 'fa-user', order: 6, index: 6 }
@@ -11,7 +10,7 @@ export const navLinks = [
 export const footerLinks = [
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact Us', href: '/contact-us' },
-  { label: 'Search', href: '/search' }
+  { label: 'People', href: '/top-people?page=1' }
 ]
 
 export const movieGenre = [
@@ -84,14 +83,244 @@ export const faqs = [
 ]
 
 export const featured = [
-  { title: 'Your Watch List', userWatchlist: true },
-  { title: "Now in Cinema's", category: 'now_playing', type: 'movie' },
-  { title: 'Popular Movies', category: 'popular', type: 'movie' },
-  { title: 'Top Rated Movies', category: 'top_rated', type: 'movie' },
-  { title: 'Upcoming Movies', category: 'upcoming', type: 'movie' },
-  { title: 'Popular Series', category: 'popular', type: 'tv' },
-  { title: 'Top Rated Series', category: 'top_rated', type: 'tv' },
-  { title: 'On The Air', category: 'on_the_air', type: 'tv' }
+  { title: 'Your Watch List', userWatchList: true },
+  { title: 'Now in Cinemas', category: 'now_playing', type: 'movie' },
+  // { title: 'Trending Movies', category: 'popular', type: 'movie' },
+  { title: 'Coming Soon', category: 'upcoming', type: 'movie' },
+  {
+    title: 'Top 10 (Movies)',
+    type: 'movie',
+    url: 'https://api.themoviedb.org/3/trending/movie/week?language=en-US'
+  },
+  { title: 'Popular TV Shows', category: 'popular', type: 'tv' },
+  { title: 'Top Rated TV Shows', category: 'top_rated', type: 'tv' },
+  {
+    title: 'Top 10 (Series)',
+    type: 'tv',
+    url: 'https://api.themoviedb.org/3/trending/tv/week?language=en-US'
+  },
+  {
+    title: 'Romantic Comedies',
+    feature: [{ label: '&with_genres', key: '10749,35' }]
+  },
+  { title: 'Critics’ Picks', category: 'top_rated', type: 'movie' },
+  {
+    title: 'Epic Adventures',
+    feature: [{ label: '&with_genres', key: '12,28' }]
+  },
+  {
+    title: 'Chilling Thrillers',
+    feature: [{ label: '&with_genres', key: '53,27' }]
+  },
+  {
+    title: 'Historical Dramas',
+    feature: [{ label: '&with_genres', key: '36,18' }]
+  },
+  { title: 'Currently Airing', category: 'on_the_air', type: 'tv' },
+  {
+    title: 'Feel-Good Movies',
+    feature: [{ label: '&with_genres', key: '10751,35' }]
+  },
+  {
+    title: 'Sci-fi & Fantasy',
+    feature: [{ label: '&with_genres', key: '878,14' }]
+  },
+  {
+    title: 'Mystery & Suspense',
+    feature: [{ label: '&with_genres', key: '9648,53' }]
+  }
+]
+
+export const FeaturedSeriesTitles = [
+  { title: 'Trending Series', category: 'popular', type: 'tv' },
+  { title: 'Critically Acclaimed Series', category: 'top_rated', type: 'tv' },
+  {
+    title: 'Romantic Drama',
+    feature: [
+      { label: '&with_genres', key: '18' },
+      { label: '&with_keywords', key: '9840' }
+    ]
+  },
+  {
+    title: 'Action-packed Thrillers',
+    feature: [{ label: '&with_genres', key: '10759' }]
+  },
+  {
+    title: 'Top 10',
+    url: 'https://api.themoviedb.org/3/trending/tv/week?language=en-US',
+    type: 'tv'
+  },
+  {
+    title: 'Netflix Top 10',
+    feature: [
+      { label: '&with_networks', key: '213' },
+      {
+        label: '&air_date.gte',
+        key: new Date(new Date().setMonth(new Date().getMonth() - 1))
+          .toISOString()
+          .split('T')[0]
+      }
+    ]
+  },
+  {
+    title: 'Anime',
+    feature: [{ label: '&with_keywords', key: '210024' }]
+  },
+  {
+    title: 'K-Drama',
+    feature: [
+      { label: '&with_genres', key: '18' },
+      { label: '&with_original_language', key: 'ko' }
+    ]
+  },
+  {
+    title: 'Crime Shows',
+    feature: [{ label: '&with_genres', key: '80' }]
+  },
+  {
+    title: 'Family Favorites',
+    feature: [
+      { label: '&with_genres', key: '10762,10751' },
+      { label: '&without_keywords', key: '210024' }
+    ]
+  },
+  {
+    title: 'New releases',
+    feature: [
+      {
+        label: '&first_air_date.gte',
+        key: new Date(new Date().setMonth(new Date().getMonth() - 6))
+          .toISOString()
+          .split('T')[0]
+      }
+    ],
+
+    sort: 'first_air_date.desc'
+  },
+  {
+    title: 'Sci-fi Adventures',
+    feature: [
+      { label: '&with_genres', key: '10765,10759' },
+      { label: '&without_keywords', key: '210024' }
+    ]
+  },
+  {
+    title: 'Reality Shows',
+    feature: [{ label: '&with_genres', key: '10764' }]
+  },
+  {
+    title: 'Documentaries',
+    feature: [{ label: '&with_genres', key: '99' }]
+  },
+  {
+    title: 'Supernatural Tales',
+    feature: [
+      { label: '&with_genres', key: '10765' },
+      { label: '&without_keywords', key: '210024' }
+    ]
+  },
+  {
+    title: 'Teen Dramas',
+    feature: [
+      { label: '&with_genres', key: '18' },
+      { label: '&with_keywords', key: '193400' }
+    ]
+  },
+  {
+    title: 'Sitcoms',
+    feature: [{ label: '&with_keywords', key: '193171' }]
+  },
+  {
+    title: 'Fantasy anime',
+    feature: [{ label: '&with_keywords', key: '293198,210024' }]
+  }
+]
+
+export const FeaturedMoviesTitles = [
+  { title: 'Box Office Hits', category: 'popular', type: 'movie' },
+  { title: 'Award-Winning Movies', category: 'top_rated', type: 'movie' },
+  {
+    title: 'Animated Favorites',
+    feature: [{ label: '&with_genres', key: '16' }]
+  },
+  {
+    title: 'Romantic Comedies',
+    feature: [{ label: '&with_genres', key: '10749,35' }]
+  },
+  {
+    title: 'Top 10',
+    url: 'https://api.themoviedb.org/3/trending/movie/week?language=en-US',
+    type: 'movie'
+  },
+  {
+    title: 'Netflix Top 10',
+    feature: [
+      { label: '&with_networks', key: '213' },
+      {
+        label: '&air_date.gte',
+        key: new Date(new Date().setMonth(new Date().getMonth() - 1))
+          .toISOString()
+          .split('T')[0]
+      }
+    ]
+  },
+  {
+    title: 'Heart-Stopping Action',
+    feature: [{ label: '&with_genres', key: '28' }]
+  },
+  {
+    title: 'Crime Thrillers',
+    feature: [{ label: '&with_genres', key: '80,53' }]
+  },
+  {
+    title: 'Laugh Out Loud',
+    feature: [{ label: '&with_genres', key: '35' }]
+  },
+  {
+    title: 'Dramatic Masterpieces',
+    feature: [{ label: '&with_genres', key: '18' }]
+  },
+  {
+    title: 'Adventurous Journeys',
+    feature: [{ label: '&with_genres', key: '12' }]
+  },
+  {
+    title: 'Family Fun',
+    feature: [{ label: '&with_genres', key: '10751' }]
+  },
+  {
+    title: 'Horror Flicks',
+    feature: [{ label: '&with_genres', key: '27' }]
+  },
+  {
+    title: 'Sci-fi Spectacles',
+    feature: [{ label: '&with_genres', key: '878' }]
+  },
+  {
+    title: 'Musical Hits',
+    feature: [{ label: '&with_genres', key: '10402' }]
+  },
+  {
+    title: 'Historical Epics',
+    feature: [{ label: '&with_genres', key: '36' }]
+  },
+  {
+    title: 'Feel-Good Stories',
+    feature: [{ label: '&with_genres', key: '10751,18' }]
+  },
+  {
+    title: 'War Dramas',
+    feature: [{ label: '&with_genres', key: '10752' }]
+  },
+  {
+    title: 'Fantasy Adventures',
+    feature: [{ label: '&with_genres', key: '14,12' }]
+  },
+  {
+    title: 'Biographical Films',
+    genre: '36,18',
+    feature: [{ label: '&with_genres', key: '36,18' }]
+  }
 ]
 
 export const actorLinks = [
@@ -138,68 +367,68 @@ export const actorDetails = [
 
 export const sortOptions = [
   {
-    label: 'Popularity Ascending',
-    key: 'popularity.asc'
-  },
-  {
     label: 'Popularity Descending',
     key: 'popularity.desc'
   },
   {
-    label: 'Release Date Ascending',
-    key: 'release_date.asc'
+    label: 'Popularity Ascending',
+    key: 'popularity.asc'
   },
   {
     label: 'Release Date Descending',
     key: 'release_date.desc'
   },
   {
-    label: 'Title Ascending',
-    key: 'original_title.asc'
+    label: 'Release Date Ascending',
+    key: 'release_date.asc'
   },
   {
     label: 'Title Descending',
     key: 'original_title.desc'
   },
   {
-    label: 'Revenue Ascending',
-    key: 'revenue.asc'
+    label: 'Title Ascending',
+    key: 'original_title.asc'
   },
   {
     label: 'Revenue Descending',
     key: 'revenue.desc'
   },
-
   {
-    label: 'Release Date Ascending',
-    key: 'primary_release_date.asc'
+    label: 'Revenue Ascending',
+    key: 'revenue.asc'
   },
+
   {
     label: 'Release Date Descending',
     key: 'primary_release_date.desc'
   },
   {
-    label: 'Vote Average Ascending',
-    key: 'vote_average.asc'
+    label: 'Release Date Ascending',
+    key: 'primary_release_date.asc'
   },
   {
     label: 'Vote Average Descending',
     key: 'vote_average.desc'
   },
   {
-    label: 'Title Ascending',
-    key: 'title.asc'
+    label: 'Vote Average Ascending',
+    key: 'vote_average.asc'
   },
   {
     label: 'Title Descending',
     key: 'title.desc'
   },
   {
-    label: 'Vote Count Ascending',
-    key: 'vote_count.asc'
+    label: 'Title Ascending',
+    key: 'title.asc'
   },
   {
     label: 'Vote Count Descending',
     key: 'vote_count.desc'
+  },
+  {
+    label: 'Vote Count Ascending',
+    key: 'vote_count.asc'
   }
 ]

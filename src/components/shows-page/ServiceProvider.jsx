@@ -1,17 +1,21 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { BiSolidRightArrow } from 'react-icons/bi'
 import { fetchData } from '../../utils/tmdbfetch'
 import { TiTick } from 'react-icons/ti'
 
-const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
-  const [isModalOpen, setIsModalOpened] = useState(false)
+const ServiceProvider = ({
+  selectedProviders,
+  setSelectedProviders,
+  type_,
+  openedModal,
+  setOpenedModal,
+  setWatchRegion
+}) => {
   const [regions, setRegions] = useState([])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchCountryQuery, setSearchCountryQuery] = useState('')
   const [watchProviders, setWatchProviders] = useState([])
-  const [region, setRegion] = useState('')
+  const [region, setRegion] = useState(localStorage.getItem('region') || '')
 
   useEffect(() => {
     fetchData({
@@ -25,44 +29,54 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
       }`,
       setData: setWatchProviders
     })
+
+    localStorage.setItem('region', region)
   }, [region])
 
   const handleProviderToggle = provider => {
     setSelectedProviders(prev =>
-      prev.some(p => p.provider_id === provider.provider_id)
-        ? prev.filter(p => p.provider_id !== provider.provider_id)
-        : [...prev, provider]
+      prev.some(p => p === provider.provider_id)
+        ? prev.filter(p => p !== provider.provider_id)
+        : [...prev, provider.provider_id]
     )
   }
+
   const filteredCountries = regions.filter(country =>
     country.english_name
       .toLowerCase()
       .includes(searchCountryQuery.toLowerCase())
   )
 
+  useEffect(() => {
+    if (selectedProviders.length > 0) {
+      setWatchRegion(region)
+    } else {
+      setWatchRegion('')
+    }
+  }, [selectedProviders])
+
   return (
-    <div
-      className={`bg-slate-900 p-4 shadow-lg ${
-        isModalOpen ? 'rounded-t' : 'rounded'
-      }`}
-    >
-      <div className='space-y-4'>
+    <div className={`bg-slate-900 shadow-lg rounded`}>
+      <div className='space-y-4 p-4'>
         {/* Header */}
         <div className='space-y-5 relative'>
           <div
             className='flex items-center justify-between cursor-pointer text-slate-300'
-            onClick={() => setIsModalOpened(prev => !prev)}
+            onClick={() =>
+              setOpenedModal(prev => (prev !== 'provider' ? 'provider' : ''))
+            }
           >
             <span className='font-medium text-sm'>Watch Provider</span>
             <BiSolidRightArrow
-              className={`duration-300 transform ${isModalOpen && 'rotate-90'}`}
+              className={`duration-300 transform ${
+                openedModal === 'provider' && 'rotate-90'
+              }`}
             />
           </div>
 
-          {/* Dropdown */}
-          {isDropdownOpen && isModalOpen && (
+          {/* Dropdown for Regions */}
+          {isDropdownOpen && openedModal === 'provider' && (
             <>
-              {/* Overlay */}
               <div
                 className='fixed top-0 left-0 h-screen w-screen'
                 onClick={() => {
@@ -88,6 +102,7 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
                         className='px-4 py-2 hover:bg-slate-700 cursor-pointer text-sm text-white flex items-center gap-2'
                         onClick={() => {
                           setRegion(country.iso_3166_1)
+
                           setIsDropdownOpen(false)
                           setSearchCountryQuery('')
                         }}
@@ -112,7 +127,7 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
         </div>
 
         {/* Watch Providers */}
-        {isModalOpen && (
+        {openedModal === 'provider' && (
           <div className='space-y-4'>
             {/* Country Selector */}
             <div className='w-full'>
@@ -137,8 +152,8 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
               </div>
             </div>
 
-            {/* Providers Grid */}
-            <div className='grid grid-cols-4 gap-2 max-h-60 overflow-y-auto'>
+            {/* Providers Grid (Responsive) */}
+            <div className='grid grid-cols-4 lg:grid-cols-5 gap-2 max-h-60 overflow-y-auto'>
               {watchProviders.map(provider => (
                 <button
                   key={provider.provider_id}
@@ -146,18 +161,14 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
                   className='relative group'
                 >
                   <div
-                    className={`absolute inset-0 flex justify-center items-center rounded transition-all duration-300 ${
-                      selectedProviders.some(
-                        selectedProvider =>
-                          selectedProvider.provider_id === provider.provider_id
-                      )
+                    className={`absolute inset-0 flex justify-center items-center rounded transition-all z-20 duration-300 ${
+                      selectedProviders.includes(Number(provider.provider_id))
                         ? 'bg-blue-700/70 text-white'
-                        : 'bg-transparent group-hover:bg-blue-700/40'
+                        : 'bg-transparent  group-hover:bg-blue-700/40'
                     }`}
                   >
-                    {selectedProviders.some(
-                      selectedProvider =>
-                        selectedProvider.provider_id === provider.provider_id
+                    {selectedProviders.includes(
+                      Number(provider.provider_id)
                     ) && <TiTick />}
                   </div>
                   <img
@@ -175,4 +186,4 @@ const GenreProvider = ({ selectedProviders, setSelectedProviders, type_ }) => {
   )
 }
 
-export default GenreProvider
+export default ServiceProvider

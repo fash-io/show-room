@@ -7,10 +7,10 @@ import 'swiper/css/pagination'
 import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import { Link } from 'react-router-dom'
 import { BiInfoCircle, BiLogoYoutube } from 'react-icons/bi'
-import { fetchLogos } from '../../utils/logo-util'
-import { fetchData, fetchTrailer } from '../../utils/tmdbfetch'
-import UserContext from '../../UserContext'
-import { movieGenre, tvGenre } from '../../constants'
+import { fetchLogos } from '../utils/logo-util'
+import { fetchData, fetchTrailer } from '../utils/tmdbfetch'
+import UserContext from '../UserContext'
+import { movieGenre, tvGenre } from '../constants'
 
 const Slider = ({ height, type, setError, setLoading }) => {
   const [show, setShow] = useState([])
@@ -153,7 +153,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
                           handleClick(movie)
                         }}
                       >
-                        <BiLogoYoutube color='' /> Play Trailer
+                        <BiLogoYoutube /> Play Trailer
                       </button>
                     </div>
                   </div>

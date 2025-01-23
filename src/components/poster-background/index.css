@@ -82,7 +82,6 @@
 .action-button,
 .action-select {
   border-radius: 500px;
-  /* font-size: 13px; */
   cursor: pointer;
   padding: 5px 10px;
   background-color: transparent;
@@ -93,7 +92,6 @@
 .action-select:focus {
   background-color: #fff;
   color: black;
-  /* transform: scale(1.1); */
   outline: none;
 }
 
