@@ -109,7 +109,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
                 <div className='text-center text-sm space-y-1 block md:hidden'>
                   <span className='text-[10px] text-white/50'>
                     {genres[index]
-                      ? genres[index].genres.join(', ')
+                      ? genres[index].genres?.join(', ')
                       : 'loading'}
                   </span>
                   <p
@@ -117,7 +117,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
                     style={{ textShadow: '2px 2px 4px #000000' }}
                   >
                     {movie.overview.length > 70
-                      ? `${movie.overview.slice(0, 90)}...`
+                      ? `${movie?.overview?.slice(0, 90)}...`
                       : movie.overview}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ const Slider = ({ height, type, setError, setLoading }) => {
                       style={{ textShadow: '2px 2px 4px #000000' }}
                     >
                       {movie.overview.length > 300
-                        ? `${movie.overview.slice(0, 300)}...`
+                        ? `${movie?.overview?.slice(0, 300)}...`
                         : movie.overview}
                     </p>
                     <p
