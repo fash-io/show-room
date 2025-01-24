@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const apiKey = `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
+console.log(apiKey)
 export const options = {
   method: 'GET',
   headers: {
