@@ -124,7 +124,7 @@ const Slider = ({ type, setError, setLoading }) => {
                         style={{ textShadow: '2px 2px 4px #000000' }}
                       >
                         {movie?.overview &&
-                          (movie.overview.length > 70
+                          (movie.overview?.length > 70
                             ? `${movie?.overview?.slice(0, 90)}...`
                             : movie?.overview)}
                       </p>
@@ -137,7 +137,7 @@ const Slider = ({ type, setError, setLoading }) => {
                           style={{ textShadow: '2px 2px 4px #000000' }}
                         >
                           {movie?.overview &&
-                            (movie.overview.length > 300
+                            (movie.overview?.length > 300
                               ? `${movie?.overview?.slice(0, 300)}...`
                               : movie?.overview)}
                         </p>
