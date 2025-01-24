@@ -79,8 +79,8 @@ const Slider = ({ type, setError, setLoading }) => {
         {show.map((movie, index) => {
           const mediaType = movie?.media_type === 'movie' ? 'Movie' : 'TV Show'
           const overview =
-            movie?.overview.length > 300
-              ? `${movie?.overview.slice(0, 300)}...`
+            movie?.overview?.length > 300
+              ? `${movie?.overview?.slice(0, 300)}...`
               : movie?.overview
 
           return (
