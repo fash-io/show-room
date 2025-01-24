@@ -1,25 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useCallback } from 'react'
 import ShowCard from './ShowCard'
-import { options, fetchDetails } from '../utils/api'
+import { fetchDetails, options } from '../utils/api'
 import UserContext from '../UserContext'
-import randomizeArray from 'randomize-array'
 import axios from 'axios'
 import { fetchTrailer } from '../utils/tmdbfetch'
 import TopTen from './shows-page/TopTen'
+import randomizeArray from 'randomize-array'
+import { debounce } from 'lodash'
 
 const TitleCards = ({
-  title,
-  category,
-  type,
   userWatchList,
   data_,
-  feature,
+  feature_,
   type_,
   onShowMore,
-  disableHover,
-  sort,
-  url_
+  title_
 }) => {
   const { userData } = useContext(UserContext)
   const [watchListData, setWatchListData] = useState([])
@@ -28,34 +24,43 @@ const TitleCards = ({
   const [loading, setLoading] = useState(false)
   const [activeTrailer, setActiveTrailer] = useState({ id: null, url: null })
 
+  const {
+    feature = '',
+    type = '',
+    category = '',
+    title = '',
+    sort = '',
+    url = ''
+  } = feature_ || {}
+
   useEffect(() => {
     const fetchApiData = async () => {
+      if (!url && !feature && !category) return
       setLoading(true)
       try {
-        let data = []
         const maxPages = 3
-        let url
-
-        for (let i = 1; i <= maxPages; i++) {
-          url = url_
-            ? `${url_}&page=${i}`
+        const urls = Array.from({ length: maxPages }, (_, i) =>
+          url
+            ? `${url}&page=${i + 1}`
             : feature
             ? `https://api.themoviedb.org/3/discover/${
                 type_ || 'movie'
-              }?language=en-US&page=${i}&sort_by=${
-                sort ? sort : 'popularity.desc'
+              }?language=en-US&page=${i + 1}&sort_by=${
+                sort || 'popularity.desc'
               }&vote_count.gte=100${feature
                 .map(feat => `&${feat.label}=${feat.key}`)
                 .join('')}`
-            : `https://api.themoviedb.org/3/${type}/${category}?language=en-US&page=${i}`
-
-          const response = await axios.get(url, options)
-          data = data.concat(response.data.results)
-        }
-
-        setData(data)
+            : `https://api.themoviedb.org/3/${type}/${category}?language=en-US&page=${
+                i + 1
+              }`
+        )
+        const responses = await Promise.all(
+          urls.map(url_ => axios.get(url_, options))
+        )
+        const allData = responses.flatMap(response => response.data.results)
+        setData(allData)
       } catch (err) {
-        setError(err)
+        setError(err.message || 'Failed to fetch data.')
         console.error(err)
       } finally {
         setLoading(false)
@@ -63,19 +68,28 @@ const TitleCards = ({
     }
 
     const fetchWatchListData = async () => {
-      const watchList = userData?.watchList || []
-      const detailedWatchListData = await Promise.all(
-        watchList.map(async item => fetchDetails(item.id, item.type))
-      )
-      setWatchListData(detailedWatchListData)
+      if (!userData?.watchList?.length) return
+
+      try {
+        const detailedData = await Promise.all(
+          userData.watchList.map(item => fetchDetails(item.id, item.type))
+        )
+        setWatchListData(detailedData)
+      } catch (err) {
+        setError('Failed to fetch watchlist data.')
+        console.error(err)
+      }
     }
 
     if (userWatchList) {
       fetchWatchListData()
     } else if (data_) {
       setData(randomizeArray(data_))
-    } else fetchApiData()
+    } else {
+      fetchApiData()
+    }
 
+    // Cleanup function
     return () => {
       setError(null)
       setWatchListData([])
@@ -85,38 +99,51 @@ const TitleCards = ({
     type,
     userWatchList,
     userData,
-    setLoading,
     data_,
     type_,
     feature,
     sort,
-    url_
+    url
   ])
 
   const handleHover = async show => {
-    if (activeTrailer.id === show.id) {
-      setActiveTrailer({ id: null, url: null })
-    } else {
-      const trailer = await fetchTrailer(type || type_, show.id)
-      !trailer && setActiveTrailer({ id: show.id, url: 'no' })
-      setActiveTrailer({ id: show.id, url: trailer.key })
+    if (activeTrailer.id === show.id) return
+
+    try {
+      const trailer = await fetchTrailer(type || type_ || show.type, show.id)
+      setActiveTrailer({ id: show.id, url: trailer?.key || 'no' })
+    } catch (error) {
+      console.error('Error fetching trailer:', error)
+      setActiveTrailer({ id: show.id, url: 'no' })
     }
   }
+
+  const debouncedHandleHover = useCallback(
+    debounce(show => handleHover(show), 2000),
+    [activeTrailer.id]
+  )
+
   if (loading)
     return (
       <>
-        <h2 className={`mb-1`}>{title || 'Popular'}</h2>
+        <h2 className='mb-1'>{title || 'Popular'}</h2>
         <div className='bg-[rgba(20,20,20,0.9)] h-[10vh] my-5 animate-pulse' />
       </>
     )
-  if (error) return <div className='h-[10vh] text-center'>{error.message}</div>
+
+  if (error)
+    return (
+      <div className='h-[10vh] text-center text-red-500'>
+        {error || 'Something went wrong. Please try again later.'}
+      </div>
+    )
 
   const dataToDisplay = userWatchList ? watchListData : data
 
   return (
     <div className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'>
       <div className='flex justify-between'>
-        <h2 className={`mb-1`}>{title || 'Popular'}</h2>
+        <h2 className='mb-1'>{title || title_ || 'Popular'}</h2>
         {onShowMore && feature && (
           <button className='cta flex items-center' onClick={onShowMore}>
             <span>Show all</span>
@@ -129,27 +156,24 @@ const TitleCards = ({
       </div>
       <div className='overflow-x-scroll py-3 space-x-3 whitespace-nowrap div inset-1'>
         {dataToDisplay.length > 0 ? (
-          title.startsWith('Top 10') || title === 'Netflix Top 10' ? (
+          title.startsWith('Top 10') || title.startsWith('Netflix') ? (
             <TopTen data={dataToDisplay} type_={type_ || type} />
           ) : (
             dataToDisplay.map((card, i) => (
               <ShowCard
                 key={i}
                 i={i}
-                type_={type_ || type}
+                type_={type_ || type || card.type}
                 show={card}
                 type={2}
                 isPlaying={activeTrailer.id === card.id}
                 trailerUrl={activeTrailer.url}
-                onHover={() => handleHover(card)}
+                onHover={() => debouncedHandleHover(card)}
                 onHoverEnd={() => setActiveTrailer({ id: null, url: null })}
-                disableHover={disableHover}
               />
             ))
           )
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
     </div>
   )

@@ -33,23 +33,35 @@ const ShowGallery = ({ selectedType, data, onClose, handleClick }) => {
                 key={index}
                 className='relative overflow-hidden rounded group'
               >
-                <img
-                  src={
-                    selectedType === 'video'
-                      ? `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
-                      : `https://image.tmdb.org/t/p/w780${data.file_path}`
-                  }
-                  alt={`Backdrop ${index + 1}`}
-                  className='shadow-md cursor-pointer hover:scale-110  duration-200  object-cover w-full'
-                  onClick={() => handleClick(data)}
-                />
-                <div className='absolute top-0 h-full w-full left-0 bg-black/50  flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
-                  {selectedType === 'video' ? (
-                    <BiLogoYoutube size={40} />
-                  ) : (
-                    <BiZoomIn size={40} />
-                  )}
+                <div className='w-full relative'>
+                  <img
+                    src={
+                      selectedType === 'video'
+                        ? `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
+                        : `https://image.tmdb.org/t/p/w780${data.file_path}`
+                    }
+                    alt={`Backdrop ${index + 1}`}
+                    className={`shadow-md cursor-pointer   duration-200  object-cover w-full ${
+                      selectedType !== 'video' && 'hover:scale-110'
+                    }`}
+                    onClick={() => handleClick(data)}
+                  />
+                  <div className='absolute top-0 h-full w-full left-0 bg-black/50  flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
+                    {selectedType === 'video' ? (
+                      <BiLogoYoutube size={40} />
+                    ) : (
+                      <BiZoomIn size={40} />
+                    )}
+                  </div>
                 </div>
+                {data.name && (
+                  <div className='text-xs'>
+                    {data.name}
+                    {' ('}
+                    {data.type}
+                    {')'}
+                  </div>
+                )}
               </div>
             ))}
           </div>

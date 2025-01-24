@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from 'react'
 import ShowCard from '../components/ShowCard'
 import Error from '../components/Error'
-import { fetchWatchlistData, options } from '../utils/api'
+import { fetchWatchListData } from '../utils/api'
 import UserContext from '../UserContext'
 import { Link } from 'react-router-dom'
+import Loader_ from '../components/Loaders/Loader_'
 
 const MyListPage = () => {
   const { user, userData } = useContext(UserContext)
   const [favorites, setFavorites] = useState([])
-  const [watchList, setWatchlist] = useState([])
+  const [watchList, setWatchList] = useState([])
   const [watched, setWatched] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -17,22 +18,22 @@ const MyListPage = () => {
   const [mediaType, setMediaType] = useState('all')
 
   useEffect(() => {
-    fetchWatchlistData(
-      setLoading,
-      setError,
-      setFavorites,
-      setWatchlist,
-      setWatched,
-      userData,
-      user
-    )
-
-    fetchWatchlistData()
-  }, [options, user])
+    if (user) {
+      fetchWatchListData(
+        setLoading,
+        setError,
+        setFavorites,
+        setWatchList,
+        setWatched,
+        userData,
+        user
+      )
+    }
+  }, [user, userData])
 
   useEffect(() => {
     handleSetDataSet(dataSet, mediaType)
-  }, [favorites, watchList, watched, dataSet, mediaType])
+  }, [favorites, watchList, watched, dataSet, mediaType, user])
 
   const handleSetDataSet = (set, type) => {
     setDataSet(set)
@@ -52,7 +53,6 @@ const MyListPage = () => {
         filteredData = favorites
     }
 
-    // Filter by mediaType
     if (type !== 'all') {
       const mediaTypeKey = type === 'movie' ? 'movie' : 'series'
       filteredData = filteredData.filter(item => item.type === mediaTypeKey)
@@ -94,16 +94,7 @@ const MyListPage = () => {
 
   return (
     <>
-      {loading && (
-        <div className='fixed min-h-screen w-full bg-black/70 flex justify-center items-center z-10'>
-          <p className='text-xl font-semibold'>Loading</p>
-          <p className={`spans`}>
-            <span>.</span>
-            <span>.</span>
-            <span>.</span>
-          </p>
-        </div>
-      )}
+      {loading && <Loader_ />}
       <div className='min-h-screen text-white py-20 px-4 sm:px-8 lg:px-8'>
         <div className='flex flex-col lg:flex-row items-center justify-between mb-10 space-y-4 lg:space-y-0 sm:px-20'>
           <div className='flex flex-wrap items-center space-x-4'>
@@ -171,27 +162,35 @@ const MyListPage = () => {
           </div>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8'>
-          <h2 className='text-center text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#1a2a6c] via-pink-500 to-[#ff7e5f] mb-12 mx-auto w-min whitespace-nowrap flex items-center'>
+        <div className='container mx-auto px-4 py-8'>
+          <h2 className='text-center text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#1a2a6c] via-pink-500 to-[#ff7e5f] mb-12'>
             {dataSet === 'favorite'
               ? 'Favorites'
               : dataSet === 'watchList'
               ? 'Watch List'
               : 'Watched'}
           </h2>
+
           {data.length === 0 ? (
-            <p className='text-center text-gray-400 col-span-full'>
+            <p className='text-center text-gray-400 text-lg col-span-full'>
               No items found.
             </p>
           ) : (
-            data.map((show, i) => (
-              <div
-                key={i}
-                className='relative group rounded overflow-hidden shadow-lg'
-              >
-                <ShowCard show={show} type_={show.type} type={1} user={user} />
-              </div>
-            ))
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 '>
+              {data.map((show, i) => (
+                <div
+                  key={i}
+                  className='relative group rounded-lg overflow-hidden shadow-lg '
+                >
+                  <ShowCard
+                    show={show}
+                    type_={show.type}
+                    type={4}
+                    user={user}
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Loading from '../components/Loaders/Loading'
 import Error from '../components/Error'
 import { fetchData } from '../utils/tmdbfetch'
@@ -24,6 +24,7 @@ const ContentPage = () => {
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [keywords, setKeywords] = useState([])
   const [nextAirDate, setNextAirDate] = useState(false)
   useEffect(() => {
     const fetchContentDetails = async () => {
@@ -46,6 +47,15 @@ const ContentPage = () => {
           single: true,
           setError: setError
         })
+        fetchData({
+          url: `https://api.themoviedb.org/3/${
+            type === 'series' ? 'tv' : 'movie'
+          }/${id}/keywords`,
+          setData: setKeywords,
+          single: true,
+          setError: setError
+        })
+
         let data = []
         for (let i = 1; i <= 3; i++) {
           let response = await axios.get(
@@ -199,15 +209,56 @@ const ContentPage = () => {
             label={'Seasons'}
           />
         )}
+
         {recommendations.length > 0 && (
           <div className='p-4 sm:p-6 md:p-10'>
             <TitleCards
-              type={type}
+              type_={type}
               data_={recommendations}
-              title='Recommendations'
+              title_='Recommendations'
               className={'text-2xl sm:text-3xl font-semibold mb-4'}
             />
           </div>
+        )}
+
+        {(keywords.keywords?.length > 0 || keywords.results?.length > 0) && (
+          <>
+            <label className='text-sm px-4 sm:px-6 md:px-10 font-semibold text-slate-400'>
+              Keywords
+            </label>
+            <div className='p-4 sm:p-6 md:p-10 flex flex-wrap gap-3'>
+              {keywords.keywords?.map(keyword => (
+                <Link
+                  to={`/shows/${
+                    type === 'movie'
+                      ? 'movies'
+                      : type === 'tv'
+                      ? 'series'
+                      : type
+                  }?with_keywords=${keyword.id}`}
+                  key={keyword.id}
+                  className={`px-4 py-1.5 text-sm rounded-full border-2 cursor-pointer transition-colors bg-transparent text-slate-300 border-slate-600 hover:bg-slate-800 hover:border-slate-400`}
+                >
+                  {keyword.name}
+                </Link>
+              ))}
+              {keywords.results?.map(keyword => (
+                <Link
+                  to={`/shows/${
+                    type === 'movie'
+                      ? 'movies'
+                      : type === 'tv'
+                      ? 'series'
+                      : type
+                  }?with_keywords=${keyword.id}`}
+                  key={keyword.id}
+                  className={`px-4 py-1.5 text-sm rounded-full border-2 cursor-pointer transition-colors bg-transparent text-slate-300 border-slate-600 hover:bg-slate-800 hover:border-slate-400`}
+                >
+                  {keyword.name}
+                </Link>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </>

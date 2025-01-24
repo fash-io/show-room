@@ -1,12 +1,14 @@
 import { BiSolidRightArrow } from 'react-icons/bi'
-import { sortOptions } from '../../constants'
+import { moviesSortOptions, seriesSortOptions } from '../../constants'
 
 const SortType = ({
   setSortOption,
   sortOption,
   openedModal,
-  setOpenedModal
+  setOpenedModal,
+  type_
 }) => {
+  const sortOptions = type_ === 'movie' ? moviesSortOptions : seriesSortOptions
   return (
     <div className={`bg-slate-900 shadow-lg rounded`}>
       {/* Sort Type Header for Larger Screens */}

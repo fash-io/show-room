@@ -5,7 +5,6 @@ import MultiRangeSlider from '../MultiRangeSlider'
 import { BiSolidRightArrow } from 'react-icons/bi'
 import { fetchData } from '../../utils/tmdbfetch'
 import { BsPerson } from 'react-icons/bs'
-import axios from 'axios'
 import { options } from '../../utils/api'
 
 const AdvancedFilters = ({
@@ -26,70 +25,74 @@ const AdvancedFilters = ({
   const [keywordSearch, setKeywordSearch] = useState('')
   const [personSearch, setPersonSearch] = useState('')
   const [people, setPeople] = useState([])
-  const modalRef = useRef(null)
   const [keywords, setKeywords] = useState([])
   const [loadingPeople, setLoadingPeople] = useState(false)
   const [loadingKeyword, setLoadingKeyword] = useState(false)
-
-  useEffect(() => {
-    if (keywordSearch.length > 2) {
-      setLoadingKeyword(true)
-      fetchData({
-        url: `https://api.themoviedb.org/3/search/keyword?query=${keywordSearch}&page=1`,
-        setData: setKeywords
-      }).finally(() => setLoadingKeyword(false))
-    }
-
-    if (personSearch.length > 2) {
-      setLoadingPeople(true)
-      fetchData({
-        url: `https://api.themoviedb.org/3/search/person?query=${personSearch}&include_adult=true&language=en-US&page=1`,
-        setData: setPeople
-      }).finally(() => setLoadingPeople(false))
-    }
-  }, [type_, keywordSearch, personSearch])
+  const modalRef = useRef(null)
 
   const [keywordNames, setKeywordNames] = useState({})
 
   useEffect(() => {
-    const fetchKeywordDetails = async () => {
-      const fetches = SelectedKeywords.map(async keywordId => {
-        if (!keywordNames[keywordId]) {
-          try {
-            const res = await fetch(
-              `https://api.themoviedb.org/3/keyword/${keywordId}`,
-              options
-            )
-            const data = await res.json()
-            return { id: keywordId, name: data.name }
-          } catch (error) {
-            console.error(`Error fetching keyword ${keywordId}:`, error)
-            return { id: keywordId, name: 'Unknown' }
-          }
-        }
-        return { id: keywordId, name: keywordNames[keywordId] }
-      })
+    const fetchKeywordsAndPeople = async () => {
+      if (keywordSearch.length > 2) {
+        setLoadingKeyword(true)
+        fetchData({
+          url: `https://api.themoviedb.org/3/search/keyword?query=${keywordSearch}&page=1`,
+          setData: setKeywords
+        }).finally(() => setLoadingKeyword(false))
+      }
 
-      const results = await Promise.all(fetches)
-      const updatedNames = results.reduce((acc, { id, name }) => {
-        acc[id] = name
-        return acc
-      }, {})
-      setKeywordNames(prev => ({ ...prev, ...updatedNames }))
+      if (personSearch.length > 2) {
+        setLoadingPeople(true)
+        fetchData({
+          url: `https://api.themoviedb.org/3/search/person?query=${personSearch}&include_adult=true&language=en-US&page=1`,
+          setData: setPeople
+        }).finally(() => setLoadingPeople(false))
+      }
     }
 
-    fetchKeywordDetails()
+    fetchKeywordsAndPeople()
+  }, [keywordSearch, personSearch])
+
+  const fetchKeywordDetails = useCallback(async () => {
+    const fetches = SelectedKeywords.map(async keywordId => {
+      if (!keywordNames[keywordId]) {
+        try {
+          const res = await fetch(
+            `https://api.themoviedb.org/3/keyword/${keywordId}`,
+            options
+          )
+          const data = await res.json()
+          return { id: keywordId, name: data.name }
+        } catch (error) {
+          console.error(`Error fetching keyword ${keywordId}:`, error)
+          return { id: keywordId, name: 'Unknown' }
+        }
+      }
+      return { id: keywordId, name: keywordNames[keywordId] }
+    })
+
+    const results = await Promise.all(fetches)
+    const updatedNames = results.reduce((acc, { id, name }) => {
+      acc[id] = name
+      return acc
+    }, {})
+
+    setKeywordNames(prev => ({ ...prev, ...updatedNames }))
   }, [SelectedKeywords, keywordNames])
 
-  const handleClickOutside = useCallback(
-    e => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setPersonSearch('')
-        setPeople([])
-      }
-    },
-    [setPersonSearch, setPeople]
-  )
+  useEffect(() => {
+    if (SelectedKeywords.length > 0) {
+      fetchKeywordDetails()
+    }
+  }, [SelectedKeywords, keywordNames, fetchKeywordDetails])
+
+  const handleClickOutside = useCallback(e => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setPersonSearch('')
+      setPeople([])
+    }
+  }, [])
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside)
@@ -108,10 +111,14 @@ const AdvancedFilters = ({
     setPersonSearch('')
   }
 
+  const handleKeywordSelection = keyword => {
+    setSelectedKeywords(prev => [...prev, keyword.id])
+    setKeywordSearch('')
+    setKeywords([])
+  }
+
   return (
-    <div
-      className={`bg-slate-900 shadow-lg rounded  max-h-[45vh] overflow-y-scroll`}
-    >
+    <div className='bg-slate-900 shadow-lg rounded max-h-[45vh] overflow-y-scroll'>
       <div
         className='flex px-4 py-4 items-center justify-between cursor-pointer text-slate-300 sticky top-0 bg-slate-900 border-slate-800 border-b z-10 shadow'
         onClick={() =>
@@ -128,6 +135,7 @@ const AdvancedFilters = ({
 
       {openedModal === 'adv_filter' && (
         <div className='rounded-b w-full' ref={modalRef}>
+          {/* Keywords Section */}
           <div className='p-2 border-y border-slate-800 space-y-3'>
             <label className='flex flex-wrap gap-2 items-center justify- font-medium text-slate-300 mb-2'>
               Keywords
@@ -145,26 +153,24 @@ const AdvancedFilters = ({
               )}
             </div>
             <div className='flex gap-1 px-2 flex-wrap'>
-              {SelectedKeywords.map(keyword => {
-                return (
-                  <div
-                    key={keyword}
-                    className='bg-slate-950 text-white rounded inline items-center space-x-2 p-1'
+              {SelectedKeywords.map(keyword => (
+                <div
+                  key={keyword}
+                  className='bg-slate-950 text-white rounded inline items-center space-x-2 p-1'
+                >
+                  <span>{keywordNames[keyword] || 'Loading...'}</span>
+                  <button
+                    className='text-sm hover:text-red-400'
+                    onClick={() =>
+                      setSelectedKeywords(prev =>
+                        prev.filter(kid => kid !== keyword)
+                      )
+                    }
                   >
-                    <span>{keywordNames[keyword] || 'Loading...'}</span>
-                    <button
-                      className='text-sm hover:text-red-400'
-                      onClick={() =>
-                        setSelectedKeywords(prev =>
-                          prev.filter(kid => kid !== keyword)
-                        )
-                      }
-                    >
-                      &times;
-                    </button>
-                  </div>
-                )
-              })}
+                    &times;
+                  </button>
+                </div>
+              ))}
             </div>
 
             {keywordSearch && (
@@ -175,11 +181,7 @@ const AdvancedFilters = ({
                     <button
                       key={keyword.id}
                       className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors'
-                      onClick={() => {
-                        setSelectedKeywords(prev => [...prev, keyword.id])
-                        setKeywordSearch('')
-                        setKeywords([])
-                      }}
+                      onClick={() => handleKeywordSelection(keyword)}
                     >
                       {keyword.name}
                     </button>
@@ -189,81 +191,80 @@ const AdvancedFilters = ({
           </div>
 
           {/* People Search */}
-          <div className='relative p-2 space-y-2'>
-            <label className='text-slate-300'>People</label>
-            <div className='relative'>
-              <input
-                type='text'
-                className='w-full p-3 bg-gray-900 text-white rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all'
-                placeholder='Actors & directors'
-                value={personSearch}
-                onChange={e => setPersonSearch(e.target.value)}
-              />
-              {loadingPeople && (
-                <span className='h-3 top-4 right-2 border-l-transparent animate-spin rounded-full absolute aspect-square border'></span>
-              )}
-            </div>
-
-            {/* Selected People */}
-            {selectedPeople.length > 0 && (
-              <div className='flex flex-wrap gap-1'>
-                {selectedPeople.map(person => (
-                  <div key={person.id} className='group relative'>
-                    {person.profile_path ? (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
-                        alt={person.name}
-                        className='w-10 h-10 rounded-full object-cover'
-                      />
-                    ) : (
-                      <BsPerson />
-                    )}
-
-                    <button
-                      className='absolute top-0 right-0 left-0 opacity-0 group-hover:opacity-100 duration-200 w-full h-full text-xs flex justify-center items-center bg-red-600 rounded-full '
-                      onClick={() => handleRemovePerson(person.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                ))}
+          {type_ === 'movie' && (
+            <div className='relative p-2 space-y-2'>
+              <label className='text-slate-300'>People</label>
+              <div className='relative'>
+                <input
+                  type='text'
+                  className='w-full p-3 bg-gray-900 text-white rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all'
+                  placeholder='Actors & directors'
+                  value={personSearch}
+                  onChange={e => setPersonSearch(e.target.value)}
+                />
+                {loadingPeople && (
+                  <span className='h-3 top-4 right-2 border-l-transparent animate-spin rounded-full absolute aspect-square border'></span>
+                )}
               </div>
-            )}
 
-            {/* Search Results */}
-            {personSearch && (
-              <div className='absolute top-20 sm:left-0 max-h-96 w-full bg-slate-800 overflow-y-auto rounded z-[60]'>
-                {people.length > 0 ? (
-                  people.map(person => (
-                    <div
-                      key={person.id}
-                      className='w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer'
-                      onClick={() => handleAddPerson(person)}
-                    >
-                      <span className='text-sm'>{person.name}</span>
+              {/* Selected People */}
+              {selectedPeople.length > 0 && (
+                <div className='flex flex-wrap gap-1'>
+                  {selectedPeople.map(person => (
+                    <div key={person.id} className='group relative'>
                       {person.profile_path ? (
                         <img
                           src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
                           alt={person.name}
-                          className='w-9 h-9 rounded-full object-cover'
+                          className='w-10 h-10 rounded-full object-cover'
                         />
                       ) : (
                         <BsPerson />
                       )}
+                      <button
+                        className='absolute top-0 right-0 left-0 opacity-0 group-hover:opacity-100 duration-200 w-full h-full text-xs flex justify-center items-center bg-red-600 rounded-full'
+                        onClick={() => handleRemovePerson(person.id)}
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
-                  ))
-                ) : loadingPeople ? (
-                  <></>
-                ) : (
-                  <div className='text-center text-gray-400'>
-                    No results found
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
 
-          {/* <div className='p-4 border-y border-slate-800 space-y-2'>
+              {/* Search Results */}
+              {personSearch && (
+                <div className='absolute top-20 sm:left-0 max-h-96 w-full bg-slate-800 overflow-y-auto rounded z-[60]'>
+                  {people.length > 0 ? (
+                    people.map(person => (
+                      <div
+                        key={person.id}
+                        className='w-full p-2 flex justify-between items-center hover:bg-gray-700 cursor-pointer'
+                        onClick={() => handleAddPerson(person)}
+                      >
+                        <span className='text-sm'>{person.name}</span>
+                        {person.profile_path ? (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
+                            alt={person.name}
+                            className='w-8 h-8 rounded-full object-cover'
+                          />
+                        ) : (
+                          <BsPerson />
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className='p-2'>No results found</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Additional Filters */}
+
+          <div className='p-4 border-y border-slate-800 space-y-2'>
             <label className='block text-sm font-medium text-slate-300'>
               Runtime
             </label>
@@ -278,8 +279,8 @@ const AdvancedFilters = ({
                 setRuntime({ gte: min, lte: max })
               }}
             />
-          </div> */}
-          {/* <div className='p-4 border-y border-slate-800 space-y-2'>
+          </div>
+          <div className='p-4 border-y border-slate-800 space-y-2'>
             <label className='block text-sm font-medium text-slate-300'>
               Vote Average
             </label>
@@ -293,8 +294,8 @@ const AdvancedFilters = ({
                 setVoteAverage({ gte: min, lte: max })
               }}
             />
-          </div> */}
-          {/* <div className='p-4 border-y border-slate-800 space-y-2'>
+          </div>
+          <div className='p-4 border-y border-slate-800 space-y-2'>
             <label className='block text-sm font-medium text-slate-300'>
               Vote Count (least)
             </label>
@@ -303,13 +304,13 @@ const AdvancedFilters = ({
               className='w-full'
               type='range'
               min={1}
-              value={voteCount}
+              value={voteCount || 0}
               max={1000}
               onChange={e => {
                 SetVoteCount(e.target.value)
               }}
             />
-          </div> */}
+          </div>
         </div>
       )}
     </div>

@@ -153,13 +153,14 @@ export const FeaturedSeriesTitles = [
   {
     title: 'Netflix Top 10',
     feature: [
-      { label: '&with_networks', key: '213' },
+      { label: '&with_watch_providers', key: '8' },
       {
         label: '&air_date.gte',
-        key: new Date(new Date().setMonth(new Date().getMonth() - 1))
+        key: new Date(new Date().setMonth(new Date().getMonth() - 2))
           .toISOString()
           .split('T')[0]
-      }
+      },
+      { label: '&watch_region', key: 'NG' }
     ]
   },
   {
@@ -255,13 +256,15 @@ export const FeaturedMoviesTitles = [
   {
     title: 'Netflix Top 10',
     feature: [
-      { label: '&with_networks', key: '213' },
+      { label: '&with_watch_providers', key: '8' },
+
       {
-        label: '&air_date.gte',
+        label: '&release_date.gte',
         key: new Date(new Date().setMonth(new Date().getMonth() - 1))
           .toISOString()
           .split('T')[0]
-      }
+      },
+      { label: '&watch_region', key: 'NG' }
     ]
   },
   {
@@ -365,7 +368,57 @@ export const actorDetails = [
   }
 ]
 
-export const sortOptions = [
+export const seriesSortOptions = [
+  {
+    label: 'Popularity Descending',
+    key: 'popularity.desc'
+  },
+  {
+    label: 'Popularity Ascending',
+    key: 'popularity.asc'
+  },
+  {
+    label: 'First Air Date Descending',
+    key: 'first_air_date.desc'
+  },
+  {
+    label: 'First Air Date Ascending',
+    key: 'first_air_date.asc'
+  },
+  {
+    label: 'Name Descending',
+    key: 'name.desc'
+  },
+  {
+    label: 'Name Ascending',
+    key: 'name.asc'
+  },
+  {
+    label: 'Original Name Descending',
+    key: 'original_name.desc'
+  },
+  {
+    label: 'Original Name Ascending',
+    key: 'original_name.asc'
+  },
+  {
+    label: 'Vote Average Descending',
+    key: 'vote_average.desc'
+  },
+  {
+    label: 'Vote Average Ascending',
+    key: 'vote_average.asc'
+  },
+  {
+    label: 'Vote Count Descending',
+    key: 'vote_count.desc'
+  },
+  {
+    label: 'Vote Count Ascending',
+    key: 'vote_count.asc'
+  }
+]
+export const moviesSortOptions = [
   {
     label: 'Popularity Descending',
     key: 'popularity.desc'

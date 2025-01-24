@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -22,11 +22,11 @@ import {
   ContactUs,
   FAQ,
   CollectionPage,
-  MyList
+  MyList,
+  PosterBackground,
+  TopPeople
 } from './pages'
-import PosterBackground from './pages/PosterBackground'
 import GalleryModal from './components/GalleryModal'
-import TopPeople from './pages/TopPeople'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -49,6 +49,11 @@ const App = () => {
     return () => unsubscribe()
   }, [])
 
+  const shouldHideNavbarAndFooter = useCallback(() => {
+    const hiddenPaths = ['/login', '/poster', '/signup']
+    return hiddenPaths.includes(location.pathname)
+  }, [location.pathname])
+
   if (loading) {
     return <Loading />
   }
@@ -56,21 +61,12 @@ const App = () => {
   return (
     <>
       <UserContext.Provider
-        value={{
-          user: user,
-          userData: userData,
-          setTrailerUrl: setTrailerUrl,
-          trailerUrl: trailerUrl
-        }}
+        value={{ user, userData, trailerUrl, setTrailerUrl }}
       >
         <ToastContainer className={'toast-container z-[1000]'} />
-        {location.pathname === '/login' ||
-        location.pathname === '/poster' ||
-        location.pathname === '/signup' ? (
-          <></>
-        ) : (
-          <Navbar />
-        )}
+
+        {!shouldHideNavbarAndFooter() && <Navbar />}
+
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
@@ -87,19 +83,13 @@ const App = () => {
           <Route path='/poster' element={<PosterBackground />} />
           <Route path='/top-people' element={<TopPeople />} />
           <Route path='/:type/:id' element={<ShowPage />} />
-          <Route path='/shows' element={<ShowsPage />} />
           <Route path='/shows/:type' element={<ShowsPage />} />
           <Route path='*' element={<Error />} />
         </Routes>
-        {location.pathname === '/login' ||
-        location.pathname === '/poster' ||
-        location.pathname === '/signup' ? (
-          <></>
-        ) : (
-          <>
-            <Footer />
-          </>
-        )}
+
+        {/* Conditionally render Footer */}
+        {!shouldHideNavbarAndFooter() && <Footer />}
+
         {trailerUrl && (
           <GalleryModal
             selectedData={trailerUrl}

@@ -4,12 +4,13 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import Error from '../components/Error'
-import { handleLogout, handleRemoveItem } from '../utils/firebaseHandlers'
 import GoBackButton from '../components/GoBackButton'
 import { Link, useNavigate } from 'react-router-dom'
 import Loading from '../components/Loaders/Loading'
-import { fetchWatchlistData } from '../utils/api'
+import { fetchWatchListData } from '../utils/api'
 import UserContext from '../UserContext'
+import { logout } from '../utils/firebase-auth'
+import { removeItemFromList } from '../utils/firebase-storage'
 
 const ProfilePage = () => {
   const { user, userData } = useContext(UserContext)
@@ -22,17 +23,17 @@ const ProfilePage = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [favorites, setFavorites] = useState([])
-  const [watchlist, setWatchlist] = useState([])
+  const [watchList, setWatchList] = useState([])
   const [watched, setWatched] = useState([])
   const [activeTab, setActiveTab] = useState('favorites')
   const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
-    fetchWatchlistData(
+    fetchWatchListData(
       setLoading,
       setError,
       setFavorites,
-      setWatchlist,
+      setWatchList,
       setWatched,
       userData,
       user
@@ -124,7 +125,7 @@ const ProfilePage = () => {
   }
 
   const handle_Logout = () => {
-    handleLogout()
+    logout()
     navigator('/')
   }
 
@@ -166,8 +167,8 @@ const ProfilePage = () => {
       case 'favorites':
         data = favorites
         break
-      case 'watchlist':
-        data = watchlist
+      case 'watchList':
+        data = watchList
         break
       case 'watched':
         data = watched
@@ -203,7 +204,9 @@ const ProfilePage = () => {
           </div>
         </div>
         <button
-          onClick={() => handleRemoveItem(item.id, item.type, user, activeTab)}
+          onClick={() =>
+            removeItemFromList(user.uid, item.id, item.type, activeTab)
+          }
           className='text-red-500 hover:text-red-700 transition'
         >
           <i className='fa fa-trash'></i>
@@ -259,14 +262,14 @@ const ProfilePage = () => {
               Favorites
             </button>
             <button
-              onClick={() => setActiveTab('watchlist')}
+              onClick={() => setActiveTab('watchList')}
               className={`text-white py-2 px-4 rounded ${
-                activeTab === 'watchlist'
+                activeTab === 'watchList'
                   ? 'bg-blue-500'
                   : 'bg-gray-700 hover:bg-gray-600'
               }`}
             >
-              Watchlist
+              WatchList
             </button>
             <button
               onClick={() => setActiveTab('watched')}

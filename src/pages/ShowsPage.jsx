@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   useParams,
   useNavigate,
@@ -24,7 +24,6 @@ const TVShowsPage = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-
   const [shows, setShows] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -68,6 +67,7 @@ const TVShowsPage = () => {
     }
     return sanitized
   }
+
   const fetchShows = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams(
@@ -76,8 +76,11 @@ const TVShowsPage = () => {
       const url = showType
         ? `https://api.themoviedb.org/3/discover/${showType}?${queryParams}&page=${page}`
         : `https://api.themoviedb.org/3/trending/all/week?language=en-US&page=${page}`
-      console.log(url)
       const response = await axios.get(url, options)
+      if (response.data?.results?.length < 1) {
+        setShows([])
+        return
+      }
       setShows(prev =>
         page === 1 ? response.data.results : [...prev, ...response.data.results]
       )
@@ -93,7 +96,6 @@ const TVShowsPage = () => {
   useEffect(() => {
     setLoading(true)
     setPage(1)
-    setTotalPages(10)
     window.scrollTo({ top: 0 })
   }, [location.search, filters])
 
@@ -111,6 +113,30 @@ const TVShowsPage = () => {
     navigate(`/shows/${newType}`)
   }
 
+  const observerRef = useRef()
+
+  useEffect(() => {
+    if (loading || loadingMore || page >= totalPages) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPage(prev => prev + 1)
+          setLoadingMore(true)
+        }
+      },
+      { rootMargin: '100px' }
+    )
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current)
+    }
+  }, [loading, loadingMore, page, totalPages])
+
   const handleShowMore = feature => {
     let newFilters = { ...filters }
 
@@ -119,43 +145,34 @@ const TVShowsPage = () => {
       newFilters[filterKey] = f.key
     })
 
+    newFilters.sort_by = filters.sort_by || 'popularity.desc'
+    newFilters.include_adult =
+      filters.include_adult !== undefined ? filters.include_adult : false
+
     const sanitizedFilters = sanitizeFilters(newFilters)
     setFilters(sanitizedFilters)
     setSearchParams(sanitizedFilters)
   }
 
-  const handleLoadMore = () => {
-    if (page < totalPages) {
-      setPage(prev => prev + 1)
-      setLoadingMore(true)
-    }
-  }
   return (
     <div className='min-h-screen text-white'>
-      <div className='mx-auto pt-10 px-3 lg:px-16'>
+      <div className='mx-auto pt-10'>
         {isExploring ? (
-          <div>
+          <div className='pl-10'>
             <h3 className='text-center text-3xl mt-14 text-pink-600'>
               {type.toUpperCase()}
             </h3>
-
             {featured_.map((feature, i) => (
               <TitleCards
                 key={i}
-                title={feature.title}
-                category={feature.category}
-                type={feature.type}
-                feature={feature.feature}
                 type_={showType}
-                sort={feature.sort}
-                url_={feature.url}
+                feature_={feature}
                 onShowMore={() => handleShowMore(feature.feature)}
               />
             ))}
           </div>
         ) : (
-          <div className='grid grid-cols-12 gap-6 '>
-            {/* Sidebar Filters */}
+          <div className='grid grid-cols-12 gap-6 px-3 lg:px-16'>
             <div className='md:col-span-3 absolute md:relative min-h-[90vh] z-50'>
               <FilterOptions
                 filters={filters}
@@ -168,14 +185,9 @@ const TVShowsPage = () => {
               />
             </div>
 
-            {/* Shows Grid */}
             <div className='col-span-12 md:col-span-9 md:pt-10'>
               <h2 className='text-center text-3xl sm:text-4xl font-bold text-slate-300 mb-7'>
-                {type === 'movies'
-                  ? 'Movies'
-                  : type === 'series'
-                  ? 'Series'
-                  : 'All Shows'}
+                {showType.toUpperCase()}
               </h2>
               {error ? (
                 <div className='text-center flex flex-col items-center text-red-500'>
@@ -188,7 +200,7 @@ const TVShowsPage = () => {
                     onClick={fetchShows}
                   >
                     {loading ? (
-                      <Loader_ className={'scale-50 '} />
+                      <Loader_ className='scale-50' />
                     ) : (
                       <RxReload size={20} />
                     )}
@@ -208,19 +220,8 @@ const TVShowsPage = () => {
                   ))}
                 </div>
               )}
-              {!error && page < totalPages && (
-                <button
-                  className={`text-center text-sm w-full h-10 rounded-full bg-blue-800/50 px-20 hover:bg-blue-900 duration-200 mt-10 disabled:bg-blue-800/50 disabled:grayscale`}
-                  onClick={handleLoadMore}
-                  disabled={loadingMore}
-                >
-                  {loadingMore ? (
-                    <Loader_ className={'scale-90'} />
-                  ) : (
-                    'Load more'
-                  )}
-                </button>
-              )}
+              <div ref={observerRef} />
+              {loadingMore && <Loader_ className='mt-5' />}
             </div>
           </div>
         )}

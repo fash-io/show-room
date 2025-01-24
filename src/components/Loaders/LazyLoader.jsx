@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-const LazyLoader = ({ src, alt, className, hidden, i, ...props }) => {
+const LazyLoader = ({ src, alt, className, hidden, i = 0, ...props }) => {
   const [loaded, setLoaded] = useState(false)
   if (hidden) {
-    return
+    return null
   }
 
   return (

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { fetchData } from '../../utils/tmdbfetch'
 import DropdownWithOutsideClick from './DropdownWithOutsideClick '
 import { CgClose } from 'react-icons/cg'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Filters = ({
   type,
@@ -19,7 +21,9 @@ const Filters = ({
   originCountry,
   setOriginCountry,
   originalLanguage,
-  setOriginalLanguage
+  setOriginalLanguage,
+  primaryDate,
+  setPrimaryDate
 }) => {
   const genre = type === 'movies' ? movieGenre : tvGenre
   const [regions, setRegions] = useState([])
@@ -28,6 +32,7 @@ const Filters = ({
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
   const [searchCountryQuery, setSearchCountryQuery] = useState('')
   const [searchLanguageQuery, setSearchLanguageQuery] = useState('')
+  const [isRange, setIsRange] = useState(false)
 
   const handleGenre = _id => {
     setGenres(prevGenres =>
@@ -36,6 +41,9 @@ const Filters = ({
         : [...prevGenres, _id]
     )
   }
+  useEffect(() => {
+    setPrimaryDate('')
+  }, [isRange])
 
   useEffect(() => {
     const fetchRegions = async () => {
@@ -107,34 +115,61 @@ const Filters = ({
             </div>
           </div>
 
-          {/* Release Date */}
           <div className='p-4 border-y border-slate-800 space-y-4 text-sm'>
-            <label className='block text-base font-medium text-slate-400'>
-              Release Date
-            </label>
-            <div className='space-y-3'>
-              <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between'>
-                <span className='text-slate-300'>From</span>
+            <div className='flex justify-between items-center'>
+              <label className='block text-base font-medium text-slate-400'>
+                Release Date
+              </label>
+
+              <div className='flex items-center gap-2'>
                 <input
-                  type='date'
-                  value={date.gte}
-                  onChange={e =>
-                    setDate(prev => ({ ...prev, gte: e.target.value }))
-                  }
-                  className='w-full sm:w-32 p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  type='checkbox'
+                  id='adult'
+                  checked={isRange}
+                  onChange={() => setIsRange(prev => !prev)}
+                  className='ui-checkbox'
                 />
+                <span className='text-slate-300'>Range</span>
               </div>
-              <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between'>
-                <span className='text-slate-300'>To</span>
-                <input
-                  type='date'
-                  value={date.lte}
-                  onChange={e =>
-                    setDate(prev => ({ ...prev, lte: e.target.value }))
-                  }
-                  className='w-full sm:w-32 p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                />
-              </div>
+            </div>
+            <div className='flex items-center justify-between w-full gap-2'>
+              {isRange ? (
+                <div className='w-full space-y-3'>
+                  <div className='flex items-center justify-between w-full '>
+                    <span className='text-slate-300'>From</span>
+                    <input
+                      type='month'
+                      value={date.gte}
+                      onChange={e =>
+                        setDate(prev => ({ ...prev, gte: e.target.value }))
+                      }
+                      className='w-32 p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    />
+                  </div>
+                  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between'>
+                    <span className='text-slate-300'>To</span>
+                    <input
+                      type='month'
+                      value={date.lte}
+                      onChange={e =>
+                        setDate(prev => ({ ...prev, lte: e.target.value }))
+                      }
+                      className='w-full sm:w-32 p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className='flex w-full items-center justify-between'>
+                  <span className='text-slate-300'>Release Year</span>
+                  <DatePicker
+                    selected={primaryDate}
+                    onChange={date => setPrimaryDate(date)}
+                    showYearPicker
+                    dateFormat='yyyy'
+                    className='w-full sm:w-32 p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  />
+                </div>
+              )}
             </div>
           </div>
 

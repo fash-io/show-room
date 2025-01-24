@@ -10,7 +10,7 @@ const VideoPlayer = ({ trailerUrl }) => {
     <div className='absolute top-0 left-0 w-full h-full z-10 '>
       <iframe
         src={`https://www.youtube.com/embed/${trailerUrl}?autoplay=1&controls=0`}
-        className='w-full h-full pointer-events-none'
+        className='w-full h-full pointer-events-none rounded-br-xl'
         frameBorder='0'
         allow='autoplay; encrypted-media'
         allowFullScreen

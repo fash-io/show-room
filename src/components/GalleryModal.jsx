@@ -6,7 +6,6 @@ import { LuDownload, LuMinimize, LuX } from 'react-icons/lu'
 
 const GalleryModal = ({ selectedData, closeModal }) => {
   const [size, setSize] = useState('default')
-  console.log(size)
 
   if (selectedData.file_path) {
     return (

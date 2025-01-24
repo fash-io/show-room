@@ -1,11 +1,11 @@
 import axios from 'axios'
 
+const apiKey = `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
 export const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyOTk4YjQyMDliOGZjYWJiMGY5NmRkYTU3ZDlhZjI5ZiIsIm5iZiI6MTcyNDk1OTg0Ni44NjEzMTksInN1YiI6IjY2ZDBjYWUwNDYxZTRjNDg4N2IxMzVkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8QXxSpY5y4m-sXdD9Qp0TuBfbdUjUiSvTHL_rY0mP4A'
+    Authorization: apiKey
   }
 }
 
@@ -15,19 +15,18 @@ export const fetchDetails = async (id, type) => {
       `/api/3/${type === 'movie' ? 'movie' : 'tv'}/${id}?language=en-US`,
       options
     )
-    const data = response.data
-    return { ...data, type }
+    return { ...response.data, type }
   } catch (error) {
     console.error(`Error fetching details for ${type} with ID ${id}:`, error)
     return null
   }
 }
 
-export const fetchWatchlistData = async (
+export const fetchWatchListData = async (
   setLoading,
   setError,
   setFavorites,
-  setWatchlist,
+  setWatchList,
   setWatched,
   userData,
   user
@@ -37,40 +36,27 @@ export const fetchWatchlistData = async (
     return
   }
   try {
-    setLoading(true)
+    setLoading?.(true)
 
-    const watchListItems = userData.watchList || []
-    const favoriteItems = userData.favorite || []
-    const watchedItems = userData.watched || []
+    const fetchItemsDetails = async items =>
+      await Promise.all(
+        items.map(async item => {
+          const details = await fetchDetails(item.id, item.type)
+          return details
+        })
+      )
 
-    const favoriteDetails = await Promise.all(
-      favoriteItems.map(async item => {
-        const details = await fetchDetails(item.id, item.type)
-        return details
-      })
-    )
+    const favoriteDetails = await fetchItemsDetails(userData.favorite || [])
+    const watchListDetails = await fetchItemsDetails(userData.watchList || [])
+    const watchedDetails = await fetchItemsDetails(userData.watched || [])
 
-    const watchlistDetails = await Promise.all(
-      watchListItems.map(async item => {
-        const details = await fetchDetails(item.id, item.type)
-        return details
-      })
-    )
-
-    const watchedDetails = await Promise.all(
-      watchedItems.map(async item => {
-        const details = await fetchDetails(item.id, item.type)
-        return details
-      })
-    )
-
-    setFavorites(favoriteDetails.filter(item => item !== null))
-    setWatchlist(watchlistDetails.filter(item => item !== null))
-    setWatched(watchedDetails.filter(item => item !== null))
+    setFavorites?.(favoriteDetails.filter(item => item !== null))
+    setWatchList?.(watchListDetails.filter(item => item !== null))
+    setWatched?.(watchedDetails.filter(item => item !== null))
   } catch (err) {
-    setError('Failed to load data.')
-    console.error(err)
+    setError?.('Failed to load data.')
+    console.error('Error fetching watchList data:', err)
   } finally {
-    setLoading(false)
+    setLoading?.(false)
   }
 }

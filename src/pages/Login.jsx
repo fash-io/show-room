@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
-import { login, signup } from '../utils/firebase'
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RxEyeOpen, RxEyeClosed, RxCrossCircled } from 'react-icons/rx'
@@ -8,6 +7,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Loader_ from '../components/Loaders/Loader_'
 import PosterBackground from '../components/poster-background/PosterBackground'
+import { login, signup } from '../utils/firebase-auth'
 
 const Login = () => {
   const location = useLocation()

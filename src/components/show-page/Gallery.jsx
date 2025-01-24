@@ -135,23 +135,35 @@ const Gallery = ({ backdrops, videos, posters }) => {
                     key={index}
                     className='relative overflow-hidden w-full rounded group'
                   >
-                    <img
-                      src={
-                        selectedType === 'video'
-                          ? `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
-                          : `https://image.tmdb.org/t/p/w500${data.file_path}`
-                      }
-                      alt={`Backdrop ${index + 1}`}
-                      className='shadow-md cursor-pointer hover:scale-110  duration-200  object-cover w-full'
-                      onClick={() => handleClick(data)}
-                    />
-                    <div className='absolute top-0 h-full w-full left-0 bg-black/50 z-50 flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
-                      {selectedType === 'video' ? (
-                        <BiLogoYoutube size={40} color='red' />
-                      ) : (
-                        <BiZoomIn size={40} />
-                      )}
+                    <div className='w-full relative'>
+                      <img
+                        src={
+                          selectedType === 'video'
+                            ? `https://img.youtube.com/vi/${data.key}/hqdefault.jpg`
+                            : `https://image.tmdb.org/t/p/w500${data.file_path}`
+                        }
+                        alt={`Backdrop ${index + 1}`}
+                        className={`shadow-md cursor-pointer   duration-200  object-cover w-full ${
+                          selectedType === 'video' ? '' : 'hover:scale-110'
+                        }`}
+                        onClick={() => handleClick(data)}
+                      />
+                      <div className='absolute top-0 h-full w-full left-0 bg-black/50 z-50 flex justify-center items-center pointer-events-none opacity-0 group-hover:opacity-100 duration-200'>
+                        {selectedType === 'video' ? (
+                          <BiLogoYoutube size={40} />
+                        ) : (
+                          <BiZoomIn size={40} />
+                        )}
+                      </div>
                     </div>
+                    {data.name && (
+                      <div className='text-xs mt-1'>
+                        {data.name}
+                        {' ('}
+                        {data.type}
+                        {')'}
+                      </div>
+                    )}
                   </div>
                 ))}
 
@@ -159,10 +171,8 @@ const Gallery = ({ backdrops, videos, posters }) => {
               (videos.length > 7 && selectedType === 'video') ||
               (posters.length > 11 && selectedType === 'poster')) && (
               <div
-                className={`rounded flex items-center justify-center duration-200 cursor-pointer ${
-                  selectedType === 'video'
-                    ? ''
-                    : 'bg-white/10 hover:bg-white/20'
+                className={`rounded flex items-center justify-center duration-200 cursor-pointer bg-white/10 hover:bg-white/20  ${
+                  selectedType === 'video' && 'scale-75'
                 }`}
                 onClick={() => {
                   setGalleryModal(true)

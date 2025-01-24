@@ -1,5 +1,10 @@
 import axios from 'axios'
 import { options } from './api'
+
+/**
+ * Fetches data from a given URL and updates state accordingly.
+ * @param {Object} params - The parameters for the fetch operation.
+ */
 export const fetchData = async ({
   url,
   setData,
@@ -11,48 +16,60 @@ export const fetchData = async ({
 }) => {
   if (!useTryCatch) {
     const response = await axios.get(url, options)
-    response.status === 200
-      ? single
-        ? setData(response.data)
-        : setData(response.data.results)
-      : setError(response.statusText)
+    if (response.status === 200) {
+      single
+        ? setData(response.data || {})
+        : setData(response.data.results || [])
+    } else {
+      setError?.(response.statusText)
+    }
     return
   }
-
-  setLoading && setLoading(true)
+  setLoading?.(true)
   try {
     const response = await axios.get(url, options)
     if (response.status === 200) {
+      const data = response.data || {}
       if (single) {
-        setData(response.data || {})
+        setData(data)
       } else {
-        setData(response.data.results || [])
-        setTotalPages && setTotalPages(response.data.total_pages || 0)
+        setData(data.results || [])
+        setTotalPages?.(data.total_pages || 0)
       }
-      return response.data
+      return data
     } else {
-      setError && setError(response.statusText)
+      setError?.(response.statusText)
     }
   } catch (err) {
     console.error(err)
-    setError(err.message)
+    setError?.(err.message)
   } finally {
-    setLoading && setLoading(false)
+    setLoading?.(false)
   }
 }
 
-export const fetchTrailer = async (type, id, setTrailerUrl) => {
-  const response = await axios.get(
-    `https://api.themoviedb.org/3/${
-      type === 'series' ? 'tv' : type
-    }/${id}/videos?language=en-US`,
-    options
-  )
-  const trailer = response.data.results.find(
-    video => video.type === 'Trailer' && video.site === 'YouTube'
-  )
-  if (trailer) {
-    if (setTrailerUrl) setTrailerUrl(trailer)
-    else return trailer
+/**
+ * Fetches the trailer URL for a specific type and ID.
+ * @param {string} type - The type of media (e.g., "movie" or "series").
+ * @param {number} id - The ID of the media item.
+ * @param {Function} setTrailerUrl - The state setter for the trailer URL.
+ */
+export const fetchTrailer = async (type, id, setTrailer) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/${type}/${id}/videos?language=en-US`,
+      options
+    )
+
+    const trailer = response.data.results.find(
+      video => video.type === 'Trailer' && video.site === 'YouTube'
+    )
+
+    if (trailer) {
+      setTrailer && setTrailer(trailer)
+      return trailer
+    }
+  } catch (error) {
+    console.error('Error fetching trailer:', error)
   }
 }

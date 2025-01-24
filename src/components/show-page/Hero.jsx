@@ -55,13 +55,13 @@ const Hero = ({ content }) => {
             )}
             <p className='text-xs w-5/6 sm:text-sm italic'>{content.tagline}</p>
             {trailer && (
-              <span
-                className='py-1 px-2 sm:p-3 bg-white text-black cursor-pointer rounded sm:py-2 inline-block space-x-5'
+              <button
+                className='py-1 sm:py-2 px-3 text-xs sm:text-sm font-semibold bg-[#6d6d6eb3] rounded hover:bg-[#6d6d6e66] transition duration-200 inline-block space-x-5'
                 onClick={() => setTrailerUrl(trailer)}
               >
-                <BsYoutube className='text-red-700 inline' />
+                <BsYoutube className='inline' />
                 <span>Play Trailer</span>
-              </span>
+              </button>
             )}
           </div>
         </>

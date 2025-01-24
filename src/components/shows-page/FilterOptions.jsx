@@ -5,11 +5,10 @@ import ServiceProvider from './ServiceProvider'
 import Filters from './Filters'
 import AdvancedFilters from './AdvancedFilters'
 import { BiTrash } from 'react-icons/bi'
-import { FiFilter } from 'react-icons/fi'
 import { RiArrowGoBackFill } from 'react-icons/ri'
+import { FiFilter } from 'react-icons/fi'
 
 const FilterOptions = ({ setFilters, type, filters }) => {
-  console.log(filters)
   const [selectedProviders, setSelectedProviders] = useState(
     (filters?.with_watch_providers?.length > 0 &&
       filters?.with_watch_providers?.split(',').map(Number)) ||
@@ -51,11 +50,10 @@ const FilterOptions = ({ setFilters, type, filters }) => {
   const [voteAverage, setVoteAverage] = useState({ gte: '', lte: '' })
   const [voteCount, SetVoteCount] = useState('')
   const [openedModal, setOpenedModal] = useState('')
-  const [filterModal, setFilterModal] = useState(false)
+  const [primaryDate, setPrimaryDate] = useState('')
 
   const type_ = type === 'movies' ? 'movie' : 'tv'
-
-  console.log(selectedProviders)
+  const [FilterModal, setFilterModal] = useState(false)
 
   const handleClearFilters = () => {
     setFilters({ sort_by: 'popularity.desc' })
@@ -64,6 +62,7 @@ const FilterOptions = ({ setFilters, type, filters }) => {
     setSelectedPeople([])
     setOriginCountry('')
     setOriginalLanguage('')
+    setPrimaryDate('')
     setGenres([])
     SetVoteCount('')
     setVoteAverage({ gte: '', lte: '' })
@@ -74,14 +73,34 @@ const FilterOptions = ({ setFilters, type, filters }) => {
   }
 
   const handleApplyFilters = () => {
-    const dateKey = type_ === 'tv' ? 'first_air_date' : 'release_date'
+    const dateKey = type_ === 'movie' ? 'release_date' : 'first_air_date'
+    const yearKey =
+      type_ === 'movie' ? 'primary_release_year' : 'first_air_date_year'
+    const formatDate = date => {
+      if (date) {
+        const formattedDate = new Date(date)
+        return formattedDate.toLocaleDateString('en-CA')
+      }
+      return ''
+    }
+    const date_ = primaryDate
+      ? {
+          [`${yearKey}`]: primaryDate.getFullYear(),
+          [`${dateKey}.gte`]: '',
+          [`${dateKey}.lte`]: ''
+        }
+      : {
+          [`${dateKey}.gte`]: formatDate(date?.gte) || '',
+          [`${dateKey}.lte`]: formatDate(date?.lte) || '',
+          [`${yearKey}`]: ''
+        }
     const formattedFilters = {
       sort_by: sortOption,
-      with_watch_providers: selectedProviders.map(p => p).join(','),
+      with_watch_providers: selectedProviders.join(','),
       include_adult: includeAdult,
       watch_region: watchRegion,
-      with_genres: genres.map(g => g).join(','),
-      with_keywords: SelectedKeywords.map(k => k).join(','),
+      with_genres: genres.join(','),
+      with_keywords: SelectedKeywords.join(','),
       with_people: selectedPeople.map(p => p.id).join(','),
       'with_runtime.gte': runtime.gte,
       'with_runtime.lte': runtime.lte,
@@ -90,8 +109,7 @@ const FilterOptions = ({ setFilters, type, filters }) => {
       'vote_count.gte': voteCount,
       with_origin_country: originCountry,
       with_original_language: originalLanguage,
-      [`${dateKey}.gte`]: date?.gte,
-      [`${dateKey}.lte`]: date?.lte
+      ...date_
     }
 
     const sanitizeFilters = filters => {
@@ -111,165 +129,98 @@ const FilterOptions = ({ setFilters, type, filters }) => {
     setFilters(sanitizedFilters)
   }
   return (
-    <div className='text-sm space-y-3 sticky top-20 overflow-y-scroll py-4 px-3 '>
-      <div className='hidden space-y-3 md:block '>
-        <div className='w-full flex '>
+    <>
+      {' '}
+      <span
+        className='fixed md:hidden bottom-36 right-3 p-3 bg-blue-500 rounded-full z-50'
+        onClick={() => setFilterModal(prev => !prev)}
+      >
+        <FiFilter />
+      </span>
+      <div
+        className={`text-sm space-y-3 left-0 top-0 max-md:w-screen max-md:h-screen fixed md:sticky md:top-20 md:overflow-y-scroll py-4 md:px-3 max-md:bg-black/80 max-md:backdrop-blur-md flex flex-col justify-center pb-48 px-9 max-md:${
+          FilterModal ? 'flex' : 'hidden'
+        }`}
+        onClick={() => setFilterModal(false)}
+      >
+        <div className='space-y-3 block' onClick={e => e.stopPropagation()}>
+          <div className='w-full flex'>
+            <button
+              className='bg-slate-700 p-3 rounded-full animate-bounce active:animate-ping'
+              title='Remove filters'
+              onClick={() => setFilters({})}
+            >
+              <RiArrowGoBackFill className='mx-auto' />
+            </button>
+          </div>
+          <SortType
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+            openedModal={openedModal}
+            setOpenedModal={setOpenedModal}
+            type_={type_}
+          />
+          <ServiceProvider
+            selectedProviders={selectedProviders}
+            setSelectedProviders={setSelectedProviders}
+            type_={type_}
+            openedModal={openedModal}
+            setOpenedModal={setOpenedModal}
+            watchRegion={watchRegion}
+            setWatchRegion={setWatchRegion}
+          />
+          <Filters
+            type={type}
+            includeAdult={includeAdult}
+            setIncludeAdult={setIncludeAdult}
+            genres={genres}
+            setGenres={setGenres}
+            date={date}
+            setDate={setDate}
+            primaryDate={primaryDate}
+            setPrimaryDate={setPrimaryDate}
+            openedModal={openedModal}
+            setOpenedModal={setOpenedModal}
+            originCountry={originCountry}
+            setOriginCountry={setOriginCountry}
+            originalLanguage={originalLanguage}
+            setOriginalLanguage={setOriginalLanguage}
+          />
+          <AdvancedFilters
+            setSelectedKeywords={setSelectedKeywords}
+            SelectedKeywords={SelectedKeywords}
+            setSelectedPeople={setSelectedPeople}
+            selectedPeople={selectedPeople}
+            runtime={runtime}
+            setRuntime={setRuntime}
+            type_={type_}
+            voteAverage={voteAverage}
+            setVoteAverage={setVoteAverage}
+            voteCount={voteCount}
+            SetVoteCount={SetVoteCount}
+            openedModal={openedModal}
+            setOpenedModal={setOpenedModal}
+          />
+        </div>
+
+        <div className='flex gap-2'>
           <button
-            className='bg-slate-700 p-3 rounded-full animate-bounce active:animate-ping'
-            title='Remove filters'
-            onClick={() => setFilters({})}
+            onClick={handleClearFilters}
+            className='w-full flex gap-3 items-center justify-center bg-gray-600 text-white py-2 rounded hover:bg-red-800/70 hover:shadow-lg transition-colors duration-200 ease-in-out'
           >
-            <RiArrowGoBackFill className='mx-auto' />
+            <BiTrash className='text-lg' />
+            Clear Filters
+          </button>
+
+          <button
+            onClick={handleApplyFilters}
+            className='w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 hover:shadow-lg transition-colors duration-200 ease-in-out'
+          >
+            Apply Filters
           </button>
         </div>
-        <SortType
-          sortOption={sortOption}
-          setSortOption={setSortOption}
-          openedModal={openedModal}
-          setOpenedModal={setOpenedModal}
-        />
-        <ServiceProvider
-          selectedProviders={selectedProviders}
-          setSelectedProviders={setSelectedProviders}
-          type_={type_}
-          openedModal={openedModal}
-          setOpenedModal={setOpenedModal}
-          watchRegion={watchRegion}
-          setWatchRegion={setWatchRegion}
-        />
-        <Filters
-          type={type}
-          includeAdult={includeAdult}
-          setIncludeAdult={setIncludeAdult}
-          genres={genres}
-          setGenres={setGenres}
-          date={date}
-          setDate={setDate}
-          openedModal={openedModal}
-          setOpenedModal={setOpenedModal}
-          originCountry={originCountry}
-          setOriginCountry={setOriginCountry}
-          originalLanguage={originalLanguage}
-          setOriginalLanguage={setOriginalLanguage}
-        />
-        <AdvancedFilters
-          setSelectedKeywords={setSelectedKeywords}
-          SelectedKeywords={SelectedKeywords}
-          setSelectedPeople={setSelectedPeople}
-          selectedPeople={selectedPeople}
-          runtime={runtime}
-          setRuntime={setRuntime}
-          type_={type_}
-          voteAverage={voteAverage}
-          setVoteAverage={setVoteAverage}
-          voteCount={voteCount}
-          SetVoteCount={SetVoteCount}
-          openedModal={openedModal}
-          setOpenedModal={setOpenedModal}
-        />
       </div>
-
-      {/* Modal trigger for small screens */}
-      <div className='md:hidden '>
-        <button
-          onClick={() => setFilterModal(true)}
-          className='p-3 bg-blue-500 text-white rounded-full fixed left-5 bottom-20 hover:bg-blue-600'
-        >
-          <FiFilter />
-        </button>
-        {filterModal && (
-          <div
-            className='fixed inset-0 bg-black/50 flex justify-center items-center z-50'
-            onClick={() => setFilterModal(false)}
-          >
-            <div
-              className='bg-gray-800 text-white p-6 rounded-lg w-11/12 md:w-1/3'
-              onClick={e => e.stopPropagation()}
-            >
-              <div className='space-y-4'>
-                <SortType
-                  sortOption={sortOption}
-                  setSortOption={setSortOption}
-                  openedModal={openedModal}
-                  setOpenedModal={setOpenedModal}
-                />
-                <ServiceProvider
-                  selectedProviders={selectedProviders}
-                  setSelectedProviders={setSelectedProviders}
-                  type_={type_}
-                  openedModal={openedModal}
-                  setOpenedModal={setOpenedModal}
-                  watchRegion={watchRegion}
-                  setWatchRegion={setWatchRegion}
-                />
-                <Filters
-                  type={type}
-                  includeAdult={includeAdult}
-                  setIncludeAdult={setIncludeAdult}
-                  genres={genres}
-                  setGenres={setGenres}
-                  date={date}
-                  setDate={setDate}
-                  openedModal={openedModal}
-                  setOpenedModal={setOpenedModal}
-                  originCountry={originCountry}
-                  setOriginCountry={setOriginCountry}
-                  originalLanguage={originalLanguage}
-                  setOriginalLanguage={setOriginalLanguage}
-                />
-                <AdvancedFilters
-                  setSelectedKeywords={setSelectedKeywords}
-                  SelectedKeywords={SelectedKeywords}
-                  setSelectedPeople={setSelectedPeople}
-                  selectedPeople={selectedPeople}
-                  runtime={runtime}
-                  setRuntime={setRuntime}
-                  type_={type_}
-                  voteAverage={voteAverage}
-                  setVoteAverage={setVoteAverage}
-                  voteCount={voteCount}
-                  SetVoteCount={SetVoteCount}
-                  openedModal={openedModal}
-                  setOpenedModal={setOpenedModal}
-                />
-              </div>
-              <div className='mt-4 flex justify-between'>
-                <button
-                  onClick={handleClearFilters}
-                  className='bg-red-600 py-2 px-4 rounded text-white'
-                >
-                  Clear Filters
-                </button>
-                <button
-                  onClick={handleApplyFilters}
-                  className='bg-green-600 py-2 px-4 rounded text-white'
-                >
-                  Apply Filters
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Buttons for large screens */}
-      <div className='space-y-3 hidden md:block'>
-        <button
-          onClick={handleClearFilters}
-          className='w-full flex gap-3 items-center justify-center bg-gray-600 text-white py-2 rounded hover:bg-red-600 hover:shadow-lg transition-colors duration-200 ease-in-out'
-        >
-          <BiTrash className='text-lg' />
-          Clear Filters
-        </button>
-
-        <button
-          onClick={handleApplyFilters}
-          className='w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 hover:shadow-lg transition-colors duration-200 ease-in-out'
-        >
-          Apply Filters
-        </button>
-      </div>
-    </div>
+    </>
   )
 }
 

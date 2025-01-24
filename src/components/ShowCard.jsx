@@ -26,6 +26,7 @@ const ShowCard = props => {
   const showTrailer =
     windowWidth > 768 &&
     (location.pathname === '/' || location.pathname.startsWith('/shows/')) &&
+    type === 2 &&
     !disableHover
       ? true
       : false
@@ -48,9 +49,14 @@ const ShowCard = props => {
             alt={show.name || show.title}
             className='w-full object-cover rounded group- peer transition-transform duration-300'
           />
-          <h3 className='w-full bg-gradient-to-t from-black to-transparent p-3 text-xs sm:text-sm font-light text-white text-center  transition-opacity duration-300 font-lobster'>
-            {show.name || show.title}
-          </h3>
+          <div className='py-3 text-xs  font-light text-white flex justify-between'>
+            <h3 className='font-lobster max-w-[80%]'>
+              {show.name || show.title}
+            </h3>
+            <span className='block text-yellow-500 font-medium'>
+              {show.vote_average > 1 ? show.vote_average.toFixed(1) : 'N/A'} /10
+            </span>
+          </div>
         </div>
       </Link>
     )
@@ -136,7 +142,8 @@ const ShowCard = props => {
             </div>
 
             <p className='text-[8px] md:hidden text-white/60 mt-0.5'>
-              {show.first_air_date || show.release_date.slice}
+              {show.first_air_date ||
+                (show.release_date && show.release_date.slice(0, 10))}
             </p>
           </>
         )}
@@ -173,7 +180,7 @@ const ShowCard = props => {
               </span>
             </p>
             {show.overview && (
-              <p className='text-xs mt-1 hidden lg:block'>
+              <p className='text-xs  hidden lg:block'>
                 {show.overview.length > 60
                   ? `${show.overview.slice(0, 60)}...`
                   : show.overview}
@@ -181,6 +188,70 @@ const ShowCard = props => {
             )}
           </div>
         </Link>
+      </div>
+    )
+  } else if (type === 4) {
+    return (
+      <div className='flex gap-4 w-full p-1  border-white/50 border-2 overflow-hidden rounded sm:rounded bg-white/10'>
+        <img
+          src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
+          alt={show.title || show.name}
+          className='sm:w-[43%]  max-sm:max-w-[30%] rounded-l-[2px] rounded-lg shadow-lg '
+        />
+        <div className='flex flex-col gap-0.5 py-2'>
+          <h3 className='text font-semibold text-white'>
+            {show.title || show.name}
+          </h3>
+          <p className='text-sm text-gray-400 mt-0.5'>
+            {show.release_date
+              ? `Released: ${new Date(show.release_date)?.getFullYear()}`
+              : show.first_air_date
+              ? `From: ${new Date(show.first_air_date)?.getFullYear()} - ${
+                  show.status === 'Returning Series'
+                    ? 'Present'
+                    : new Date(show.last_air_date)?.getFullYear()
+                }`
+              : 'Release Date: N/A'}
+          </p>
+          <p className='text-sm text-gray-400 '>
+            {show.runtime || show.episode_run_time?.length > 0
+              ? `Runtime: ${
+                  show.type === 'movie'
+                    ? `${Math.floor(show.runtime / 60)}h ${
+                        show.runtime % 60
+                      }min`
+                    : `${show.episode_run_time} min/episode`
+                }`
+              : 'Runtime: N/A'}
+          </p>
+          <p className='text-sm text-gray-400 text-wrap bg-white flex flex-wrap'>
+            <span className='text-white'>Genre:</span>
+
+            {show.genres
+              ? show.genres.map(genre => (
+                  <Link
+                    key={genre.id}
+                    to={`/shows/${
+                      show.type === 'movie'
+                        ? 'movies'
+                        : show.type === 'tv'
+                        ? 'series'
+                        : show.type
+                    }?with_genres=${genre.id}`}
+                    className='text-sm ml-1 hover:text-gray-200'
+                  >
+                    {genre.name},
+                  </Link>
+                ))
+              : 'N/A'}
+          </p>
+          <Link
+            to={`/${show.type === 'movie' ? 'movie' : 'series'}/${show.id}`}
+            className='text-pink-500 text-sm mt-2 underline hover:text-pink-400'
+          >
+            View Details
+          </Link>
+        </div>
       </div>
     )
   }
