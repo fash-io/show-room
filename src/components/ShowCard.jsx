@@ -97,8 +97,8 @@ const ShowCard = props => {
                   {show.title || show.name}
                 </div>
                 <p className='text-xs font-bold mb-2'>
-                  {show.overview.length > 90
-                    ? `${show.overview.slice(0, 90)}...`
+                  {show?.overview?.length > 90
+                    ? `${show?.overview?.slice(0, 90)}...`
                     : show.overview}
                 </p>
                 <span className='block text-yellow-500 font-medium'>
@@ -181,8 +181,8 @@ const ShowCard = props => {
             </p>
             {show.overview && (
               <p className='text-xs  hidden lg:block'>
-                {show.overview.length > 60
-                  ? `${show.overview.slice(0, 60)}...`
+                {show.overview?.length > 60
+                  ? `${show.overview?.slice(0, 60)}...`
                   : show.overview}
               </p>
             )}
