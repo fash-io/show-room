@@ -18,7 +18,7 @@ const Home = () => {
   return (
     <>
       {loading && <Loading transparent={true} />}
-      <Slider type='all' setLoading={setLoading} setError={setError} />
+      {/* <Slider type='all' setLoading={setLoading} setError={setError} /> */}
       {!loading ? (
         <div className='pl-2 pr-1 sm:pl-10'>
           {featured.map((feature, i) => {
