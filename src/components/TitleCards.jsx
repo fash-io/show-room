@@ -69,7 +69,6 @@ const TitleCards = ({
 
     const fetchWatchListData = async () => {
       if (!userData?.watchList?.length) return
-
       try {
         const detailedData = await Promise.all(
           userData.watchList.map(item => fetchDetails(item.id, item.type))
@@ -89,7 +88,6 @@ const TitleCards = ({
       fetchApiData()
     }
 
-    // Cleanup function
     return () => {
       setError(null)
       setWatchListData([])
@@ -139,8 +137,9 @@ const TitleCards = ({
     )
 
   const dataToDisplay = userWatchList ? watchListData : data
+  console.log(dataToDisplay)
 
-  return (
+  return dataToDisplay?.length > 0 ? (
     <div className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'>
       <div className='flex justify-between'>
         <h2 className='mb-1'>{title || title_ || 'Popular'}</h2>
@@ -176,6 +175,8 @@ const TitleCards = ({
         ) : null}
       </div>
     </div>
+  ) : (
+    ''
   )
 }
 
