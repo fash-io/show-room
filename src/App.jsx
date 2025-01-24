@@ -27,6 +27,7 @@ import {
   TopPeople
 } from './pages'
 import GalleryModal from './components/GalleryModal'
+import SeasonPage from './pages/SeasonPage'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -84,6 +85,8 @@ const App = () => {
           <Route path='/top-people' element={<TopPeople />} />
           <Route path='/:type/:id' element={<ShowPage />} />
           <Route path='/shows/:type' element={<ShowsPage />} />
+          <Route path='/show/:id/season' element={<SeasonPage />} />
+
           <Route path='*' element={<Error />} />
         </Routes>
 

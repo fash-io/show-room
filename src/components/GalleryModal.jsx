@@ -14,6 +14,11 @@ const GalleryModal = ({ selectedData, closeModal }) => {
         onClick={closeModal}
       >
         <div className='relative' onClick={e => e.stopPropagation()}>
+          <img
+            src={`https://image.tmdb.org/t/p/original${selectedData.file_path}`}
+            alt='Selected Backdrop'
+            className='max-w-[90vw] max-h-[80vh] rounded shadow-2xl'
+          />
           <button
             onClick={closeModal}
             className='absolute top-4 right-4 text-gray-400 hover:text-white bg-gray-800 p-2 rounded-full shadow-md transition-all duration-300'
@@ -21,11 +26,6 @@ const GalleryModal = ({ selectedData, closeModal }) => {
           >
             <LuX size={28} />
           </button>
-          <img
-            src={`https://image.tmdb.org/t/p/original${selectedData.file_path}`}
-            alt='Selected Backdrop'
-            className='max-w-[90vw] max-h-[80vh] rounded shadow-2xl'
-          />
           <a
             href={`https://image.tmdb.org/t/p/original${selectedData.file_path}`}
             download

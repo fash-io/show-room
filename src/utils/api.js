@@ -12,7 +12,9 @@ export const options = {
 export const fetchDetails = async (id, type) => {
   try {
     const response = await axios.get(
-      `/api/3/${type === 'movie' ? 'movie' : 'tv'}/${id}?language=en-US`,
+      `https://api.themoviedb.org/3/${
+        type === 'movie' ? 'movie' : 'tv'
+      }/${id}?language=en-US`,
       options
     )
     console.log(response)

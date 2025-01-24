@@ -25,6 +25,8 @@ const ShowCollection = ({ content, setError, label }) => {
 
   const dataToUse = label === 'Collection' ? data.parts : seasons
 
+  console.log(content)
+
   return (
     <div className='p-4 sm:p-6 md:p-10 lg:p-20 max-w-full group'>
       <h2 className='text-2xl sm:text-3xl font-semibold mb-6 text-white'>
@@ -34,8 +36,9 @@ const ShowCollection = ({ content, setError, label }) => {
       <div className='flex items-center gap-10'>
         <Link
           to={
-            label === 'Collection' &&
-            `/collection/${content.belongs_to_collection.id}`
+            label === 'Collection'
+              ? `/collection/${content.belongs_to_collection.id}`
+              : `/show/${content.id}/season`
           }
           className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded max-sm:hidden'
         >
@@ -46,31 +49,25 @@ const ShowCollection = ({ content, setError, label }) => {
                     content.belongs_to_collection.poster_path ||
                     content.poster_path
                   }`
-                : label === 'Seasons'
+                : content.poster_path
                 ? `https://image.tmdb.org/t/p/w300${content.poster_path}`
-                : 'https://via.placeholder.com/150x225?text=No+Image'
+                : 'https://imageplaceholder.net/180x265/131313?text=No+Image'
             }
             alt={`${label} Poster`}
             className='rounded object-cover group-hover:scale-105 duration-500 bg-black mr-10'
           />
-          {label === 'Collection' && (
-            <div className='absolute z-50 px-1 py-3'>
-              <h3 className='text-xl sm:text-2xl font-semibold bg-gradient-to-r from-[#f12711] to-[#f5af19] bg-clip-text text-transparent'>
-                {content.belongs_to_collection.name}
-              </h3>
-            </div>
-          )}
         </Link>
-        <BsFilm className='text-5xl text-gray-400 group-hover:text-[#ff7e5f] transition duration-300 max-sm:hidden' />
 
-        <div className='flex flex-nowrap overflow-x-scroll inset-10 div space-x-4 '>
+        <div className='flex flex-nowrap overflow-x-scroll space-x-4'>
           {dataToUse?.map((item, i) => (
             <Link
               key={i}
-              to={label === 'Collection' && `/movie/${item.id}`}
-              className={`flex-shrink-0 max-w-[150px] ${
-                label === 'Seasons' && 'cursor-default'
-              }`}
+              to={
+                label === 'Collection'
+                  ? `/movie/${item.id}`
+                  : `/show/${content.id}/season?season=${item.season_number}`
+              }
+              className='flex-shrink-0 max-w-[150px]'
             >
               <div className='overflow-hidden'>
                 <img
@@ -80,7 +77,7 @@ const ShowCollection = ({ content, setError, label }) => {
                       : 'https://via.placeholder.com/150x225?text=No+Image'
                   }
                   alt={item.title || item.name}
-                  className=' object-cover hover:scale-110 duration-200 overflow-hidden h-[225px]'
+                  className='object-cover hover:scale-110 duration-200 h-[225px] rounded-lg'
                 />
               </div>
               <p className='text-sm mt-2 text-gray-200'>

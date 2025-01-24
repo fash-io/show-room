@@ -9,15 +9,5 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
-  },
-  server: {
-    proxy: {
-      // Proxy requests to the TMDB API
-      '/api': {
-        target: 'https://api.themoviedb.org',
-        changeOrigin: true, // This helps to avoid CORS issues
-        rewrite: (path) => path.replace(/^\/api/, ''), // Rewrite URL to match API endpoint structure
-      }
-    }
   }
 })
