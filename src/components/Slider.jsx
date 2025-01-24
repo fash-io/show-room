@@ -76,8 +76,8 @@ const Slider = ({ type, setError, setLoading }) => {
         className='h-full'
         onAutoplayTimeLeft={onAutoplayTimeLeft}
       >
-        {show.map((movie, index) => {
-          return (
+        {show.map((movie, index) =>
+          typeof movie.overview === 'string' ? (
             <SwiperSlide key={index} className='max-md:pb-5'>
               {movie ? (
                 <div className='relative h-full'>
@@ -126,7 +126,7 @@ const Slider = ({ type, setError, setLoading }) => {
                         {movie?.overview &&
                           (movie.overview?.length > 70
                             ? `${movie?.overview?.slice(0, 90)}...`
-                            : movie?.overview)}
+                            : movie?.overview || 'No overview available')}
                       </p>
                     </div>
 
@@ -197,8 +197,10 @@ const Slider = ({ type, setError, setLoading }) => {
                 </div>
               )}
             </SwiperSlide>
+          ) : (
+            ''
           )
-        })}
+        )}
         <div className='autoplay-progress' slot='container-end'>
           <svg viewBox='0 0 48 48' ref={progressCircle}>
             <circle cx='24' cy='24' r='20'></circle>
