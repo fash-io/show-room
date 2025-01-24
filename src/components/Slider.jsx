@@ -77,12 +77,6 @@ const Slider = ({ type, setError, setLoading }) => {
         onAutoplayTimeLeft={onAutoplayTimeLeft}
       >
         {show.map((movie, index) => {
-          const mediaType = movie?.media_type === 'movie' ? 'Movie' : 'TV Show'
-          const overview =
-            movie?.overview?.length > 300
-              ? `${movie?.overview?.slice(0, 300)}...`
-              : movie?.overview
-
           return (
             <SwiperSlide key={index} className='max-md:pb-5'>
               {movie ? (
@@ -129,9 +123,10 @@ const Slider = ({ type, setError, setLoading }) => {
                         className='text-xs'
                         style={{ textShadow: '2px 2px 4px #000000' }}
                       >
-                        {movie?.overview?.length > 70
-                          ? `${movie?.overview?.slice(0, 90)}...`
-                          : movie?.overview}
+                        {movie?.overview &&
+                          (movie.overview.length > 70
+                            ? `${movie?.overview?.slice(0, 90)}...`
+                            : movie?.overview)}
                       </p>
                     </div>
 
@@ -141,13 +136,16 @@ const Slider = ({ type, setError, setLoading }) => {
                           className='max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl text-xs sm:text-sm lg:text-base leading-5 mb-2 sm:mb-4'
                           style={{ textShadow: '2px 2px 4px #000000' }}
                         >
-                          {overview}
+                          {movie?.overview &&
+                            (movie.overview.length > 300
+                              ? `${movie?.overview?.slice(0, 300)}...`
+                              : movie?.overview)}
                         </p>
                         <p
                           className='text-xs sm:text-sm uppercase tracking-wider inline-block mb-4 mr-3 text-slate-200 font-bold '
                           style={{ textShadow: '2px 2px 4px #000000' }}
                         >
-                          {mediaType}
+                          {movie?.media_type === 'movie' ? 'Movie' : 'TV Show'}
                         </p>
                         <span className='text-[10px] text-white/50'>
                           {genres[index]?.genres?.map((genre, i) => (
