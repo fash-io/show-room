@@ -73,9 +73,10 @@ const TitleCards = ({
         const detailedData = await Promise.all(
           userData.watchList.map(item => fetchDetails(item.id, item.type))
         )
+
         setWatchListData(detailedData)
       } catch (err) {
-        setError('Failed to fetch watchlist data.')
+        setError('Failed to fetch watchList data.')
         console.error(err)
       }
     }
@@ -135,9 +136,7 @@ const TitleCards = ({
         {error || 'Something went wrong. Please try again later.'}
       </div>
     )
-
   const dataToDisplay = userWatchList ? watchListData : data
-  console.log(dataToDisplay)
 
   return dataToDisplay?.length > 0 ? (
     <div className='mt-3 sm:mt-7 md:mt-8 sm:mb-5 md:mb-8'>

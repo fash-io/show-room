@@ -15,6 +15,7 @@ export const fetchDetails = async (id, type) => {
       `/api/3/${type === 'movie' ? 'movie' : 'tv'}/${id}?language=en-US`,
       options
     )
+    console.log(response)
     return { ...response.data, type }
   } catch (error) {
     console.error(`Error fetching details for ${type} with ID ${id}:`, error)
