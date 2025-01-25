@@ -122,10 +122,7 @@ const ContentPage = () => {
       feature: [
         {
           label: '&with_genres',
-          key: content?.genres
-            ?.filter((_, i) => i < 2)
-            .map(genre => genre.id)
-            .join(',')
+          key: content?.genres?.map(genre => genre.id).join(',')
         },
 
         {
