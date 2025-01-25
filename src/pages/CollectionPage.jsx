@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import ShowCard from '../components/ShowCard'
+import { useNavigate, useParams } from 'react-router-dom'
 import Error from '../components/Error'
 import Loading from '../components/Loaders/Loading'
 import { fetchData } from '../utils/tmdbfetch'
+import SeasonScroller from '../components/season-page/SeasonScroller'
 
 const CollectionPage = () => {
   const [collection, setCollection] = useState(null)
+  const navigator = useNavigate()
   const [error, setError] = useState(null)
   const { id } = useParams()
   const [loading, setLoading] = useState(true)
+
+  const handleSeasonSelect = id_ => {
+    navigator(`/movie/${id_}`)
+  }
 
   useEffect(() => {
     const dataProps = {
@@ -19,6 +24,7 @@ const CollectionPage = () => {
       setLoading: setLoading,
       setError: setError
     }
+
     fetchData(dataProps)
   }, [id])
 
@@ -36,84 +42,24 @@ const CollectionPage = () => {
 
   return (
     <>
-      <div className='min-h-screen bg-black text-white'>
-        {collection && (
-          <>
-            {/* Backdrop Section */}
-            <div className='relative w-full h-[80vh]'>
-              <img
-                src={`https://image.tmdb.org/t/p/original${
-                  collection.backdrop_path || collection.poster_path
-                }`}
-                alt={collection.title || collection.name}
-                className='object-cover w-full h-full'
-              />
-              <div className='absolute inset-0 bg-gradient-to-b from-black/60 to-black' />
-              <div className='absolute inset-0 bg-black/30 backdrop-blur-sm' />
-              <div className='absolute bottom-16 left-10'>
-                <h1 className='text-3xl sm:text-5xl font-extrabold drop-shadow-lg'>
-                  {collection.title || collection.name}
-                </h1>
-                <p className='text-sm sm:text-base text-gray-300 mt-3'>
-                  {collection.overview || 'No description available.'}
-                </p>
-              </div>
-            </div>
-
-            {/* Poster and Overview */}
-            <div className='p-6 md:p-12 lg:p-20 grid grid-cols-1 md:grid-cols-3 gap-10'>
-              {/* Poster */}
-              <div className='flex justify-center md:justify-start'>
-                <img
-                  src={`https://image.tmdb.org/t/p/original${collection.poster_path}`}
-                  alt={`${collection.title || collection.name} Poster`}
-                  className='w-72 sm:w-96 rounded-lg shadow-xl transition-transform transform hover:scale-105'
-                />
-              </div>
-              {/* Overview */}
-              <div className='col-span-2'>
-                <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
-                  Overview
-                </h2>
-                <p className='text-base sm:text-lg text-gray-300 leading-relaxed'>
-                  {collection.overview || 'No overview available.'}
-                </p>
-                {/* Metadata */}
-                <div className='mt-6 text-sm text-gray-400 space-y-2'>
-                  <p>
-                    <span className='font-bold text-gray-200'>
-                      Number of Movies:
-                    </span>{' '}
-                    {collection.parts?.length || 'Unknown'}
-                  </p>
-                  <p>
-                    <span className='font-bold text-gray-200'>
-                      Collection ID:
-                    </span>{' '}
-                    {id}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Movies Section */}
-            <div className='container mx-auto p-6 md:p-12'>
-              <h2 className='text-3xl sm:text-4xl font-bold mb-6'>
-                Movies in Collection
-              </h2>
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
-                {collection?.parts?.map(movie => (
-                  <ShowCard
-                    key={movie.id}
-                    show={movie}
-                    type_={movie.media_type}
-                    type={1}
-                  />
-                ))}
-              </div>
-            </div>
-          </>
-        )}
+      <div className='relative flex flex-col justify-end h-[90vh] bg-cover bg-center mb-40'>
+        <img
+          src={`https://image.tmdb.org/t/p/original${collection.backdrop_path}`}
+          className='w-full h-full top-0 left-0 absolute object-cover object-bottom -z-20 rounded-b-[190px]'
+          alt=''
+        />
+        <div className='flex flex-col gap-5 translate-y-20 px-1 sm:px-8'>
+          <div className='mx-auto max-w-4xl text-center sm:text-left'>
+            <h1 className='md:text-2xl'>{collection.name}</h1>
+            <p className='text-sm tracking-wider text-gray-400 mt-4'>
+              {collection.overview}
+            </p>
+          </div>
+          <SeasonScroller
+            allSeasons={collection.parts}
+            handleSeasonSelect={handleSeasonSelect}
+          />
+        </div>
       </div>
     </>
   )

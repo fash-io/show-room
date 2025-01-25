@@ -20,12 +20,14 @@
 /* Rank Styling */
 .top-ten-rank {
   position: absolute;
+  font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+  letter-spacing: 2px;
   top: 50%;
   transform: translateY(-50%);
   left: -40px;
   font-size: 16rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.2);
   z-index: -1;
   transition: all 200ms ease;
   letter-spacing: -40px;
@@ -56,7 +58,6 @@
   z-index: 10;
 }
 
-/* Info Section */
 .top-ten-info {
   text-align: center;
   margin-top: 10px;

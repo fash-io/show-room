@@ -58,7 +58,34 @@ const ShowCollection = ({ content, setError, label }) => {
           />
         </Link>
 
-        <div className='flex flex-nowrap overflow-x-scroll space-x-4'>
+        <div
+          className='flex flex-nowrap 
+        overflow-x-scroll space-x-4 div'
+        >
+          <Link
+            to={
+              label === 'Collection'
+                ? `/collection/${content.belongs_to_collection.id}`
+                : `/show/${content.id}/season`
+            }
+            className='flex-shrink-0 w-[9rem] sm:w-44 group overflow-hidden rounded max-sm:block hidden'
+          >
+            <img
+              src={
+                content.belongs_to_collection
+                  ? `https://image.tmdb.org/t/p/w300${
+                      content.belongs_to_collection.poster_path ||
+                      content.poster_path
+                    }`
+                  : content.poster_path
+                  ? `https://image.tmdb.org/t/p/w300${content.poster_path}`
+                  : 'https://imageplaceholder.net/180x265/131313?text=No+Image'
+              }
+              alt={`${label} Poster`}
+              className='rounded object-cover group-hover:scale-105 duration-500 bg-black mr-10'
+            />
+            {content.belongs_to_collection?.name || content.name}
+          </Link>
           {dataToUse?.map((item, i) => (
             <Link
               key={i}

@@ -23,9 +23,12 @@ const ContentPage = () => {
   const [videos, setVIdeos] = useState([])
   const [error, setError] = useState(null)
   const [recommendations, setRecommendations] = useState([])
+  const [recommendations_, setRecommendations_] = useState([])
   const [loading, setLoading] = useState(true)
   const [keywords, setKeywords] = useState([])
   const [nextAirDate, setNextAirDate] = useState(false)
+  const [crewType, setCrewType] = useState('cast')
+
   useEffect(() => {
     const fetchContentDetails = async () => {
       setLoading(true)
@@ -98,10 +101,6 @@ const ContentPage = () => {
           setData: setVIdeos,
           setError: setError
         })
-        content?.next_episode_to_air?.air_date &&
-          setNextAirDate(
-            calculateDaysToNextEpisode(content?.next_episode_to_air?.air_date)
-          )
       } catch (err) {
         console.error('Failed to fetch content details or backdrops:', err)
         setError('Failed to load content details.')
@@ -112,6 +111,35 @@ const ContentPage = () => {
 
     fetchContentDetails()
   }, [id, type])
+  useEffect(() => {
+    content?.next_episode_to_air?.air_date &&
+      setNextAirDate(
+        calculateDaysToNextEpisode(content?.next_episode_to_air?.air_date)
+      )
+
+    setRecommendations_({
+      title: 'Similar',
+      feature: [
+        {
+          label: '&with_genres',
+          key: content?.genres
+            ?.filter((_, i) => i < 2)
+            .map(genre => genre.id)
+            .join(',')
+        },
+
+        {
+          label: '&vote_count.gte',
+          key: 100
+        },
+        {
+          label: '&with_origin_country',
+          key: content?.origin_country.join('')
+        }
+      ]
+    })
+  }, [content])
+  console.log(recommendations_)
 
   if (loading) {
     return <Loading />
@@ -168,18 +196,32 @@ const ContentPage = () => {
         )}
 
         <div className='p-4 sm:p-6 md:p-10 lg:p-20 space-y-4  lg:pb-0'>
-          {credits?.cast?.length > 0 && (
-            <>
-              <h2 className='text-2xl sm:text-3xl font-semibold mb-4'>Cast</h2>
+          <div className='max-w-7xl mx-auto mt-5'>
+            <div className='flex gap-5'>
+              {['cast', 'crew'].map(type => (
+                <h2
+                  key={type}
+                  className={`text-2xl sm:text-3xl font-semibold  inline-block cursor-pointer capitalize ${
+                    crewType === type
+                      ? 'order-1'
+                      : 'scale-50 text-gray-400 order-2'
+                  } `}
+                  onClick={() => setCrewType(type)}
+                >
+                  {type}
+                </h2>
+              ))}
+            </div>
+            {credits[crewType]?.length > 0 && (
               <div
-                className={`flex overflow-x-scroll space-x-4 sm:space-x-7 pb-4 div`}
+                className={`flex overflow-x-scroll space-x-4 sm:space-x-7 py-4 div`}
               >
-                {credits.cast.map((actor, i) => (
+                {credits[crewType]?.map((actor, i) => (
                   <ScrollCard person={actor} key={i} />
                 ))}
               </div>
-            </>
-          )}
+            )}
+          </div>
 
           {directors?.length > 1 && (
             <>
@@ -211,12 +253,22 @@ const ContentPage = () => {
         )}
 
         {recommendations.length > 0 && (
-          <div className='p-4 sm:p-6 md:p-10'>
+          <div className='px-4 sm:px-6 md:px-10'>
             <TitleCards
               type_={type}
               data_={recommendations}
               title_='Recommendations'
               className={'text-2xl sm:text-3xl font-semibold mb-4'}
+            />
+          </div>
+        )}
+        {recommendations_ && (
+          <div className='px-4 sm:px-6 md:px-10'>
+            <TitleCards
+              type_={type === 'series' ? 'tv' : type === 'movie' ? 'movie' : ''}
+              className={'text-2xl sm:text-3xl font-semibold mb-4'}
+              feature_={recommendations_}
+              filter={content.id}
             />
           </div>
         )}

@@ -40,7 +40,7 @@ const Hero = ({ content }) => {
           <img
             src={`https://image.tmdb.org/t/p/original${content.backdrop_path}`}
             alt={content.title || content.name}
-            className='object-cover h-[500px] sm:h-[600px] max-h-[75vh] w-full object-top'
+            className='object-cover h-[500px] sm:h-[600px] max-h-[80vh] w-full object-top'
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
           <div className='absolute bottom-10 left-2 sm:left-10 p-1 sm:p-8 space-y-3 sm:space-x-4'>

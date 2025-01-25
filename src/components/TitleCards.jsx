@@ -15,7 +15,8 @@ const TitleCards = ({
   feature_,
   type_,
   onShowMore,
-  title_
+  title_,
+  filter
 }) => {
   const { userData } = useContext(UserContext)
   const [watchListData, setWatchListData] = useState([])
@@ -157,19 +158,21 @@ const TitleCards = ({
           title.startsWith('Top 10') || title.startsWith('Netflix') ? (
             <TopTen data={dataToDisplay} type_={type_ || type} />
           ) : (
-            dataToDisplay.map((card, i) => (
-              <ShowCard
-                key={i}
-                i={i}
-                type_={type_ || type || card.type}
-                show={card}
-                type={2}
-                isPlaying={activeTrailer.id === card.id}
-                trailerUrl={activeTrailer.url}
-                onHover={() => debouncedHandleHover(card)}
-                onHoverEnd={() => setActiveTrailer({ id: null, url: null })}
-              />
-            ))
+            dataToDisplay
+              .filter(card => card.id !== filter)
+              .map((card, i) => (
+                <ShowCard
+                  key={i}
+                  i={i}
+                  type_={type_ || type || card.type}
+                  show={card}
+                  type={2}
+                  isPlaying={activeTrailer.id === card.id}
+                  trailerUrl={activeTrailer.url}
+                  onHover={() => debouncedHandleHover(card)}
+                  onHoverEnd={() => setActiveTrailer({ id: null, url: null })}
+                />
+              ))
           )
         ) : null}
       </div>

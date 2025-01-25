@@ -179,7 +179,7 @@ const Filters = ({
               Original Language
             </label>
             <div className='relative'>
-              <button
+              <span
                 className='w-full p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 text-left flex items-center gap-2'
                 onClick={() => setIsLanguageDropdownOpen(prev => !prev)}
               >
@@ -198,7 +198,7 @@ const Filters = ({
                   ? languages.find(l => l.iso_639_1 === originalLanguage)
                       ?.english_name || 'Select Language'
                   : 'Select Language'}
-              </button>
+              </span>
               {isLanguageDropdownOpen && (
                 <DropdownWithOutsideClick
                   isOpen={isLanguageDropdownOpen}
@@ -243,7 +243,7 @@ const Filters = ({
               Origin Country
             </label>
             <div className='relative'>
-              <button
+              <span
                 className='w-full p-2 bg-slate-800 text-slate-300 rounded border border-slate-700 text-left flex items-center gap-2'
                 onClick={() => setIsRegionDropdownOpen(prev => !prev)}
               >
@@ -269,7 +269,7 @@ const Filters = ({
                   ? regions.find(r => r.iso_3166_1 === originCountry)
                       ?.english_name || 'Select Country'
                   : 'Select Country'}
-              </button>
+              </span>
               {isRegionDropdownOpen && (
                 <DropdownWithOutsideClick
                   isOpen={isRegionDropdownOpen}

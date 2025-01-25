@@ -8,7 +8,7 @@ const Dropdown = ({ credits }) => {
   const toggleDropdown = () => setIsOpen(!isOpen)
 
   return (
-    <div className='relative w-72'>
+    <div className='relative w-72 max-sm:w-full'>
       <button
         onClick={toggleDropdown}
         className='flex items-center justify-between w-full pl-4  py-1 text-white bg-[#1a1a1a] rounded hover:bg-gray-800'

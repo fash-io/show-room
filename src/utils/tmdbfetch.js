@@ -55,9 +55,10 @@ export const fetchData = async ({
  * @param {Function} setTrailerUrl - The state setter for the trailer URL.
  */
 export const fetchTrailer = async (type, id, setTrailer) => {
+  const type_ = type === 'series' ? 'tv' : type === 'movies' ? 'movie' : type
   try {
     const response = await axios.get(
-      `https://api.themoviedb.org/3/${type}/${id}/videos?language=en-US`,
+      `https://api.themoviedb.org/3/${type_}/${id}/videos?language=en-US`,
       options
     )
 

@@ -21,6 +21,10 @@ const ScrollCard = ({ person }) => {
           {person.character && (
             <p className='text-xs text-gray-400'>as {person.character}</p>
           )}
+          {person.job && <p className='text-xs text-gray-400'>{person.job}</p>}
+          {person.department && (
+            <p className='text-xs text-gray-400'>Dept: {person.department}</p>
+          )}
         </div>
       </div>
     </Link>

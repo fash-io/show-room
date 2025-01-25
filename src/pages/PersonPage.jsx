@@ -64,22 +64,6 @@ const Profile = () => {
           single: true,
           setError: setError
         })
-        for (let page = 1; page <= 100; page++) {
-          const popularRes = await axios.get(
-            `https://api.themoviedb.org/3/person/popular?language=en-US&page=${page}`,
-            options
-          )
-          const result = popularRes.data.results.find(
-            person => person.id === parseInt(id, 10)
-          )
-          if (result) {
-            setRanking(
-              (page - 1) * 20 + popularRes.data.results.indexOf(result) + 1
-            )
-            setKnownFor(result.known_for)
-            break
-          }
-        }
       } catch (error) {
         console.error(error)
       } finally {
@@ -88,6 +72,28 @@ const Profile = () => {
     }
 
     fetchPersonDetails()
+  }, [id])
+
+  useEffect(() => {
+    const fetchTMDBTopPeople = async () => {
+      for (let page = 1; page <= 100; page++) {
+        const popularRes = await axios.get(
+          `https://api.themoviedb.org/3/person/popular?language=en-US&page=${page}`,
+          options
+        )
+        const result = popularRes.data.results.find(
+          person => person.id === parseInt(id, 10)
+        )
+        if (result) {
+          setRanking(
+            (page - 1) * 20 + popularRes.data.results.indexOf(result) + 1
+          )
+          setKnownFor(result.known_for)
+          break
+        }
+      }
+    }
+    fetchTMDBTopPeople()
   }, [id])
 
   const formatDate = dateStr => {

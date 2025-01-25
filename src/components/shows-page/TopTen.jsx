@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const TopTen = ({ data, type_ }) => {
   return (
-    <div className='top-ten-container div pr-20'>
+    <div className='top-ten-container div pr-20 pl-14 py-5'>
       {data
         .filter((_, i) => i < 10)
         .map((item, index) => (

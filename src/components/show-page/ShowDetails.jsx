@@ -126,7 +126,7 @@ const ShowDetails = ({ content, directors }) => {
                 </span>
               </span>
             </p>
-            {directors[0] && (
+            {directors && directors[0] && (
               <p className=''>
                 <span className='font-medium text-gray-400'>Director: </span>
                 <Link className='' to={`/person/${directors[0]?.id}`}>

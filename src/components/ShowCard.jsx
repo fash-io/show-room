@@ -91,7 +91,9 @@ const ShowCard = props => {
             <div className='h-full hidden md:flex p-2 justify-end whitespace-pre-wrap absolute top-0 flex-col opacity-0 z-50 group-hover:opacity-100'>
               <div
                 className='text-white text-sm'
-                style={{ textShadow: '1px 1px 2px #000000' }}
+                style={{
+                  textShadow: '1px 1px 1px #000000, -1px -1px 1px #000000'
+                }}
               >
                 <div className='font-semibold mb-2'>
                   {show.title || show.name}
